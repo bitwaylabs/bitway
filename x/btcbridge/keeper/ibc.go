@@ -57,7 +57,7 @@ func (k Keeper) IBCTransfer(ctx sdk.Context, sender string, recipient string, to
 	return resp.Sequence, nil
 }
 
-// AddToIBCWithdrawRequestQueue adds the given withdrawal request to the IBC withdrawal queue for sBTC
+// AddToIBCWithdrawRequestQueue adds the given withdrawal request to the IBC withdrawal queue for BTCT
 func (k Keeper) AddToIBCWithdrawRequestQueue(ctx sdk.Context, channelId string, sequence uint64, recipient string, amount int64) {
 	store := ctx.KVStore(k.storeKey)
 
@@ -119,8 +119,8 @@ func (k Keeper) IterateIBCWithdrawRequestQueue(ctx sdk.Context, cb func(req *typ
 	}
 }
 
-// CheckSBTC returns true if the given packet is to receive native sBTC, false otherwise
-func (k Keeper) CheckSBTC(ctx sdk.Context, packet ibcexported.PacketI, data transfertypes.FungibleTokenPacketData) bool {
+// CheckBTCT returns true if the given packet is to receive native BTCT, false otherwise
+func (k Keeper) CheckBTCT(ctx sdk.Context, packet ibcexported.PacketI, data transfertypes.FungibleTokenPacketData) bool {
 	// check if the receiving chain is source
 	if !transfertypes.ReceiverChainIsSource(packet.GetSourcePort(), packet.GetSourceChannel(), data.Denom) {
 		return false
@@ -227,9 +227,9 @@ func (k Keeper) IBCReceivePacketCallback(
 		return nil
 	}
 
-	// check if the packet is sBTC token transfer and auto-pegout enabled
+	// check if the packet is BTCT token transfer and auto-pegout enabled
 	data, ok := tryGetFungibleTokenPacketData(packet)
-	if !ok || !k.CheckSBTC(ctx, packet, data) {
+	if !ok || !k.CheckBTCT(ctx, packet, data) {
 		return nil
 	}
 

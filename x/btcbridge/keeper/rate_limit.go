@@ -236,7 +236,7 @@ func (k Keeper) GetGlobalRateLimitQuota(ctx sdk.Context, supplyPercentageQuota u
 		return 0
 	}
 
-	// get the current sBTC supply
+	// get the current BTCT supply
 	supply := k.bankKeeper.GetSupply(ctx, k.BtcDenom(ctx)).Amount.Int64()
 
 	return supply * int64(supplyPercentageQuota) / 100

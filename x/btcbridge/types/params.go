@@ -44,7 +44,7 @@ var (
 	DefaultRateLimitPeriod = 30 * time.Hour // 30 hours
 
 	// default supply percentage quota for global rate limit
-	DefaultGlobalRateLimitSupplyPercentageQuota = uint32(5) // 5% sBTC supply
+	DefaultGlobalRateLimitSupplyPercentageQuota = uint32(5) // 5% BTCT supply
 
 	// default quota for per address rate limit
 	DefaultAddressRateLimitQuota = int64(50000000) // 0.5 BTC
