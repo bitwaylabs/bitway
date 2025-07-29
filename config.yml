@@ -1,0 +1,60 @@
+version: 1
+build:
+  binary: bitwayd
+  proto:
+    path: proto
+    third_party_paths:
+      - third_party/proto
+      - proto_vendor
+accounts:
+  - name: alice
+    coins:
+      - 10000000000000000000000000000000ubtw
+      - 10000000000000000000000000000000uusdc
+      - 10000000000000000000000000000000uusdt
+
+  - name: bob
+    mnemonic: "furnace wild gravity resist heavy beef bundle deliver design service cycle monkey"
+    coins:
+      - 10000000000000000000000000000000ubtw
+      - 10000000000000000000000000000000uusdc
+      - 10000000000000000000000000000000uusdt
+# faucet:
+#   name: bob
+#   coins:
+#     - 10ubtw
+#   host: 0.0.0.0:4500
+genesis:
+  app_state:
+    crisis:
+      constant_fee:
+        denom: ubtw
+    gov:
+      deposit_params:
+        min_deposit:
+          - amount: "10000000"
+            denom: ubtw
+      params:
+        min_deposit:
+          - amount: "10000000"
+            denom: ubtw
+        voting_period: "60s"
+    mint:
+      params:
+        mint_denom: ubtw
+    staking:
+      params:
+        bond_denom: ubtw
+  chain_id: grimoria-testnet-1
+  consensus_params:
+    block:
+      max_gas: "100000000"
+validators:
+  - name: alice
+    bonded: 10000000000000000000000ubtw
+    home: $HOME/.bitway
+client:
+  openapi:
+    path: "docs/static/openapi.yml"
+prefix:
+  address: "bitway"

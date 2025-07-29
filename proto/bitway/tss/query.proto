@@ -1,0 +1,143 @@
+syntax = "proto3";
+package bitway.tss;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "bitway/tss/params.proto";
+import "bitway/tss/tss.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/tss/types";
+
+// Query defines the gRPC querier service.
+service Query {
+    // Params queries the parameters of the module.
+    rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+      option (google.api.http).get = "/bitway/tss/params";
+    }
+
+    // DKGRequest queries the dkg request by the given id.
+    rpc DKGRequest(QueryDKGRequestRequest) returns (QueryDKGRequestResponse) {
+        option (google.api.http).get = "/bitway/tss/dkg/requests/{id}";
+    }
+
+    // DKGRequests queries dkg requests by the given params.
+    rpc DKGRequests(QueryDKGRequestsRequest) returns (QueryDKGRequestsResponse) {
+        option (google.api.http).get = "/bitway/tss/dkg/requests";
+    }
+
+    // DKGCompletions queries dkg completions by the given dkg request id.
+    rpc DKGCompletions(QueryDKGCompletionsRequest) returns (QueryDKGCompletionsResponse) {
+        option (google.api.http).get = "/bitway/tss/dkg/completions/{id}";
+    }
+
+    // SigningRequest queries the signing request by the given id.
+    rpc SigningRequest(QuerySigningRequestRequest) returns (QuerySigningRequestResponse) {
+        option (google.api.http).get = "/bitway/tss/signing/requests/{id}";
+    }
+
+    // SigningRequests queries the signing requests by the given params.
+    rpc SigningRequests(QuerySigningRequestsRequest) returns (QuerySigningRequestsResponse) {
+        option (google.api.http).get = "/bitway/tss/signing/requests";
+    }
+
+    // RefreshingRequest queries the refreshing request by the given id.
+    rpc RefreshingRequest(QueryRefreshingRequestRequest) returns (QueryRefreshingRequestResponse) {
+        option (google.api.http).get = "/bitway/tss/refreshing/requests/{id}";
+    }
+
+    // RefreshingRequests queries the refreshing requests by the given status.
+    rpc RefreshingRequests(QueryRefreshingRequestsRequest) returns (QueryRefreshingRequestsResponse) {
+        option (google.api.http).get = "/bitway/tss/refreshing/requests";
+    }
+
+    // RefreshingCompletions queries refreshing completions by the given request id.
+    rpc RefreshingCompletions(QueryRefreshingCompletionsRequest) returns (QueryRefreshingCompletionsResponse) {
+        option (google.api.http).get = "/bitway/tss/refreshing/completions/{id}";
+    }
+}
+
+message QueryDKGRequestRequest {
+    uint64 id = 1;
+}
+
+message QueryDKGRequestResponse {
+    DKGRequest request = 1;
+}
+
+message QueryDKGRequestsRequest {
+    string module = 1;
+    DKGStatus status = 2;
+    cosmos.base.query.v1beta1.PageRequest pagination = 3;
+}
+
+message QueryDKGRequestsResponse {
+    repeated DKGRequest requests = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryDKGCompletionsRequest {
+    uint64 id = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryDKGCompletionsResponse {
+    repeated DKGCompletion completions = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QuerySigningRequestRequest {
+    uint64 id = 1;
+}
+
+message QuerySigningRequestResponse {
+    SigningRequest request = 1;
+}
+
+message QuerySigningRequestsRequest {
+    string module = 1;
+    SigningStatus status = 2;
+    cosmos.base.query.v1beta1.PageRequest pagination = 3;
+}
+
+message QuerySigningRequestsResponse {
+    repeated SigningRequest requests = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryRefreshingRequestRequest {
+    uint64 id = 1;
+}
+
+message QueryRefreshingRequestResponse {
+    RefreshingRequest request = 1;
+}
+
+message QueryRefreshingRequestsRequest {
+    RefreshingStatus status = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryRefreshingRequestsResponse {
+    repeated RefreshingRequest requests = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryRefreshingCompletionsRequest {
+    uint64 id = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryRefreshingCompletionsResponse {
+    repeated RefreshingCompletion completions = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {
+}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+    Params params = 1 [(gogoproto.nullable) = false];
+}

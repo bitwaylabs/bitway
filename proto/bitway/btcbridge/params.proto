@@ -1,0 +1,137 @@
+syntax = "proto3";
+package bitway.btcbridge;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/btcbridge/types";
+
+// Params defines the parameters for the module.
+message Params {
+  // The minimum number of confirmations required for the deposit transactions
+  int32 deposit_confirmation_depth = 1;
+  // The minimum number of confirmations required for the withdrawal transactions
+  int32 withdraw_confirmation_depth = 2;
+  // Indicates the maximum depth or distance from the latest block up to which transactions are considered for acceptance.
+  uint64 max_acceptable_block_depth = 3;
+  // The denomination of the voucher
+  string btc_voucher_denom = 4;
+  // Indicates if deposit is enabled
+  bool deposit_enabled = 5;
+  // Indicates if withdrawal is enabled
+  bool withdraw_enabled = 6;
+  // Trusted relayers for non-btc asset deposit
+  repeated string trusted_non_btc_relayers = 7;
+  // Trusted fee providers to submit bitcoin fee rate
+  repeated string trusted_fee_providers = 8;
+  // Period of validity for the fee rate
+  int64 fee_rate_validity_period = 9;
+  // Asset vaults
+  repeated Vault vaults = 10;
+  // Withdrawal params
+  WithdrawParams withdraw_params = 11 [(gogoproto.nullable) = false];
+  // Protocol limitations
+  ProtocolLimits protocol_limits = 12 [(gogoproto.nullable) = false];
+  // Protocol fees
+  ProtocolFees protocol_fees = 13 [(gogoproto.nullable) = false];
+  // TSS params
+  TSSParams tss_params = 14 [(gogoproto.nullable) = false];
+  // IBC params
+  IBCParams ibc_params = 15 [(gogoproto.nullable) = false];
+  // Rate limit params
+  RateLimitParams rate_limit_params = 16 [(gogoproto.nullable) = false];
+}
+
+// AssetType defines the type of asset
+enum AssetType {
+  // Unspecified asset type
+  ASSET_TYPE_UNSPECIFIED = 0;
+  // BTC
+  ASSET_TYPE_BTC = 1;
+  // BRC20: ordi, sats
+  ASSET_TYPE_BRC20 = 2;
+  // RUNE: dog•go•to•the•moon
+  ASSET_TYPE_RUNES = 3;
+}
+
+// Vault defines the asset vault
+message Vault {
+  // the vault address for deposit
+  string address = 1;
+  // public key of the vault
+  string pub_key = 2;
+  // the asset type supported by the vault
+  AssetType asset_type = 3;
+  // version
+  uint64 version = 4;
+}
+
+message WithdrawParams {
+  // Maximum number of utxos used to build the signing request; O means unlimited
+  uint32 max_utxo_num = 1;
+  // Period for handling btc withdrawal requests
+  int64 btc_batch_withdraw_period = 2;
+  // Maximum number of btc withdrawal requests to be handled per batch
+  uint32 max_btc_batch_withdraw_num = 3;
+}
+
+// ProtocolLimits defines the params related to the the protocol limitations
+message ProtocolLimits {
+  // The minimum deposit amount for btc in sat
+  int64 btc_min_deposit = 1;
+  // The minimum withdrawal amount for btc in sat
+  int64 btc_min_withdraw = 2;
+  // The maximum withdrawal amount for btc in sat
+  int64 btc_max_withdraw = 3;
+}
+
+// ProtocolFees defines the params related to the protocol fees
+message ProtocolFees {
+  // Protocol fee amount for deposit in sat
+  int64 deposit_fee = 1;
+  // Protocol fee amount for withdrawal in sat
+  int64 withdraw_fee = 2;
+  // Protocol fee collector
+  string collector = 3;
+}
+
+// RateLimitParams defines the params related to the rate limit for BTC withdrawal
+message RateLimitParams {
+  // Global rate limit params
+  GlobalRateLimitParams global_rate_limit_params = 1 [(gogoproto.nullable) = false];
+  // Per address rate limit params
+  AddressRateLimitParams address_rate_limit_params = 2 [(gogoproto.nullable) = false];
+}
+
+// GlobalRateLimitParams defines the global rate limit params
+message GlobalRateLimitParams {
+  // Duration of each rate limit epoch
+  google.protobuf.Duration period = 1 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+  // Maximum withdrawable supply percentage during the rate limit period; 100 means no limit
+  uint32 supply_percentage_quota = 2;
+}
+
+// AddressRateLimitParams defines the per address rate limit params
+message AddressRateLimitParams {
+  // Duration of each rate limit epoch
+  google.protobuf.Duration period = 1 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+  // Maximum withdrawable amount during the rate limit period; 0 means no limit
+  int64 quota = 2;
+}
+
+// TSSParams defines the params related to TSS
+message TSSParams {
+  // Timeout duration for DKG request
+  google.protobuf.Duration dkg_timeout_period = 1 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+  // Transition period after which TSS participants update process is completed
+  google.protobuf.Duration participant_update_transition_period = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+}
+
+// IBCParams defines the params related to IBC
+message IBCParams {
+  // Timeout height offset relative to the current client height
+  uint64 timeout_height_offset = 1;
+  // Timeout duration relative to the current time
+  google.protobuf.Duration timeout_duration = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+}

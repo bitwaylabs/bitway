@@ -1,0 +1,108 @@
+syntax = "proto3";
+package bitway.oracle;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "bitway/oracle/oracle.proto";
+import "bitway/oracle/params.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/oracle/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Params queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/bitway/oracle/params";
+  }
+
+  // ListPrices queries all oracle prices.
+  rpc ListPrices(QueryListPricesRequest) returns (QueryListPricesResponse) {
+    option (google.api.http).get = "/bitway/oracle/prices";
+  }
+
+  // GetPrice queries the oracle price by symbol.
+  rpc GetPriceBySymbol(QueryGetPriceBySymbolRequest) returns (QueryGetPriceBySymbolResponse) {
+    option (google.api.http).get = "/bitway/oracle/prices/{symbol}";
+  }
+
+  // ChainTip queries the chain tip of the module.
+  rpc QueryChainTip(QueryChainTipRequest) returns (QueryChainTipResponse) {
+    option (google.api.http).get = "/bitway/oracle/tip";
+  }
+  // BlockHeaderByHeight queries the block header by height.
+  rpc QueryBlockHeaderByHeight(QueryBlockHeaderByHeightRequest) returns (QueryBlockHeaderByHeightResponse) {
+    option (google.api.http).get = "/bitway/oracle/blockheader/height/{height}";
+  }
+  // BlockHeaderByHash queries the block header by hash.
+  rpc QueryBlockHeaderByHash(QueryBlockHeaderByHashRequest) returns (QueryBlockHeaderByHashResponse) {
+    option (google.api.http).get = "/bitway/oracle/blockheader/hash/{hash}";
+  }
+  // BestBlockHeader queries the best block header.
+  rpc QueryBestBlockHeader(QueryBestBlockHeaderRequest) returns (QueryBestBlockHeaderResponse) {
+    option (google.api.http).get = "/bitway/oracle/bestblockheader";
+  }
+}
+
+// QueryPoolRequest is request type for the Query/Pool RPC method.
+message QueryGetPriceBySymbolRequest {
+  string symbol = 1;
+}
+
+// QueryPoolResponse is response type for the Query/Pool RPC method.
+message QueryGetPriceBySymbolResponse {
+  string price = 1;
+}
+
+// QueryPoolsRequest is request type for the Query/Pools RPC method.
+message QueryListPricesRequest {}
+
+// QueryPoolsResponse is response type for the Query/Pools RPC method.
+message QueryListPricesResponse {
+  repeated OraclePrice prices = 1;
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryChainTipRequest is request type for the Query/ChainTip RPC method.
+message QueryChainTipRequest {}
+
+// QueryChainTipResponse is response type for the Query/ChainTip RPC method.
+message QueryChainTipResponse {
+  string hash = 1;
+  uint64 height = 2;
+}
+
+// QueryBlockHeaderByHeightRequest is the request type for the Query/BlockHeaderByHeight RPC method.
+message QueryBlockHeaderByHeightRequest {
+  uint64 height = 1;
+}
+
+// QueryBlockHeaderByHeightResponse is the response type for the Query/BlockHeaderByHeight RPC method.
+message QueryBlockHeaderByHeightResponse {
+  BlockHeader block_header = 1;
+}
+
+// QueryBlockHeaderByHashRequest is the request type for the Query/BlockHeaderByHash RPC method.
+message QueryBlockHeaderByHashRequest {
+  string hash = 1;
+}
+
+// QueryBlockHeaderByHashResponse is the response type for the Query/BlockHeaderByHash RPC method.
+message QueryBlockHeaderByHashResponse {
+  BlockHeader block_header = 1;
+}
+
+// QueryBestBlockHeaderRequest is the request type for the Query/BestBlockHeader RPC method.
+message QueryBestBlockHeaderRequest {}
+
+// QueryBestBlockHeaderResponse is the response type for the Query/BestBlockHeader RPC method.
+message QueryBestBlockHeaderResponse {
+  BlockHeader block_header = 1;
+}

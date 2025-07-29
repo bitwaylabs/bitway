@@ -1,0 +1,15 @@
+syntax = "proto3";
+package bitway.btcbridge;
+
+import "gogoproto/gogo.proto";
+import "bitway/btcbridge/params.proto";
+import "bitway/btcbridge/btcbridge.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/btcbridge/types";
+
+// GenesisState defines the btc bridge module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  repeated UTXO utxos = 2;
+  DKGRequest dkg_request = 3;
+}

@@ -1,0 +1,259 @@
+syntax = "proto3";
+package bitway.btcbridge;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+import "bitway/btcbridge/params.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/btcbridge/types";
+
+// Fee rate
+message FeeRate {
+  // fee rate
+  int64 value = 1;
+  // block height at which the fee rate is submitted
+  int64 height = 2;
+}
+
+// Bitcoin Signing Status
+enum SigningStatus {
+  // SIGNING_STATUS_UNSPECIFIED - Default value, should not be used
+  SIGNING_STATUS_UNSPECIFIED = 0;
+  // SIGNING_STATUS_PENDING - The signing request is pending
+  SIGNING_STATUS_PENDING = 1;
+  // SIGNING_STATUS_BROADCASTED - The signing request is broadcasted
+  SIGNING_STATUS_BROADCASTED = 2;
+  // SIGNING_STATUS_CONFIRMED - The signing request is confirmed
+  SIGNING_STATUS_CONFIRMED = 3;
+  // SIGNING_STATUS_FAILED - The signing request failed to be signed or broadcast due to unexpected exceptions
+  SIGNING_STATUS_FAILED = 4;
+}
+
+// Bitcoin Signing Request
+message SigningRequest {
+  string address = 1;
+  uint64 sequence = 2;
+  AssetType type = 3;
+  string txid = 4;
+  string psbt = 5;
+  google.protobuf.Timestamp creation_time = 6 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  SigningStatus status = 7;
+}
+
+// Compact Signing Request
+message CompactSigningRequest {
+  string address = 1;
+  uint64 sequence = 2;
+  AssetType type = 3;
+  string txid = 4;
+  repeated string signers = 5;
+  repeated string sig_hashes = 6;
+  google.protobuf.Timestamp creation_time = 7 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  SigningStatus status = 8;
+}
+
+// Withdrawal Request
+message WithdrawRequest {
+  string address = 1;
+  string amount = 2;
+  uint64 sequence = 3;
+  string txid = 4;
+}
+
+// Withdrawal request via IBC
+message IBCWithdrawRequest {
+  string channel_id = 1;
+  uint64 sequence = 2;
+  string address = 3;
+  string amount = 4;
+}
+
+// Rate limit for BTC withdrawal
+message RateLimit {
+  GlobalRateLimit global_rate_limit = 1 [(gogoproto.nullable) = false];
+  AddressRateLimit address_rate_limit = 2 [(gogoproto.nullable) = false];
+}
+
+// Global rate limit for BTC withdrawal
+message GlobalRateLimit {
+  // Starting time for the current epoch
+  google.protobuf.Timestamp start_time = 1 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  // End time for the current epoch
+  google.protobuf.Timestamp end_time = 2 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  // Maximum withdrawable amount for the current epoch; 0 means no limit
+  int64 quota = 3;
+  // Used quota currently
+  int64 used = 4;
+}
+
+// Per address rate limit for BTC withdrawal
+message AddressRateLimit {
+  // Starting time for the current epoch
+  google.protobuf.Timestamp start_time = 1 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  // End time for the current epoch
+  google.protobuf.Timestamp end_time = 2 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  // Maximum withdrawable amount for the current epoch; 0 means no limit
+  int64 quota = 3;
+}
+
+// Per address rate limit details
+message AddressRateLimitDetails {
+  // Address
+  string address = 1;
+  // Used quota currently
+  int64 used = 2;
+}
+
+// Bitcoin UTXO
+message UTXO {
+  string txid = 1;
+  uint64 vout = 2;
+  string address = 3;
+  uint64 amount = 4;
+  uint64 height = 5;
+  bytes pub_key_script = 6;
+  bool is_locked = 7;
+  // rune balances associated with the UTXO
+  repeated RuneBalance runes = 8;
+}
+
+// Rune Balance
+message RuneBalance {
+  // serialized rune id
+  string id = 1;
+  // rune amount
+  string amount = 2;
+}
+
+// Rune ID
+message RuneId {
+  // block height
+  uint64 block = 1;
+  // tx index
+  uint32 tx = 2;
+}
+
+// Rune Edict
+message Edict {
+  RuneId id = 1;
+  string amount = 2;
+  uint32 output = 3;
+}
+
+// BTC UTXO Consolidation
+message BtcConsolidation {
+  // maximum threshold of the btc value
+  int64 target_threshold = 1;
+  // maximum number of the utxos to be consolidated; 0 means all
+  uint32 max_num = 2;
+}
+
+// Runes UTXO Consolidation
+message RunesConsolidation {
+  // rune id
+  string rune_id = 1;
+  // maximum threshold of the corresponding rune balance
+  string target_threshold = 2;
+  // maximum number of the utxos to be consolidated; 0 means all
+  uint32 max_num = 3;
+}
+
+// DKG Participant
+message DKGParticipant {
+  // the optional moniker
+  string moniker = 1;
+  // the optional operator address
+  string operator_address = 2;
+  // participant consensus pub key
+  string consensus_pubkey = 3;
+}
+
+enum DKGRequestStatus {
+  // DKG_REQUEST_STATUS_UNSPECIFIED defines the unknown DKG request status
+  DKG_REQUEST_STATUS_UNSPECIFIED = 0;
+  // DKG_REQUEST_STATUS_PENDING defines the status of the DKG request which is pending
+  DKG_REQUEST_STATUS_PENDING = 1;
+  // DKG_REQUEST_STATUS_COMPLETED defines the status of the DKG request which is completed
+  DKG_REQUEST_STATUS_COMPLETED = 2;
+  // DKG_REQUEST_STATUS_FAILED defines the status of the DKG request which failed
+  DKG_REQUEST_STATUS_FAILED = 3;
+  // DKG_REQUEST_STATUS_TIMEDOUT defines the status of the DKG request which timed out
+  DKG_REQUEST_STATUS_TIMEDOUT = 4;
+}
+
+// DKG Request
+message DKGRequest {
+  // the unique request id
+  uint64 id = 1;
+  // participant set
+  repeated DKGParticipant participants = 2;
+  // threshold required to perform DKG
+  uint32 threshold = 3;
+  // asset types of vaults to be generated
+  repeated AssetType vault_types = 4;
+  // indicates if transferring assets to the newly generated vaults when the DKG request is completed
+  bool enable_transfer = 5;
+  // target number of the UTXOs to be transferred each time
+  uint32 target_utxo_num = 6;
+  // expiration time
+  google.protobuf.Timestamp expiration = 7 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+  // status
+  DKGRequestStatus status = 8;
+}
+
+// DKG Completion Request
+message DKGCompletionRequest {
+  // request id
+  uint64 id = 1;
+  // sender
+  string sender = 2;
+  // new vaults generated by DKG
+  repeated string vaults = 3;
+  // participant consensus pub key
+  string consensus_pubkey = 4;
+  // hex encoded participant signature
+  string signature = 5;
+}
+
+// Refreshing Status
+enum RefreshingStatus {
+  // REFRESHING_STATUS_UNSPECIFIED defines the unknown refreshing status
+  REFRESHING_STATUS_UNSPECIFIED = 0;
+  // REFRESHING_STATUS_PENDING defines the status of the refreshing request which is pending
+  REFRESHING_STATUS_PENDING = 1;
+  // REFRESHING_STATUS_COMPLETED defines the status of the refreshing request which is completed
+  REFRESHING_STATUS_COMPLETED = 2;
+  // REFRESHING_STATUS_TIMEDOUT defines the status of the refreshing request which timed out
+  REFRESHING_STATUS_TIMEDOUT = 3;
+}
+
+// Refreshing Request
+message RefreshingRequest {
+  // request id
+  uint64 id = 1;
+  // request id of the DKG corresponding to the key shares to be refreshed
+  uint64 dkg_id = 2;
+  // removed participant set
+  repeated string removed_participants = 3;
+  // new threshold
+  uint32 threshold = 4;
+  // expiration time
+  google.protobuf.Timestamp expiration_time = 5 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  // status
+  RefreshingStatus status = 6;
+}
+
+// Refreshing Completion
+message RefreshingCompletion {
+  // request id
+  uint64 id = 1;
+  // sender
+  string sender = 2;
+  // participant consensus pub key
+  string consensus_pubkey = 3;
+  // hex encoded participant signature
+  string signature = 4;
+}

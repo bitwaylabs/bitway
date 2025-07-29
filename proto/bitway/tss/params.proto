@@ -1,0 +1,21 @@
+syntax = "proto3";
+package bitway.tss;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/tss/types";
+
+// Params defines the parameters for the module.
+message Params {
+    repeated DKGParticipant allowed_dkg_participants = 1 [(gogoproto.nullable) = false];
+    google.protobuf.Duration dkg_timeout_duration = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+}
+
+// DKG Participant
+message DKGParticipant {
+  // the optional moniker
+  string moniker = 1;
+  // participant consensus pub key
+  string consensus_pubkey = 2;
+}

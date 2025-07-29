@@ -1,0 +1,15 @@
+syntax = "proto3";
+package bitway.liquidation;
+
+import "gogoproto/gogo.proto";
+import "bitway/liquidation/liquidation.proto";
+import "bitway/liquidation/params.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/liquidation/types";
+
+// GenesisState defines the liquidation module's genesis state.
+message GenesisState {
+    Params params = 1 [(gogoproto.nullable) = false];
+    repeated Liquidation liquidations = 2;
+    repeated LiquidationRecord liquidationRecords = 3;
+}

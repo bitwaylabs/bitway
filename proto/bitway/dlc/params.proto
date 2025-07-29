@@ -1,0 +1,18 @@
+syntax = "proto3";
+package bitway.dlc;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/dlc/types";
+
+// Params defines the parameters for the module.
+message Params {
+    uint32 nonce_queue_size = 1;
+    uint32 nonce_generation_batch_size = 2;
+    int64 nonce_generation_interval = 3;
+    repeated string allowed_oracle_participants = 4;
+    uint32 oracle_participant_num = 5;
+    uint32 oracle_participant_threshold = 6;
+}

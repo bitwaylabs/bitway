@@ -1,0 +1,19 @@
+syntax = "proto3";
+package bitway.lending;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/lending/types";
+
+// Params defines the parameters for the module.
+message Params {
+    // final timeout duration for loan
+    google.protobuf.Duration final_timeout_duration = 1 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+    // request fee collector address
+    string request_fee_collector = 2;
+    // origination fee collector address
+    string origination_fee_collector = 3;
+    // protocol fee collector address
+    string protocol_fee_collector = 4;
+}

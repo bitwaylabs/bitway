@@ -1,0 +1,97 @@
+syntax = "proto3";
+package bitway.dlc;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/dlc/types";
+
+enum DLCOracleStatus {
+    Oracle_status_Enable = 0;
+    Oracle_status_Disable = 1;
+}
+
+message DLCOracle {
+    uint64 id = 1;
+    uint64 dkg_id = 2;
+    string desc = 3;
+    string pubkey = 4;
+    uint64 nonce_index = 5;
+    google.protobuf.Timestamp time = 6 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    DLCOracleStatus status = 7;
+}
+
+enum DCMStatus {
+    DCM_status_Enable = 0;
+    DCM_status_Disable = 1;
+}
+
+message DCM {
+    uint64 id = 1;
+    uint64 dkg_id = 2;
+    string desc = 3;
+    string pubkey = 4;
+    google.protobuf.Timestamp time = 5 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    DCMStatus status = 6;
+}
+
+message DLCNonce {
+    uint64 index = 1;
+    string nonce = 2;
+    string oracle_pubkey = 3;
+    google.protobuf.Timestamp time = 4 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+}
+
+enum DlcEventType {
+    UNSPECIFIED = 0;
+    PRICE = 1;
+    DATE = 2;
+    LENDING = 3;
+}
+
+message DLCEvent {
+    uint64 id = 1;
+    DlcEventType type = 2;
+    string nonce = 3;
+    string pubkey = 4;
+    string description = 5;
+    repeated string outcomes = 6;
+    bool has_triggered = 7;
+    int32 outcome_index = 8;
+    google.protobuf.Timestamp publish_at = 9 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    google.protobuf.Timestamp trigger_at = 10 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+}
+
+message DLCAttestation {
+    uint64 id = 1;
+    uint64 event_id = 2;
+    string outcome = 3;
+    string pubkey = 4;
+    string signature = 5;
+    google.protobuf.Timestamp time = 6 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+}
+
+// Oracle participant liveness
+message OracleParticipantLiveness {
+  // consensus pub key
+  string consensus_pubkey = 1;
+  // Indicates if the participant is alive
+  bool is_alive = 2;
+  // Id of the last participating DKG
+  uint64 last_dkg_id = 3;
+  // last block height at which the participant was active
+  int64 last_block_height = 4;
+}
+
+// Signing intent
+enum SigningIntent {
+    SIGNING_INTENT_DEFAULT = 0;
+}
+
+// DKG intent
+enum DKGIntent {
+    DKG_INTENT_DEFAULT = 0;
+    DKG_INTENT_PRICE_EVENT_NONCE = 10000;
+    DKG_INTENT_DATE_EVENT_NONCE = 20000;
+    DKG_INTENT_LENDING_EVENT_NONCE = 30000;
+}

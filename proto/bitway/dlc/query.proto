@@ -1,0 +1,215 @@
+syntax = "proto3";
+package bitway.dlc;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "bitway/dlc/dlc.proto";
+import "bitway/dlc/params.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/dlc/types";
+
+// Query defines the gRPC querier service.
+service Query {
+    // Params queries the parameters of the module.
+    rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+      option (google.api.http).get = "/bitway/dlc/params";
+    }
+
+    // Event queries the event by the given id.
+    rpc Event(QueryEventRequest) returns (QueryEventResponse) {
+        option (google.api.http).get = "/bitway/dlc/events/{id}";
+    }
+
+    // Events queries events by the given status.
+    rpc Events(QueryEventsRequest) returns (QueryEventsResponse) {
+        option (google.api.http).get = "/bitway/dlc/events";
+    }
+
+    // Attestation queries the attestation by the given id.
+    rpc Attestation(QueryAttestationRequest) returns (QueryAttestationResponse) {
+        option (google.api.http).get = "/bitway/dlc/attestations/{id}";
+    }
+
+    // AttestationByEvent queries the attestation by the given event id.
+    rpc AttestationByEvent(QueryAttestationByEventRequest) returns (QueryAttestationByEventResponse) {
+        option (google.api.http).get = "/bitway/dlc/attestation/event";
+    }
+
+    // Attestations queries all attestations.
+    rpc Attestations(QueryAttestationsRequest) returns (QueryAttestationsResponse) {
+        option (google.api.http).get = "/bitway/dlc/attestations";
+    }
+
+    // Nonce queries the nonce by the given oracle id and index
+    rpc Nonce(QueryNonceRequest) returns (QueryNonceResponse) {
+        option (google.api.http).get = "/bitway/dlc/nonces/{oracle_id}/{index}";
+    }
+
+    // Nonces queries all nonces of the given oracle
+    rpc Nonces(QueryNoncesRequest) returns (QueryNoncesResponse) {
+        option (google.api.http).get = "/bitway/dlc/nonces/{oracle_id}";
+    }
+
+    // CountNonces queries the total count of nonces.
+    rpc CountNonces(QueryCountNoncesRequest) returns (QueryCountNoncesResponse) {
+        option (google.api.http).get = "/bitway/dlc/nonces/count";
+    }
+
+    // DCM queries the DCM by the given id or public key.
+    rpc DCM(QueryDCMRequest) returns (QueryDCMResponse) {
+        option (google.api.http).get = "/bitway/dlc/dcm";
+    }
+
+    // DCMs queries DCMs by the given status.
+    rpc DCMs(QueryDCMsRequest) returns (QueryDCMsResponse) {
+        option (google.api.http).get = "/bitway/dlc/dcms";
+    }
+
+    // Oracle queries the oracle by the given id or public key.
+    rpc Oracle(QueryOracleRequest) returns (QueryOracleResponse) {
+        option (google.api.http).get = "/bitway/dlc/oracle";
+    }
+
+    // Oracles queries oracles by the given status.
+    rpc Oracles(QueryOraclesRequest) returns (QueryOraclesResponse) {
+        option (google.api.http).get = "/bitway/dlc/oracles";
+    }
+
+    // OracleParticipantLiveness queries the oracle participant liveness
+    rpc OracleParticipantLiveness(QueryOracleParticipantLivenessRequest) returns (QueryOracleParticipantLivenessResponse) {
+        option (google.api.http).get = "/bitway/dlc/oracle_participant_liveness";
+    }
+}
+
+message QueryAttestationRequest {
+    uint64 id = 1;
+}
+
+message QueryAttestationResponse {
+    DLCAttestation attestation = 1;
+}
+
+message QueryAttestationByEventRequest {
+    uint64 event_id = 1;
+}
+
+message QueryAttestationByEventResponse {
+    DLCAttestation attestation = 1;
+}
+
+message QueryAttestationsRequest {
+    cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAttestationsResponse {
+    repeated DLCAttestation attestations = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryDCMRequest {
+    uint64 id = 1;
+    string pub_key = 2;
+}
+
+message QueryDCMResponse {
+    DCM dcm = 1 [(gogoproto.customname) = "DCM"];
+    repeated string participants = 2;
+}
+
+message QueryDCMsRequest {
+    DCMStatus status = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryDCMsResponse {
+    repeated DCM dcms = 1 [(gogoproto.customname) = "DCMs"];
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryOracleRequest{
+    uint64 id = 1;
+    string pub_key = 2;
+}
+
+message QueryOracleResponse{
+    DLCOracle oracle = 1;
+    repeated string participants = 2;
+}
+
+message QueryOraclesRequest{
+    DLCOracleStatus status = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryOraclesResponse{
+    repeated DLCOracle oracles = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryCountNoncesRequest {}
+
+// QueryCountNoncesResponse is response type for the Query/CountNonces RPC method.
+// counts should use the same order as recommended oracles in Params
+message QueryCountNoncesResponse{
+    repeated uint32 counts = 1; // qty of nonce in the cache queue
+}
+
+message QueryNonceRequest {
+    uint64 oracle_id = 1;
+    uint64 index = 2;
+}
+
+message QueryNonceResponse{
+    DLCNonce nonce = 1;
+}
+
+message QueryNoncesRequest {
+    uint64 oracle_id = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryNoncesResponse{
+    repeated DLCNonce nonces = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryEventRequest is request type for the Query/Event RPC method.
+message QueryEventRequest {
+    uint64 id = 1;
+}
+
+// QueryEventResponse is response type for the Query/Event RPC method.
+message QueryEventResponse {
+    DLCEvent event = 1;
+}
+
+// QueryEventsRequest is request type for the Query/Events RPC method.
+message QueryEventsRequest {
+    bool triggered = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryEventsResponse is response type for the Query/Events RPC method.
+message QueryEventsResponse {
+    repeated DLCEvent events = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryOracleParticipantLivenessRequest {
+    string consensus_pubkey = 1;
+    bool alive = 2;
+}
+
+message QueryOracleParticipantLivenessResponse {
+    repeated OracleParticipantLiveness participant_livenesses = 1;
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {
+}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+    Params params = 1 [(gogoproto.nullable) = false];
+}

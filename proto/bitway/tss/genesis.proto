@@ -1,0 +1,16 @@
+syntax = "proto3";
+package bitway.tss;
+
+import "gogoproto/gogo.proto";
+import "bitway/tss/params.proto";
+import "bitway/tss/tss.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/tss/types";
+
+// GenesisState defines the module's genesis state.
+message GenesisState {
+    Params params = 1 [(gogoproto.nullable) = false];
+
+    repeated DKGRequest dkg_requests = 2;
+    repeated SigningRequest signing_requests = 3;
+}

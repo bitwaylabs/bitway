@@ -1,0 +1,76 @@
+syntax = "proto3";
+package bitway.farming;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/farming/types";
+
+// Epoch status
+enum EpochStatus {
+  EPOCH_STATUS_PENDING = 0;
+  EPOCH_STATUS_STARTED = 1;
+  EPOCH_STATUS_ENDED = 2;
+}
+
+// Epoch defines the epoch
+message Epoch {
+  uint64 id = 1;
+  google.protobuf.Timestamp start_time = 2 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+  google.protobuf.Timestamp end_time = 3 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+  repeated TotalStaking total_stakings = 4 [(gogoproto.nullable) = false];
+  EpochStatus status = 5;
+}
+
+// Staking status
+enum StakingStatus {
+  STAKING_STATUS_UNSPECIFIED = 0;
+  STAKING_STATUS_STAKED = 1;
+  STAKING_STATUS_UNLOCKED = 2;
+  STAKING_STATUS_UNSTAKED = 3;
+}
+
+// Staking defines the staking
+message Staking {
+  uint64 id = 1;
+  string address = 2;
+  cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
+  google.protobuf.Duration lock_duration = 4 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+  string lock_multiplier = 5 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+  cosmos.base.v1beta1.Coin effective_amount = 6 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin pending_rewards = 7 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin total_rewards = 8 [(gogoproto.nullable) = false];
+  google.protobuf.Timestamp start_time = 9 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+  StakingStatus status = 10;
+}
+
+// TotalStaking defines total staking per denom
+message TotalStaking {
+  string denom = 1;
+  cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin effective_amount = 3 [(gogoproto.nullable) = false];
+}
+
+// AccountRewardPerEpoch defines the account reward per epoch
+message AccountRewardPerEpoch {
+  string address = 1;
+  repeated TotalStaking stakings = 2 [(gogoproto.nullable) = false];
+  repeated string shares = 3 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+  string total_share = 4 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+  cosmos.base.v1beta1.Coin reward = 5 [(gogoproto.nullable) = false];
+}

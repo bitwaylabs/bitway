@@ -1,0 +1,36 @@
+syntax = "proto3";
+package bitway.oracle;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/oracle/types";
+
+// Oracle Price from Price Extention
+message OraclePrice {
+  string symbol = 1; // id
+  string price = 2 [
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// Bitcoin Block Header From Price Extention
+message BlockHeader {
+  int32 version = 1;
+  string hash = 2;
+  int32 height = 3;
+  string previous_block_hash = 4;
+  string merkle_root = 5;
+  uint64 nonce = 6;
+  string bits = 7;
+  int64 time = 8;
+  int32 ntx = 9;
+}
+
+// Oracle Vote Extenstion
+message OracleVoteExtension {
+  int64 height = 1;
+  map<string, string> prices = 2 [(gogoproto.nullable) = false];
+  repeated BlockHeader blocks = 3;
+  bool has_error = 4;
+}

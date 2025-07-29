@@ -1,0 +1,492 @@
+package cli
+
+import (
+	"fmt"
+	"strconv"
+
+	// "strings"
+
+	"github.com/spf13/cobra"
+
+	"github.com/btcsuite/btcd/chaincfg/chainhash"
+
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/bitwaylabs/bitway/x/btcbridge/types"
+)
+
+// GetQueryCmd returns the cli query commands for this module
+func GetQueryCmd(_ string) *cobra.Command {
+	// Group yield queries under a subcommand
+	cmd := &cobra.Command{
+		Use:                        types.ModuleName,
+		Short:                      fmt.Sprintf("Querying commands for the %s module", types.ModuleName),
+		DisableFlagParsing:         true,
+		SuggestionsMinimumDistance: 2,
+		RunE:                       client.ValidateCmd,
+	}
+
+	cmd.AddCommand(CmdQueryParams())
+	cmd.AddCommand(CmdQueryFeeRate())
+	cmd.AddCommand(CmdQueryWithdrawRequests())
+	cmd.AddCommand(CmdQuerySigningRequests())
+	cmd.AddCommand(CmdQueryUTXOs())
+	cmd.AddCommand(CmdQueryUTXOStats())
+	cmd.AddCommand(CmdQueryDKGRequests())
+	cmd.AddCommand(CmdQueryDKGCompletionRequests())
+	cmd.AddCommand(CmdQueryRefreshingRequest())
+	cmd.AddCommand(CmdQueryRefreshingRequests())
+	cmd.AddCommand(CmdQueryRefreshingCompletions())
+	cmd.AddCommand(CmdQueryRateLimit())
+	// this line is used by starport scaffolding # 1
+
+	return cmd
+}
+
+func CmdQueryParams() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "params",
+		Short: "Query the parameters of the module",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.QueryParams(cmd.Context(), &types.QueryParamsRequest{})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// CmdQueryFeeRate returns the command to query the bitcoin network fee rate
+func CmdQueryFeeRate() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "fee-rate",
+		Short: "Query the current bitcoin network fee rate on the bitway chain",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.QueryFeeRate(cmd.Context(), &types.QueryFeeRateRequest{})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// CmdQueryWithdrawRequests returns the command to query withdrawal requests
+func CmdQueryWithdrawRequests() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "withdraw-requests [address | tx hash | pending]",
+		Short: `Query withdrawal requests by address, tx hash or "pending"`,
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			if args[0] == "pending" {
+				res, err := queryClient.QueryPendingBtcWithdrawRequests(cmd.Context(), &types.QueryPendingBtcWithdrawRequestsRequest{})
+				if err != nil {
+					return err
+				}
+
+				return clientCtx.PrintProto(res)
+			} else {
+				_, err = sdk.AccAddressFromBech32(args[0])
+				if err != nil {
+					_, err := chainhash.NewHashFromStr(args[0])
+					if err != nil {
+						return fmt.Errorf("invalid arg, neither address nor tx hash or pending: %s", args[0])
+					}
+
+					res, err := queryClient.QueryWithdrawRequestsByTxHash(cmd.Context(), &types.QueryWithdrawRequestsByTxHashRequest{Txid: args[0]})
+					if err != nil {
+						return err
+					}
+
+					return clientCtx.PrintProto(res)
+				}
+
+				res, err := queryClient.QueryWithdrawRequestsByAddress(cmd.Context(), &types.QueryWithdrawRequestsByAddressRequest{Address: args[0]})
+				if err != nil {
+					return err
+				}
+
+				return clientCtx.PrintProto(res)
+			}
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// CmdQuerySigningRequests returns the command to query signing requests
+func CmdQuerySigningRequests() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "signing-requests [status | address | tx hash]",
+		Short: "Query signing requests by status, address or tx hash",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			status, err := strconv.ParseInt(args[0], 10, 32)
+			if err != nil {
+				_, err = sdk.AccAddressFromBech32(args[0])
+				if err != nil {
+					_, err := chainhash.NewHashFromStr(args[0])
+					if err != nil {
+						return fmt.Errorf("invalid arg, neither status, address nor tx hash: %s", args[0])
+					}
+
+					res, err := queryClient.QuerySigningRequestByTxHash(cmd.Context(), &types.QuerySigningRequestByTxHashRequest{Txid: args[0]})
+					if err != nil {
+						return err
+					}
+
+					return clientCtx.PrintProto(res)
+				}
+
+				res, err := queryClient.QuerySigningRequestsByAddress(cmd.Context(), &types.QuerySigningRequestsByAddressRequest{Address: args[0]})
+				if err != nil {
+					return err
+				}
+
+				return clientCtx.PrintProto(res)
+			}
+
+			res, err := queryClient.QuerySigningRequests(cmd.Context(), &types.QuerySigningRequestsRequest{Status: types.SigningStatus(status)})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// CmdQueryUTXOs returns the command to query utxos by the optional address
+func CmdQueryUTXOs() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "utxos [address]",
+		Short: "Query utxos with the optional address",
+		Args:  cobra.MaximumNArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			if len(args) == 0 {
+				res, err := queryClient.QueryUTXOs(cmd.Context(), &types.QueryUTXOsRequest{})
+				if err != nil {
+					return err
+				}
+
+				return clientCtx.PrintProto(res)
+			}
+
+			_, err = sdk.AccAddressFromBech32(args[0])
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.QueryUTXOsByAddress(cmd.Context(), &types.QueryUTXOsByAddressRequest{
+				Address: args[0],
+			})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// CmdQueryUTXOStats returns the command to query the utxo statistics by address
+func CmdQueryUTXOStats() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "utxo-stats [address]",
+		Short: "Query the utxo statistics by the given address",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			_, err = sdk.AccAddressFromBech32(args[0])
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.QueryUTXOCountAndBalancesByAddress(cmd.Context(), &types.QueryUTXOCountAndBalancesByAddressRequest{
+				Address: args[0],
+			})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// CmdQueryDKGRequests returns the command to query DKG requests
+func CmdQueryDKGRequests() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "dkg-requests [status]",
+		Short: "Query dkg requests by the optional status",
+		Args:  cobra.MaximumNArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			if len(args) > 0 {
+				status, err := strconv.ParseInt(args[0], 10, 32)
+				if err != nil {
+					return err
+				}
+
+				res, err := queryClient.QueryDKGRequests(cmd.Context(), &types.QueryDKGRequestsRequest{Status: types.DKGRequestStatus(status)})
+				if err != nil {
+					return err
+				}
+
+				return clientCtx.PrintProto(res)
+			}
+
+			res, err := queryClient.QueryAllDKGRequests(cmd.Context(), &types.QueryAllDKGRequestsRequest{})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// CmdQueryDKGCompletionRequests returns the command to query DKG completion requests
+func CmdQueryDKGCompletionRequests() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "dkg-completions [id]",
+		Short: "Query dkg completion requests by the given request id",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.QueryDKGCompletionRequests(cmd.Context(), &types.QueryDKGCompletionRequestsRequest{Id: id})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryRefreshingRequest() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "refreshing-request [id]",
+		Short: "Query the refreshing request by the given id",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.QueryRefreshingRequest(cmd.Context(), &types.QueryRefreshingRequestRequest{Id: id})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryRefreshingRequests() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "refreshing-requests [status]",
+		Short: "Query refreshing requests by the given status",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			status, err := strconv.ParseUint(args[0], 10, 32)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.QueryRefreshingRequests(cmd.Context(), &types.QueryRefreshingRequestsRequest{Status: types.RefreshingStatus(status)})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryRefreshingCompletions() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "refreshing-completions [id]",
+		Short: "Query refreshing completions by the given refreshing request id",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.QueryRefreshingCompletions(cmd.Context(), &types.QueryRefreshingCompletionsRequest{Id: id})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdQueryRateLimit() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "rate-limit [address]",
+		Short: "Query the current rate limit with the optional address",
+		Args:  cobra.MaximumNArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			if len(args) > 0 {
+				res, err := queryClient.QueryRateLimitByAddress(cmd.Context(), &types.QueryRateLimitByAddressRequest{Address: args[0]})
+				if err != nil {
+					return err
+				}
+
+				return clientCtx.PrintProto(res)
+			}
+
+			res, err := queryClient.QueryRateLimit(cmd.Context(), &types.QueryRateLimitRequest{})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}

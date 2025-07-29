@@ -1,0 +1,278 @@
+syntax = "proto3";
+
+package bitway.btcbridge;
+
+import "cosmos/msg/v1/msg.proto";
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "bitway/btcbridge/params.proto";
+import "bitway/btcbridge/btcbridge.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/btcbridge/types";
+
+// Msg defines the Msg service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  rpc SubmitDepositTransaction (MsgSubmitDepositTransaction) returns (MsgSubmitDepositTransactionResponse);
+  // SubmitWithdrawalTransaction submits the bitcoin withdrawal transaction to the bitway chain.
+  rpc SubmitWithdrawTransaction (MsgSubmitWithdrawTransaction) returns (MsgSubmitWithdrawTransactionResponse);
+  // SubmitFeeRate submits the bitcoin network fee rate to the bitway chain.
+  rpc SubmitFeeRate (MsgSubmitFeeRate) returns (MsgSubmitFeeRateResponse);
+  // UpdateTrustedNonBtcRelayers updates the trusted non-btc asset relayers.
+  rpc UpdateTrustedNonBtcRelayers (MsgUpdateTrustedNonBtcRelayers) returns (MsgUpdateTrustedNonBtcRelayersResponse);
+  // UpdateTrustedFeeProviders updates the trusted fee providers.
+  rpc UpdateTrustedFeeProviders (MsgUpdateTrustedFeeProviders) returns (MsgUpdateTrustedFeeProvidersResponse);
+  // WithdrawToBitcoin withdraws the asset to bitcoin.
+  rpc WithdrawToBitcoin (MsgWithdrawToBitcoin) returns (MsgWithdrawToBitcoinResponse);
+  // SubmitSignatures submits the signatures of the signing request to the bitway chain.
+  rpc SubmitSignatures (MsgSubmitSignatures) returns (MsgSubmitSignaturesResponse);
+  // ConsolidateVaults performs the utxo consolidation for the given vaults.
+  rpc ConsolidateVaults (MsgConsolidateVaults) returns (MsgConsolidateVaultsResponse);
+  // InitiateDKG initiates the DKG request.
+  rpc InitiateDKG (MsgInitiateDKG) returns (MsgInitiateDKGResponse);
+  // CompleteDKG completes the given DKG request.
+  rpc CompleteDKG (MsgCompleteDKG) returns (MsgCompleteDKGResponse);
+  // Refresh refreshes key shares.
+  rpc Refresh(MsgRefresh) returns (MsgRefreshResponse);
+  // CompleteRefreshing completes the given refreshing request by the participant.
+  rpc CompleteRefreshing(MsgCompleteRefreshing) returns (MsgCompleteRefreshingResponse);
+  // TransferVault transfers the vault asset from the source version to the destination version.
+  rpc TransferVault (MsgTransferVault) returns (MsgTransferVaultResponse);
+  // UpdateParams defines a governance operation for updating the x/btcbridge module
+  // parameters. The authority defaults to the x/gov module account.
+  //
+  // Since: cosmos-sdk 0.47
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+}
+
+// MsgSubmitDepositTransaction defines the Msg/SubmitDepositTransaction request type.
+message MsgSubmitDepositTransaction {
+  option (cosmos.msg.v1.signer) = "sender";
+
+  // this is the relayer address who submits the bitcoin transaction to the bitway chain
+  string sender = 1;
+  string blockhash = 2;
+  // the tx bytes in base64 format
+  // used for parsing the sender of the transaction
+  string prev_tx_bytes = 3;
+  // the tx bytes in base64 format
+  string tx_bytes = 4;
+  repeated string proof = 5;
+}
+
+// MsgSubmitDepositTransactionResponse defines the Msg/SubmitDepositTransaction response type.
+message MsgSubmitDepositTransactionResponse {
+}
+
+// MsgSubmitWithdrawTransaction defines the Msg/SubmitWithdrawTransaction request type.
+message MsgSubmitWithdrawTransaction {
+  option (cosmos.msg.v1.signer) = "sender";
+
+  // this is the relayer address who submits the bitcoin transaction to the bitway chain
+  string sender = 1;
+  string blockhash = 2;
+  // the tx bytes in base64 format
+  string tx_bytes = 3;
+  repeated string proof = 4;
+}
+
+// MsgSubmitWithdrawTransactionResponse defines the Msg/SubmitWithdrawTransaction response type.
+message MsgSubmitWithdrawTransactionResponse {
+}
+
+// MsgSubmitFeeRate defines the Msg/SubmitFeeRate request type.
+message MsgSubmitFeeRate {
+  option (cosmos.msg.v1.signer) = "sender";
+
+  string sender = 1;
+  int64 fee_rate = 2;
+}
+
+// MsgSubmitFeeRateResponse defines the Msg/SubmitFeeRate response type.
+message MsgSubmitFeeRateResponse {
+}
+
+// MsgUpdateTrustedNonBtcRelayers defines the Msg/UpdateTrustedNonBtcRelayers request type.
+message MsgUpdateTrustedNonBtcRelayers {
+  option (cosmos.msg.v1.signer) = "sender";
+
+  string sender = 1;
+  repeated string relayers = 2;
+}
+
+// MsgUpdateTrustedNonBtcRelayersResponse defines the Msg/UpdateTrustedNonBtcRelayers response type.
+message MsgUpdateTrustedNonBtcRelayersResponse {
+}
+
+// MsgUpdateTrustedFeeProviders defines the Msg/UpdateTrustedFeeProviders request type.
+message MsgUpdateTrustedFeeProviders {
+  option (cosmos.msg.v1.signer) = "sender";
+
+  string sender = 1;
+  repeated string FeeProviders = 2;
+}
+
+// MsgUpdateTrustedFeeProvidersResponse defines the Msg/UpdateTrustedFeeProviders response type.
+message MsgUpdateTrustedFeeProvidersResponse {
+}
+
+// MsgWithdrawToBitcoin defines the Msg/WithdrawToBitcoin request type.
+message MsgWithdrawToBitcoin {
+  option (cosmos.msg.v1.signer) = "sender";
+
+  string sender = 1;
+  // withdraw amount in satoshi, etc: 100000000sat = 1btc
+  string amount = 2;
+}
+
+// MsgWithdrawToBitcoinResponse defines the Msg/WithdrawToBitcoin response type.
+message MsgWithdrawToBitcoinResponse {
+}
+
+// MsgSubmitSignatures defines the Msg/SubmitSignatures request type.
+message MsgSubmitSignatures {
+  option (cosmos.msg.v1.signer) = "sender";
+
+  string sender = 1;
+  string txid = 2;
+  repeated string signatures = 3;
+}
+
+// MsgSubmitSignaturesResponse defines the Msg/SubmitSignatures response type.
+message MsgSubmitSignaturesResponse {
+}
+
+// MsgConsolidateVaults is the Msg/ConsolidateVaults request type.
+message MsgConsolidateVaults {
+  option (cosmos.msg.v1.signer) = "authority";
+
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1;
+  // vault version
+  uint64 vault_version = 2;
+  // btc consolidation
+  BtcConsolidation btc_consolidation = 3;
+  // runes consolidations
+  repeated RunesConsolidation runes_consolidations = 4;
+}
+
+// MsgConsolidateVaultsResponse defines the Msg/ConsolidateVaults response type.
+message MsgConsolidateVaultsResponse {}
+
+// MsgInitiateDKG is the Msg/InitiateDKG request type.
+message MsgInitiateDKG {
+  option (cosmos.msg.v1.signer) = "authority";
+
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1;
+  // expected participant set
+  repeated DKGParticipant participants = 2;
+  // threshold required to perform DKG
+  uint32 threshold = 3;
+  // asset types of vaults to be generated
+  repeated AssetType vault_types = 4;
+  // indicates if transferring the current vaults to the newly generated vaults when the DKG request is completed
+  bool enable_transfer = 5;
+  // target number of the UTXOs to be transferred each time
+  uint32 target_utxo_num = 6;
+}
+
+// MsgInitiateDKGResponse defines the Msg/InitiateDKG response type.
+message MsgInitiateDKGResponse {}
+
+// MsgCompleteDKG is the Msg/CompleteDKG request type.
+message MsgCompleteDKG {
+  option (cosmos.msg.v1.signer) = "sender";
+
+  // the sender
+  string sender = 1;
+  // DKG request id
+  uint64 id = 2;
+  // new vaults generated by DKG
+  repeated string vaults = 3;
+  // participant consensus pub key
+  string consensus_pubkey = 4;
+  // hex encoded participant signature
+  string signature = 5;
+}
+
+// MsgCompleteDKGResponse defines the Msg/CompleteDKG response type.
+message MsgCompleteDKGResponse {}
+
+// MsgRefresh defines the Msg/Refresh request type.
+message MsgRefresh {
+  option (cosmos.msg.v1.signer) = "authority";
+
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1;
+  // list of DKGs corresponding to key shares to be refreshed
+  repeated uint64 dkg_ids = 2;
+  // removed participant set
+  repeated string removed_participants = 3;
+  // new threshold set corresponding to the DKGs
+  repeated uint32 thresholds = 4;
+  // timeout duration per DKG refreshing
+  google.protobuf.Duration timeout_duration = 5 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+}
+
+// MsgRefreshResponse defines the Msg/Refresh response type.
+message MsgRefreshResponse {}
+
+// MsgCompleteRefreshing defines the Msg/CompleteRefreshing request type.
+message MsgCompleteRefreshing {
+  option (cosmos.msg.v1.signer) = "sender";
+
+  // sender
+  string sender = 1;
+  // request id
+  uint64 id = 2;
+  // participant consensus pub key
+  string consensus_pubkey = 3;
+  // hex encoded participant signature
+  string signature = 4;
+}
+
+// MsgCompleteRefreshingResponse defines the Msg/CompleteRefreshing response type.
+message MsgCompleteRefreshingResponse {}
+
+// MsgTransferVault is the Msg/TransferVault request type.
+message MsgTransferVault {
+  option (cosmos.msg.v1.signer) = "authority";
+
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1;
+  // version of the source vault
+  uint64 source_version = 2;
+  // version of the destination vault
+  uint64 dest_version = 3;
+  // asset type
+  AssetType asset_type = 4;
+  // a set of optional pre-built PSBTs to perform the asset transfer
+  repeated string psbts = 5;
+  // target number of the UTXOs to be transferred; only take effect when psbt not provided
+  uint32 target_utxo_num = 6;
+}
+
+// MsgTransferVaultResponse defines the Msg/TransferVault response type.
+message MsgTransferVaultResponse {}
+
+// MsgUpdateParams is the Msg/UpdateParams request type.
+//
+// Since: cosmos-sdk 0.47
+message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1;
+
+  // params defines the x/btcbridge parameters to be updated.
+  //
+  // NOTE: All parameters must be supplied.
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgUpdateParamsResponse defines the Msg/UpdateParams response type.
+//
+// Since: cosmos-sdk 0.47
+message MsgUpdateParamsResponse {}

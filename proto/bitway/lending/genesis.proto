@@ -1,0 +1,15 @@
+syntax = "proto3";
+package bitway.lending;
+
+import "gogoproto/gogo.proto";
+import "bitway/lending/params.proto";
+import "bitway/lending/lending.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/lending/types";
+
+// GenesisState defines the lending module's genesis state.
+message GenesisState {
+    Params params = 1 [(gogoproto.nullable) = false];
+
+    repeated LendingPool pools = 2;
+}

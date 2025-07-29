@@ -1,0 +1,326 @@
+syntax = "proto3";
+package bitway.lending;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+import "bitway/btcbridge/btcbridge.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/lending/types";
+
+// Status options for a lending pool
+enum PoolStatus {
+    INACTIVE = 0;
+    ACTIVE = 1;
+    PAUSED = 2;
+}
+
+// Asset metadata
+message AssetMetadata {
+    string denom = 1;
+    string symbol = 2;
+    int32 decimals = 3;
+    string price_symbol = 4;
+    bool is_base_price_asset = 5;
+}
+
+// Pool tranche config
+message PoolTrancheConfig {
+  // maturity duration in seconds
+  int64 maturity = 1;
+  // borrow apr permille
+  uint32 borrow_apr = 2 [(gogoproto.customname) = "BorrowAPR"];
+}
+
+// Pool config
+message PoolConfig {
+    // collateral asset metadata
+    AssetMetadata collateral_asset = 1 [(gogoproto.nullable) = false];
+    // lending asset metadata
+    AssetMetadata lending_asset = 2 [(gogoproto.nullable) = false];
+    // supply cap
+    string supply_cap = 3 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    // borrow cap
+    string borrow_cap = 4 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    // minimum amount to be borrowed
+    string min_borrow_amount = 5 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    // maximum amount to be borrowed
+    string max_borrow_amount = 6 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    // tranches
+    repeated PoolTrancheConfig tranches = 7 [(gogoproto.nullable) = false];
+    // request fee
+    cosmos.base.v1beta1.Coin request_fee = 8 [
+      (gogoproto.nullable) = false
+    ];
+    // origination fee factor permille
+    uint32 origination_fee_factor = 9;
+    // reserve factor permille
+    uint32 reserve_factor = 10;
+    // maximum ltv percent
+    uint32 max_ltv = 11;
+    // liquidation ltv percent
+    uint32 liquidation_threshold = 12;
+    // indicates if the pool is paused
+    bool paused = 13;
+}
+
+// Pool tranche
+message PoolTranche {
+    // maturity duration
+    int64 maturity = 1;
+    // borrow index
+    string borrow_index = 2 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+    // total borrowed
+    string total_borrowed = 3 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+     // total reserve
+    string total_reserve = 4 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+}
+
+message LendingPool {
+    string id = 1;
+    cosmos.base.v1beta1.Coin supply = 2 [
+      (gogoproto.nullable) = false
+    ];
+    string available_amount = 3 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    string borrowed_amount = 4 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    string total_borrowed = 5 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    string reserve_amount = 6 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    string total_reserve = 7 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    cosmos.base.v1beta1.Coin total_ytokens = 8 [
+      (gogoproto.nullable) = false,
+      (gogoproto.customname) = "TotalYTokens"
+    ];
+    repeated PoolTranche tranches = 9 [(gogoproto.nullable) = false];
+    PoolConfig config = 10 [(gogoproto.nullable) = false];
+    PoolStatus status = 11;
+}
+
+// Loan Status
+enum LoanStatus {
+    // Unspecified
+    Unspecified = 0;
+    // Loan Requested
+    Requested = 1;
+    // Loan Cancelled
+    Cancelled = 2;
+    // Loan Authorized
+    Authorized = 3;
+    // Loan Rejected
+    Rejected = 4;
+    // Loan Open
+    Open = 5;
+    // Loan Repaid
+    Repaid = 6;
+    // Loan Defaulted
+    Defaulted = 7;
+    // Loan Liquidated
+    Liquidated = 8;
+    // Loan Closed
+    Closed = 9;
+}
+
+// Authorization Status
+enum AuthorizationStatus {
+    // Pending
+    AUTHORIZATION_STATUS_PENDING = 0;
+    // Authorized
+    AUTHORIZATION_STATUS_AUTHORIZED = 1;
+    // Rejected
+    AUTHORIZATION_STATUS_REJECTED = 2;
+}
+
+// Authorization with deposit txs for cets
+message Authorization {
+    uint64 id = 1;
+    repeated string deposit_txs = 2;
+    AuthorizationStatus status = 3;
+}
+
+message Loan {
+    string vault_address = 1; // id
+    string borrower = 2;
+    string borrowerPubKey = 3;
+    string borrowerAuthPubKey = 4;
+    string dcm = 5 [(gogoproto.customname) = "DCM"];
+    int64 maturity_time = 6;
+    int64 final_timeout = 7;
+    string pool_id = 8;
+    cosmos.base.v1beta1.Coin borrow_amount = 9 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin request_fee = 10 [(gogoproto.nullable) = false];
+    string origination_fee = 11 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    string interest = 12 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    string protocol_fee = 13 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    int64 maturity = 14;
+    uint32 borrow_apr = 15 [(gogoproto.customname) = "BorrowAPR"];
+    string start_borrow_index = 16 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+    string liquidation_price = 17 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable) = false
+    ];
+    uint64 dlc_event_id = 18;
+    repeated Authorization authorizations = 19 [(gogoproto.nullable) = false];
+    string collateral_amount = 20 [
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (gogoproto.nullable) = false
+    ];
+    uint64 liquidation_id = 21;
+    Referrer referrer = 22;
+    google.protobuf.Timestamp create_at = 23 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    google.protobuf.Timestamp disburse_at = 24 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    LoanStatus status = 25;
+}
+
+// Referrer defines the referrer
+message Referrer {
+  // Optional name
+  string name = 1;
+  // Unique referral code with 8 alphanumeric characters
+  string referral_code = 2;
+  // Referrer address
+  string address = 3;
+  // Referral fee factor
+  string referral_fee_factor = 4 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+}
+
+enum CetType {
+  LIQUIDATION = 0;
+  DEFAULT_LIQUIDATION = 1;
+  REPAYMENT = 2;
+}
+
+// LeafScript defines the tap leaf script
+message LeafScript {
+  string script = 1;
+  string control_block = 2;
+}
+
+message CetInfo {
+  uint64 event_id = 1;
+  uint32 outcome_index = 2;
+  string signature_point = 3;
+  LeafScript script = 4 [(gogoproto.nullable) = false];
+  uint32 sighash_type = 5;
+}
+
+message LiquidationCet {
+  string tx = 1;
+  repeated string borrower_adaptor_signatures = 2;
+  repeated string borrower_adapted_signatures = 3;
+  repeated string dcm_signatures = 4 [(gogoproto.customname) = "DCMSignatures"];
+  string signed_tx_hex = 5;
+}
+
+message RepaymentCet {
+  string tx = 1;
+  repeated string dcm_adaptor_signatures = 2 [(gogoproto.customname) = "DCMAdaptorSignatures"];
+  repeated string dcm_adapted_signatures = 3 [(gogoproto.customname) = "DCMAdaptedSignatures"];
+  repeated string borrower_signatures = 4;
+  string signed_tx_hex = 5;
+}
+
+message DLCMeta {
+    LiquidationCet liquidation_cet = 1 [(gogoproto.nullable) = false]; 
+    LiquidationCet default_liquidation_cet = 2 [(gogoproto.nullable) = false];
+    RepaymentCet repayment_cet = 3 [(gogoproto.nullable) = false];
+    string timeout_refund_tx = 4;
+    repeated bitway.btcbridge.UTXO vault_utxos = 5;
+    string internal_key = 6;
+    LeafScript liquidation_script = 7 [(gogoproto.nullable) = false];
+    LeafScript repayment_script = 8 [(gogoproto.nullable) = false];
+    LeafScript timeout_refund_script = 9 [(gogoproto.nullable) = false];
+}
+
+enum DepositStatus {
+    DEPOSIT_STATUS_PENDING = 0;
+    DEPOSIT_STATUS_VERIFIED = 1;
+    DEPOSIT_STATUS_REDEEMING = 2;
+    DEPOSIT_STATUS_REDEEMED = 3;
+}
+
+message DepositLog {
+    string txid = 1;
+    string vault_address = 2;
+    uint64 authorization_id = 3;
+    string deposit_tx = 4;
+    DepositStatus status = 5;
+}
+
+message Repayment {
+    string loan_id = 1;
+    cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+    google.protobuf.Timestamp create_at = 3 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+}
+
+message Redemption {
+    uint64 id = 1;
+    string loan_id = 2;
+    string txid = 3;
+    string tx = 4;
+    repeated string signatures = 5;
+    repeated string dcm_signatures = 6 [(gogoproto.customname) = "DCMSignatures"];
+    google.protobuf.Timestamp create_at = 7 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+}
+
+// Signing intent
+enum SigningIntent {
+  SIGNING_INTENT_REPAYMENT = 0;
+  SIGNING_INTENT_LIQUIDATION = 1;
+  SIGNING_INTENT_DEFAULT_LIQUIDATION = 2;
+  SIGNING_INTENT_REDEMPTION = 3;
+}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+package bitway.farming;
+
+import "gogoproto/gogo.proto";
+import "bitway/farming/farming.proto";
+import "bitway/farming/params.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/farming/types";
+
+// GenesisState defines the farming module's genesis state.
+message GenesisState {
+    Params params = 1 [(gogoproto.nullable) = false];
+
+    repeated Staking stakings = 2;
+}

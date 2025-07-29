@@ -1,0 +1,161 @@
+syntax = "proto3";
+package bitway.farming;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/duration.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "bitway/farming/farming.proto";
+import "bitway/farming/params.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/farming/types";
+
+// Query defines the gRPC querier service.
+service Query {
+    // Params queries the parameters of the module.
+    rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+      option (google.api.http).get = "/bitway/farming/params";
+    }
+
+    rpc Staking(QueryStakingRequest) returns (QueryStakingResponse) {
+        option (google.api.http).get = "/bitway/farming/stakings/{id}";
+    }
+
+    rpc Stakings(QueryStakingsRequest) returns (QueryStakingsResponse) {
+        option (google.api.http).get = "/bitway/farming/stakings";
+    }
+
+    rpc StakingsByAddress(QueryStakingsByAddressRequest) returns (QueryStakingsByAddressResponse) {
+        option (google.api.http).get = "/bitway/farming/stakings/address/{address}";
+    }
+
+    rpc TotalStaking(QueryTotalStakingRequest) returns (QueryTotalStakingResponse) {
+        option (google.api.http).get = "/bitway/farming/total_staking";
+    }
+
+    rpc CurrentEpoch(QueryCurrentEpochRequest) returns (QueryCurrentEpochResponse) {
+        option (google.api.http).get = "/bitway/farming/current_epoch";
+    }
+
+    rpc Rewards(QueryRewardsRequest) returns (QueryRewardsResponse) {
+        option (google.api.http).get = "/bitway/farming/rewards";
+    }
+
+    rpc PendingReward(QueryPendingRewardRequest) returns (QueryPendingRewardResponse) {
+        option (google.api.http).get = "/bitway/farming/current_epoch/pending_reward";
+    }
+
+    rpc PendingRewardByAddress(QueryPendingRewardByAddressRequest) returns (QueryPendingRewardByAddressResponse) {
+        option (google.api.http).get = "/bitway/farming/current_epoch/pending_reward/{address}";
+    }
+
+    rpc EstimatedReward(QueryEstimatedRewardRequest) returns (QueryEstimatedRewardResponse) {
+        option (google.api.http).get = "/bitway/farming/estimated_reward";
+    }
+}
+
+// QueryStakingRequest is request type for the Query/Staking RPC method.
+message QueryStakingRequest {
+    uint64 id = 1;
+}
+
+// QueryStakingResponse is response type for the Query/Staking RPC method.
+message QueryStakingResponse {
+    Staking staking = 1;
+}
+
+// QueryStakingsRequest is request type for the Query/Stakings RPC method.
+message QueryStakingsRequest {
+    StakingStatus status = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryStakingsResponse is response type for the Query/Stakings RPC method.
+message QueryStakingsResponse {
+    repeated Staking stakings = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryStakingsByAddressRequest is request type for the Query/StakingsByAddress RPC method.
+message QueryStakingsByAddressRequest {
+    string address = 1;
+    StakingStatus status = 2;
+    cosmos.base.query.v1beta1.PageRequest pagination = 3;
+}
+
+// QueryStakingsByAddressResponse is response type for the Query/StakingsByAddress RPC method.
+message QueryStakingsByAddressResponse {
+    repeated Staking stakings = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryTotalStakingRequest is request type for the Query/TotalStaking RPC method.
+message QueryTotalStakingRequest {
+    string denom = 1;
+}
+
+// QueryTotalStakingResponse is response type for the Query/TotalStaking RPC method.
+message QueryTotalStakingResponse {
+    TotalStaking total_staking = 1;
+}
+
+// QueryCurrentEpochRequest is request type for the Query/CurrentEpoch RPC method.
+message QueryCurrentEpochRequest {
+}
+
+// QueryCurrentEpochResponse is response type for the Query/CurrentEpoch RPC method.
+message QueryCurrentEpochResponse {
+    Epoch current_epoch = 1;
+}
+
+// QueryRewardsRequest is request type for the Query/Rewards RPC method.
+message QueryRewardsRequest {
+    string address = 1;
+}
+
+// QueryRewardsResponse is response type for the Query/Rewards RPC method.
+message QueryRewardsResponse {
+    string pending_rewards = 1;
+    string total_rewards = 2;
+}
+
+// QueryPendingRewardRequest is request type for the Query/PendingReward RPC method.
+message QueryPendingRewardRequest {
+    uint64 id = 1;
+}
+
+// QueryPendingRewardResponse is response type for the Query/PendingReward RPC method.
+message QueryPendingRewardResponse {
+    string pending_reward = 1;
+}
+
+// QueryPendingRewardByAddressRequest is request type for the Query/PendingRewardByAddress RPC method.
+message QueryPendingRewardByAddressRequest {
+    string address = 1;
+}
+
+// QueryPendingRewardByAddressResponse is response type for the Query/PendingRewardByAddress RPC method.
+message QueryPendingRewardByAddressResponse {
+    AccountRewardPerEpoch pending_reward = 1;
+}
+
+// QueryEstimatedRewardRequest is request type for the Query/EstimatedReward RPC method.
+message QueryEstimatedRewardRequest {
+    string address = 1;
+    string amount = 2;
+    google.protobuf.Duration lock_duration = 3 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+}
+
+// QueryEstimatedRewardResponse is response type for the Query/EstimatedReward RPC method.
+message QueryEstimatedRewardResponse {
+    AccountRewardPerEpoch reward = 1;
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {
+}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+    Params params = 1 [(gogoproto.nullable) = false];
+}

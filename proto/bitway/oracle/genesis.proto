@@ -1,0 +1,16 @@
+syntax = "proto3";
+package bitway.oracle;
+
+import "gogoproto/gogo.proto";
+import "bitway/oracle/params.proto";
+import "bitway/oracle/oracle.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/oracle/types";
+
+// GenesisState defines the oracle module's genesis state.
+message GenesisState {
+    Params params = 1 [(gogoproto.nullable) = false];
+
+    repeated OraclePrice prices = 2;
+    repeated BlockHeader blocks = 3;
+}

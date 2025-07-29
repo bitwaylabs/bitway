@@ -1,0 +1,365 @@
+syntax = "proto3";
+package bitway.btcbridge;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "bitway/btcbridge/params.proto";
+import "bitway/btcbridge/btcbridge.proto";
+
+option go_package = "github.com/bitwaylabs/bitway/x/btcbridge/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc QueryParams(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/params";
+  }
+  // QueryFeeRate queries the bitcoin network fee rate on the bitway chain.
+  rpc QueryFeeRate(QueryFeeRateRequest) returns (QueryFeeRateResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/feerate";
+  }
+  // QueryWithdrawalNetworkFee queries the estimated btc network fee for the given withdrawal.
+  rpc QueryWithdrawalNetworkFee(QueryWithdrawalNetworkFeeRequest) returns (QueryWithdrawalNetworkFeeResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/withdrawal/fee/estimation";
+  }
+  // QueryWithdrawRequestsByAddress queries the withdrawal requests by the given address.
+  rpc QueryWithdrawRequestsByAddress(QueryWithdrawRequestsByAddressRequest) returns (QueryWithdrawRequestsByAddressResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/withdrawal/requests/address/{address}";
+  }
+  // QueryWithdrawRequestsByTxHash queries the withdrawal requests by the given tx hash.
+  rpc QueryWithdrawRequestsByTxHash(QueryWithdrawRequestsByTxHashRequest) returns (QueryWithdrawRequestsByTxHashResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/withdrawal/requests/tx/{txid}";
+  }
+  // QueryPendingBtcWithdrawRequests queries the pending btc withdrawal requests.
+  rpc QueryPendingBtcWithdrawRequests(QueryPendingBtcWithdrawRequestsRequest) returns (QueryPendingBtcWithdrawRequestsResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/withdrawal/requests/btc/pending";
+  }
+  // QuerySigningRequest queries the signing requests by sequence.
+  rpc QuerySigningRequest(QuerySigningRequestRequest) returns (QuerySigningRequestResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/signing/requests/{sequence}";
+  }
+  // QuerySigningRequests queries the signing requests by the given status.
+  rpc QuerySigningRequests(QuerySigningRequestsRequest) returns (QuerySigningRequestsResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/signing/requests";
+  }
+  // QuerySigningRequestsByAddress queries the signing requests by the given address.
+  rpc QuerySigningRequestsByAddress(QuerySigningRequestsByAddressRequest) returns (QuerySigningRequestsByAddressResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/signing/requests/address/{address}";
+  }
+  // QuerySigningRequestByTxHash queries the signing request by the given tx hash.
+  rpc QuerySigningRequestByTxHash(QuerySigningRequestByTxHashRequest) returns (QuerySigningRequestByTxHashResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/signing/requests/tx/{txid}";
+  }
+  // QueryPendingSigningRequests queries the pending signing requests.
+  rpc QueryPendingSigningRequests(QueryPendingSigningRequestsRequest) returns (QueryPendingSigningRequestsResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/signing/requests/pending";
+  }
+  // QueryUTXOs queries all utxos.
+  rpc QueryUTXOs(QueryUTXOsRequest) returns (QueryUTXOsResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/utxos";
+  }
+  // QueryUTXOsByAddress queries the utxos of the given address.
+  rpc QueryUTXOsByAddress(QueryUTXOsByAddressRequest) returns (QueryUTXOsByAddressResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/utxos/{address}";
+  }
+  // QueryUTXOCountAndBalancesByAddress queries the total count and balances of the unlocked utxos by the given address.
+  rpc QueryUTXOCountAndBalancesByAddress(QueryUTXOCountAndBalancesByAddressRequest) returns (QueryUTXOCountAndBalancesByAddressResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/utxos/{address}/stats";
+  }
+  // QueryDKGRequest queries the DKG request by the given id.
+  rpc QueryDKGRequest(QueryDKGRequestRequest) returns (QueryDKGRequestResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/dkg/request/{id}";
+  }
+  // QueryDKGRequests queries the DKG requests by the given status
+  rpc QueryDKGRequests(QueryDKGRequestsRequest) returns (QueryDKGRequestsResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/dkg/request";
+  }
+  // QueryAllDKGRequests queries all DKG requests.
+  rpc QueryAllDKGRequests(QueryAllDKGRequestsRequest) returns (QueryAllDKGRequestsResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/dkg/requests";
+  }
+  // QueryDKGCompletionRequests queries DKG completion requests by the given id.
+  rpc QueryDKGCompletionRequests(QueryDKGCompletionRequestsRequest) returns (QueryDKGCompletionRequestsResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/dkg/completion/request/{id}";
+  }
+  // QueryRefreshingRequest queries the refreshing request by the given id.
+  rpc QueryRefreshingRequest(QueryRefreshingRequestRequest) returns (QueryRefreshingRequestResponse) {
+      option (google.api.http).get = "/bitway/btcbridge/refreshing/requests/{id}";
+  }
+  // QueryRefreshingRequests queries the refreshing requests by the given status.
+  rpc QueryRefreshingRequests(QueryRefreshingRequestsRequest) returns (QueryRefreshingRequestsResponse) {
+      option (google.api.http).get = "/bitway/btcbridge/refreshing/requests";
+  }
+  // QueryRefreshingCompletions queries refreshing completions by the given request id.
+  rpc QueryRefreshingCompletions(QueryRefreshingCompletionsRequest) returns (QueryRefreshingCompletionsResponse) {
+      option (google.api.http).get = "/bitway/btcbridge/refreshing/completions/{id}";
+  }
+  // QueryIBCDepositScript queries the deposit OP_RETURN script for cross-chain via IBC.
+  rpc QueryIBCDepositScript(QueryIBCDepositScriptRequest) returns (QueryIBCDepositScriptResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/deposit/ibc_script";
+  }
+  // QueryRateLimit queries the current rate limit
+  rpc QueryRateLimit(QueryRateLimitRequest) returns (QueryRateLimitResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/rate_limit";
+  }
+  // QueryRateLimitByAddress queries the current rate limit by the given address
+  rpc QueryRateLimitByAddress(QueryRateLimitByAddressRequest) returns (QueryRateLimitByAddressResponse) {
+    option (google.api.http).get = "/bitway/btcbridge/rate_limit/address/{address}";
+  }
+}
+
+// QueryWithdrawRequestsByAddressRequest is request type for the Query/WithdrawRequestsByAddress RPC method.
+message QueryWithdrawRequestsByAddressRequest {
+  string address = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryWithdrawRequestsByAddressResponse is response type for the Query/WithdrawRequestsByAddress RPC method.
+message QueryWithdrawRequestsByAddressResponse {
+  repeated WithdrawRequest requests = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryWithdrawRequestsByTxHashRequest is request type for the Query/WithdrawRequestsByTxHash RPC method.
+message QueryWithdrawRequestsByTxHashRequest {
+  string txid = 1;
+}
+
+// QueryWithdrawRequestsByTxHashResponse is response type for the Query/WithdrawRequestsByTxHash RPC method.
+message QueryWithdrawRequestsByTxHashResponse {
+  repeated WithdrawRequest requests = 1;
+}
+
+// QueryPendingBtcWithdrawRequestsRequest is request type for the Query/PendingBtcWithdrawRequests RPC method.
+message QueryPendingBtcWithdrawRequestsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryPendingBtcWithdrawRequestsResponse is response type for the Query/PendingBtcWithdrawRequests RPC method.
+message QueryPendingBtcWithdrawRequestsResponse {
+  repeated WithdrawRequest requests = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QuerySigningRequestRequest is request type for the Query/SigningRequest RPC method.
+message QuerySigningRequestRequest {
+  uint64 sequence = 1;
+}
+
+// QuerySigningRequestResponse is response type for the Query/SigningRequest RPC method.
+message QuerySigningRequestResponse {
+  SigningRequest request = 1;
+}
+
+// QuerySigningRequestsRequest is request type for the Query/SigningRequests RPC method.
+message QuerySigningRequestsRequest {
+  SigningStatus status = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination            = 2;
+}
+
+// QuerySigningRequestsResponse is response type for the Query/SigningRequests RPC method.
+message QuerySigningRequestsResponse {
+  repeated SigningRequest requests = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination            = 2;
+}
+
+// QuerySigningRequestsByAddressRequest is request type for the Query/SigningRequestsByAddress RPC method.
+message QuerySigningRequestsByAddressRequest {
+  string address = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination            = 2;
+}
+
+// QuerySigningRequestsByAddressResponse is response type for the Query/SigningRequestsByAddress RPC method.
+message QuerySigningRequestsByAddressResponse {
+  repeated SigningRequest requests = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination            = 2;
+}
+
+// QuerySigningRequestByTxHashRequest is request type for the Query/SigningRequestByTxHash RPC method.
+message QuerySigningRequestByTxHashRequest {
+  string txid = 1;
+}
+
+// QuerySigningRequestByTxHashResponse is response type for the Query/SigningRequestByTxHashResponse RPC method.
+message QuerySigningRequestByTxHashResponse {
+  SigningRequest request = 1;
+}
+
+// QueryPendingSigningRequestsRequest is request type for the Query/PendingSigningRequests RPC method.
+message QueryPendingSigningRequestsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryPendingSigningRequestsResponse is response type for the Query/PendingSigningRequests RPC method.
+message QueryPendingSigningRequestsResponse {
+  repeated CompactSigningRequest requests = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryFeeRateRequest is request type for the Query/FeeRate RPC method.
+message QueryFeeRateRequest {}
+
+// QueryFeeRateResponse is response type for the Query/FeeRate RPC method.
+message QueryFeeRateResponse {
+  FeeRate fee_rate = 1;
+}
+
+// QueryWithdrawalNetworkFeeRequest is request type for the Query/WithdrawalNetworkFee RPC method.
+message QueryWithdrawalNetworkFeeRequest {
+  string address = 1;
+  string amount = 2;
+  int64 fee_rate = 3;
+}
+
+// QueryWithdrawalNetworkFeeResponse is response type for the Query/WithdrawalNetworkFee RPC method.
+message QueryWithdrawalNetworkFeeResponse {
+  int64 fee_rate = 1;
+  string fee = 2;
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryUTXOsRequest is the request type for the Query/UTXOs RPC method.
+message QueryUTXOsRequest {}
+
+// QueryUTXOsResponse is the response type for the Query/UTXOs RPC method.
+message QueryUTXOsResponse {
+  repeated UTXO utxos = 1;
+}
+
+// QueryUTXOsByAddressRequest is the request type for the Query/UTXOsByAddress RPC method.
+message QueryUTXOsByAddressRequest {
+  string address = 1;
+}
+
+// QueryUTXOsByAddressResponse is the response type for the Query/UTXOsByAddress RPC method.
+message QueryUTXOsByAddressResponse {
+  repeated UTXO utxos = 1;
+}
+
+// QueryUTXOCountAndBalancesByAddressRequest is the request type for the Query/UTXOCountAndBalancesByAddress RPC method.
+message QueryUTXOCountAndBalancesByAddressRequest {
+  string address = 1;
+}
+
+// QueryUTXOCountAndBalancesByAddressResponse is the response type for the Query/UTXOCountAndBalancesByAddress RPC method.
+message QueryUTXOCountAndBalancesByAddressResponse {
+  uint32 count = 1;
+  int64 value = 2;
+  repeated RuneBalance runeBalances = 3;
+}
+
+// QueryDKGRequestRequest is the request type for the Query/DKGRequest RPC method.
+message QueryDKGRequestRequest {
+  uint64 id = 1;
+}
+
+// QueryDKGRequestResponse is the response type for the Query/DKGRequest RPC method.
+message QueryDKGRequestResponse {
+  DKGRequest request = 1;
+}
+
+// QueryDKGRequestsRequest is the request type for the Query/DKGRequests RPC method.
+message QueryDKGRequestsRequest {
+  DKGRequestStatus status = 1;
+}
+
+// QueryDKGRequestsResponse is the response type for the Query/DKGRequests RPC method.
+message QueryDKGRequestsResponse {
+  repeated DKGRequest requests = 1;
+}
+
+// QueryAllDKGRequestsRequest is the request type for the Query/AllDKGRequests RPC method.
+message QueryAllDKGRequestsRequest {
+}
+
+// QueryAllDKGRequestsResponse is the response type for the Query/AllDKGRequests RPC method.
+message QueryAllDKGRequestsResponse {
+  repeated DKGRequest requests = 1;
+}
+
+// QueryDKGCompletionRequestsRequest is the request type for the Query/DKGCompletionRequests RPC method.
+message QueryDKGCompletionRequestsRequest {
+  uint64 id = 1;
+}
+
+// QueryDKGCompletionRequestsResponse is the response type for the Query/DKGCompletionRequests RPC method.
+message QueryDKGCompletionRequestsResponse {
+  repeated DKGCompletionRequest requests = 1;
+}
+
+message QueryRefreshingRequestRequest {
+    uint64 id = 1;
+}
+
+message QueryRefreshingRequestResponse {
+    RefreshingRequest request = 1;
+}
+
+message QueryRefreshingRequestsRequest {
+    RefreshingStatus status = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryRefreshingRequestsResponse {
+    repeated RefreshingRequest requests = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryRefreshingCompletionsRequest {
+    uint64 id = 1;
+    cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryRefreshingCompletionsResponse {
+    repeated RefreshingCompletion completions = 1;
+    cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryIBCDepositScriptRequest is the request type for the Query/IBCDepositScript RPC method.
+message QueryIBCDepositScriptRequest {
+  string channel_id = 1;
+  string recipient_address = 2;
+}
+
+// QueryIBCDepositScriptResponse is the response type for the Query/IBCDepositScript RPC method.
+message QueryIBCDepositScriptResponse {
+  string script = 1;
+}
+
+// QueryRateLimitRequest is the request type for the Query/RateLimit RPC method.
+message QueryRateLimitRequest {
+}
+
+// QueryRateLimitResponse is the response type for the Query/RateLimit RPC method.
+message QueryRateLimitResponse {
+  RateLimit rate_limit = 1;
+}
+
+// QueryRateLimitByAddressRequest is the request type for the Query/RateLimitByAddress RPC method.
+message QueryRateLimitByAddressRequest {
+  string address = 1;
+}
+
+// QueryRateLimitByAddressResponse is the response type for the Query/RateLimitByAddress RPC method.
+message QueryRateLimitByAddressResponse {
+  // Address
+  string address = 1;
+  // Starting time for the current epoch
+  google.protobuf.Timestamp start_time = 2 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  // End time for the current epoch
+  google.protobuf.Timestamp end_time = 3 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  // Maximum withdrawable amount for the current epoch; 0 means no limit
+  int64 quota = 4;
+  // Used quota currently
+  int64 used = 5;
+}
