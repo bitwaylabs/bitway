@@ -385,6 +385,18 @@ func (k Keeper) GetWithdrawRequestsByTxHash(ctx sdk.Context, txHash string) []*t
 	return requests
 }
 
+// GetAllWithdrawRequests gets all withdrawal requests
+func (k Keeper) GetAllWithdrawRequests(ctx sdk.Context) []*types.WithdrawRequest {
+	requests := make([]*types.WithdrawRequest, 0)
+
+	k.IterateWithdrawRequests(ctx, func(req *types.WithdrawRequest) (stop bool) {
+		requests = append(requests, req)
+		return false
+	})
+
+	return requests
+}
+
 // SetWithdrawRequest sets the given withdrawal request
 func (k Keeper) SetWithdrawRequest(ctx sdk.Context, req *types.WithdrawRequest) {
 	store := ctx.KVStore(k.storeKey)
@@ -598,6 +610,18 @@ func (k Keeper) GetSigningRequestsByAddr(ctx sdk.Context, req *types.QuerySignin
 	})
 
 	return signingRequests
+}
+
+// GetAllSigningRequests gets all signing requests
+func (k Keeper) GetAllSigningRequests(ctx sdk.Context) []*types.SigningRequest {
+	requests := make([]*types.SigningRequest, 0)
+
+	k.IterateSigningRequests(ctx, func(req *types.SigningRequest) (stop bool) {
+		requests = append(requests, req)
+		return false
+	})
+
+	return requests
 }
 
 // IterateSigningRequests iterates through all signing requests

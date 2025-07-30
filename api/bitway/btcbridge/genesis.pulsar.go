@@ -64,11 +64,317 @@ func (x *_GenesisState_2_list) IsValid() bool {
 	return x.list != nil
 }
 
+var _ protoreflect.List = (*_GenesisState_3_list)(nil)
+
+type _GenesisState_3_list struct {
+	list *[]*DKGRequest
+}
+
+func (x *_GenesisState_3_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_GenesisState_3_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_GenesisState_3_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*DKGRequest)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_GenesisState_3_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*DKGRequest)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_GenesisState_3_list) AppendMutable() protoreflect.Value {
+	v := new(DKGRequest)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_3_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_GenesisState_3_list) NewElement() protoreflect.Value {
+	v := new(DKGRequest)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_3_list) IsValid() bool {
+	return x.list != nil
+}
+
+var _ protoreflect.List = (*_GenesisState_4_list)(nil)
+
+type _GenesisState_4_list struct {
+	list *[]*DKGCompletionRequest
+}
+
+func (x *_GenesisState_4_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_GenesisState_4_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_GenesisState_4_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*DKGCompletionRequest)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_GenesisState_4_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*DKGCompletionRequest)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_GenesisState_4_list) AppendMutable() protoreflect.Value {
+	v := new(DKGCompletionRequest)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_4_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_GenesisState_4_list) NewElement() protoreflect.Value {
+	v := new(DKGCompletionRequest)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_4_list) IsValid() bool {
+	return x.list != nil
+}
+
+var _ protoreflect.List = (*_GenesisState_5_list)(nil)
+
+type _GenesisState_5_list struct {
+	list *[]*SigningRequest
+}
+
+func (x *_GenesisState_5_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_GenesisState_5_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_GenesisState_5_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*SigningRequest)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_GenesisState_5_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*SigningRequest)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_GenesisState_5_list) AppendMutable() protoreflect.Value {
+	v := new(SigningRequest)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_5_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_GenesisState_5_list) NewElement() protoreflect.Value {
+	v := new(SigningRequest)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_5_list) IsValid() bool {
+	return x.list != nil
+}
+
+var _ protoreflect.List = (*_GenesisState_6_list)(nil)
+
+type _GenesisState_6_list struct {
+	list *[]*WithdrawRequest
+}
+
+func (x *_GenesisState_6_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_GenesisState_6_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_GenesisState_6_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*WithdrawRequest)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_GenesisState_6_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*WithdrawRequest)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_GenesisState_6_list) AppendMutable() protoreflect.Value {
+	v := new(WithdrawRequest)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_6_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_GenesisState_6_list) NewElement() protoreflect.Value {
+	v := new(WithdrawRequest)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_6_list) IsValid() bool {
+	return x.list != nil
+}
+
+var _ protoreflect.List = (*_GenesisState_7_list)(nil)
+
+type _GenesisState_7_list struct {
+	list *[]*WithdrawRequest
+}
+
+func (x *_GenesisState_7_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_GenesisState_7_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_GenesisState_7_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*WithdrawRequest)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_GenesisState_7_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*WithdrawRequest)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_GenesisState_7_list) AppendMutable() protoreflect.Value {
+	v := new(WithdrawRequest)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_7_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_GenesisState_7_list) NewElement() protoreflect.Value {
+	v := new(WithdrawRequest)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_7_list) IsValid() bool {
+	return x.list != nil
+}
+
+var _ protoreflect.List = (*_GenesisState_8_list)(nil)
+
+type _GenesisState_8_list struct {
+	list *[]string
+}
+
+func (x *_GenesisState_8_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_GenesisState_8_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfString((*x.list)[i])
+}
+
+func (x *_GenesisState_8_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_GenesisState_8_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_GenesisState_8_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message GenesisState at list field MintedTxHashes as it is not of Message kind"))
+}
+
+func (x *_GenesisState_8_list) Truncate(n int) {
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_GenesisState_8_list) NewElement() protoreflect.Value {
+	v := ""
+	return protoreflect.ValueOfString(v)
+}
+
+func (x *_GenesisState_8_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_GenesisState             protoreflect.MessageDescriptor
-	fd_GenesisState_params      protoreflect.FieldDescriptor
-	fd_GenesisState_utxos       protoreflect.FieldDescriptor
-	fd_GenesisState_dkg_request protoreflect.FieldDescriptor
+	md_GenesisState                               protoreflect.MessageDescriptor
+	fd_GenesisState_params                        protoreflect.FieldDescriptor
+	fd_GenesisState_utxos                         protoreflect.FieldDescriptor
+	fd_GenesisState_dkg_requests                  protoreflect.FieldDescriptor
+	fd_GenesisState_dkg_completions               protoreflect.FieldDescriptor
+	fd_GenesisState_signing_requests              protoreflect.FieldDescriptor
+	fd_GenesisState_withdraw_requests             protoreflect.FieldDescriptor
+	fd_GenesisState_pending_btc_withdraw_requests protoreflect.FieldDescriptor
+	fd_GenesisState_minted_tx_hashes              protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -76,7 +382,12 @@ func init() {
 	md_GenesisState = File_bitway_btcbridge_genesis_proto.Messages().ByName("GenesisState")
 	fd_GenesisState_params = md_GenesisState.Fields().ByName("params")
 	fd_GenesisState_utxos = md_GenesisState.Fields().ByName("utxos")
-	fd_GenesisState_dkg_request = md_GenesisState.Fields().ByName("dkg_request")
+	fd_GenesisState_dkg_requests = md_GenesisState.Fields().ByName("dkg_requests")
+	fd_GenesisState_dkg_completions = md_GenesisState.Fields().ByName("dkg_completions")
+	fd_GenesisState_signing_requests = md_GenesisState.Fields().ByName("signing_requests")
+	fd_GenesisState_withdraw_requests = md_GenesisState.Fields().ByName("withdraw_requests")
+	fd_GenesisState_pending_btc_withdraw_requests = md_GenesisState.Fields().ByName("pending_btc_withdraw_requests")
+	fd_GenesisState_minted_tx_hashes = md_GenesisState.Fields().ByName("minted_tx_hashes")
 }
 
 var _ protoreflect.Message = (*fastReflection_GenesisState)(nil)
@@ -156,9 +467,39 @@ func (x *fastReflection_GenesisState) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
-	if x.DkgRequest != nil {
-		value := protoreflect.ValueOfMessage(x.DkgRequest.ProtoReflect())
-		if !f(fd_GenesisState_dkg_request, value) {
+	if len(x.DkgRequests) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_3_list{list: &x.DkgRequests})
+		if !f(fd_GenesisState_dkg_requests, value) {
+			return
+		}
+	}
+	if len(x.DkgCompletions) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_4_list{list: &x.DkgCompletions})
+		if !f(fd_GenesisState_dkg_completions, value) {
+			return
+		}
+	}
+	if len(x.SigningRequests) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_5_list{list: &x.SigningRequests})
+		if !f(fd_GenesisState_signing_requests, value) {
+			return
+		}
+	}
+	if len(x.WithdrawRequests) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_6_list{list: &x.WithdrawRequests})
+		if !f(fd_GenesisState_withdraw_requests, value) {
+			return
+		}
+	}
+	if len(x.PendingBtcWithdrawRequests) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_7_list{list: &x.PendingBtcWithdrawRequests})
+		if !f(fd_GenesisState_pending_btc_withdraw_requests, value) {
+			return
+		}
+	}
+	if len(x.MintedTxHashes) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_8_list{list: &x.MintedTxHashes})
+		if !f(fd_GenesisState_minted_tx_hashes, value) {
 			return
 		}
 	}
@@ -181,8 +522,18 @@ func (x *fastReflection_GenesisState) Has(fd protoreflect.FieldDescriptor) bool 
 		return x.Params != nil
 	case "bitway.btcbridge.GenesisState.utxos":
 		return len(x.Utxos) != 0
-	case "bitway.btcbridge.GenesisState.dkg_request":
-		return x.DkgRequest != nil
+	case "bitway.btcbridge.GenesisState.dkg_requests":
+		return len(x.DkgRequests) != 0
+	case "bitway.btcbridge.GenesisState.dkg_completions":
+		return len(x.DkgCompletions) != 0
+	case "bitway.btcbridge.GenesisState.signing_requests":
+		return len(x.SigningRequests) != 0
+	case "bitway.btcbridge.GenesisState.withdraw_requests":
+		return len(x.WithdrawRequests) != 0
+	case "bitway.btcbridge.GenesisState.pending_btc_withdraw_requests":
+		return len(x.PendingBtcWithdrawRequests) != 0
+	case "bitway.btcbridge.GenesisState.minted_tx_hashes":
+		return len(x.MintedTxHashes) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.btcbridge.GenesisState"))
@@ -203,8 +554,18 @@ func (x *fastReflection_GenesisState) Clear(fd protoreflect.FieldDescriptor) {
 		x.Params = nil
 	case "bitway.btcbridge.GenesisState.utxos":
 		x.Utxos = nil
-	case "bitway.btcbridge.GenesisState.dkg_request":
-		x.DkgRequest = nil
+	case "bitway.btcbridge.GenesisState.dkg_requests":
+		x.DkgRequests = nil
+	case "bitway.btcbridge.GenesisState.dkg_completions":
+		x.DkgCompletions = nil
+	case "bitway.btcbridge.GenesisState.signing_requests":
+		x.SigningRequests = nil
+	case "bitway.btcbridge.GenesisState.withdraw_requests":
+		x.WithdrawRequests = nil
+	case "bitway.btcbridge.GenesisState.pending_btc_withdraw_requests":
+		x.PendingBtcWithdrawRequests = nil
+	case "bitway.btcbridge.GenesisState.minted_tx_hashes":
+		x.MintedTxHashes = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.btcbridge.GenesisState"))
@@ -230,9 +591,42 @@ func (x *fastReflection_GenesisState) Get(descriptor protoreflect.FieldDescripto
 		}
 		listValue := &_GenesisState_2_list{list: &x.Utxos}
 		return protoreflect.ValueOfList(listValue)
-	case "bitway.btcbridge.GenesisState.dkg_request":
-		value := x.DkgRequest
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "bitway.btcbridge.GenesisState.dkg_requests":
+		if len(x.DkgRequests) == 0 {
+			return protoreflect.ValueOfList(&_GenesisState_3_list{})
+		}
+		listValue := &_GenesisState_3_list{list: &x.DkgRequests}
+		return protoreflect.ValueOfList(listValue)
+	case "bitway.btcbridge.GenesisState.dkg_completions":
+		if len(x.DkgCompletions) == 0 {
+			return protoreflect.ValueOfList(&_GenesisState_4_list{})
+		}
+		listValue := &_GenesisState_4_list{list: &x.DkgCompletions}
+		return protoreflect.ValueOfList(listValue)
+	case "bitway.btcbridge.GenesisState.signing_requests":
+		if len(x.SigningRequests) == 0 {
+			return protoreflect.ValueOfList(&_GenesisState_5_list{})
+		}
+		listValue := &_GenesisState_5_list{list: &x.SigningRequests}
+		return protoreflect.ValueOfList(listValue)
+	case "bitway.btcbridge.GenesisState.withdraw_requests":
+		if len(x.WithdrawRequests) == 0 {
+			return protoreflect.ValueOfList(&_GenesisState_6_list{})
+		}
+		listValue := &_GenesisState_6_list{list: &x.WithdrawRequests}
+		return protoreflect.ValueOfList(listValue)
+	case "bitway.btcbridge.GenesisState.pending_btc_withdraw_requests":
+		if len(x.PendingBtcWithdrawRequests) == 0 {
+			return protoreflect.ValueOfList(&_GenesisState_7_list{})
+		}
+		listValue := &_GenesisState_7_list{list: &x.PendingBtcWithdrawRequests}
+		return protoreflect.ValueOfList(listValue)
+	case "bitway.btcbridge.GenesisState.minted_tx_hashes":
+		if len(x.MintedTxHashes) == 0 {
+			return protoreflect.ValueOfList(&_GenesisState_8_list{})
+		}
+		listValue := &_GenesisState_8_list{list: &x.MintedTxHashes}
+		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.btcbridge.GenesisState"))
@@ -259,8 +653,30 @@ func (x *fastReflection_GenesisState) Set(fd protoreflect.FieldDescriptor, value
 		lv := value.List()
 		clv := lv.(*_GenesisState_2_list)
 		x.Utxos = *clv.list
-	case "bitway.btcbridge.GenesisState.dkg_request":
-		x.DkgRequest = value.Message().Interface().(*DKGRequest)
+	case "bitway.btcbridge.GenesisState.dkg_requests":
+		lv := value.List()
+		clv := lv.(*_GenesisState_3_list)
+		x.DkgRequests = *clv.list
+	case "bitway.btcbridge.GenesisState.dkg_completions":
+		lv := value.List()
+		clv := lv.(*_GenesisState_4_list)
+		x.DkgCompletions = *clv.list
+	case "bitway.btcbridge.GenesisState.signing_requests":
+		lv := value.List()
+		clv := lv.(*_GenesisState_5_list)
+		x.SigningRequests = *clv.list
+	case "bitway.btcbridge.GenesisState.withdraw_requests":
+		lv := value.List()
+		clv := lv.(*_GenesisState_6_list)
+		x.WithdrawRequests = *clv.list
+	case "bitway.btcbridge.GenesisState.pending_btc_withdraw_requests":
+		lv := value.List()
+		clv := lv.(*_GenesisState_7_list)
+		x.PendingBtcWithdrawRequests = *clv.list
+	case "bitway.btcbridge.GenesisState.minted_tx_hashes":
+		lv := value.List()
+		clv := lv.(*_GenesisState_8_list)
+		x.MintedTxHashes = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.btcbridge.GenesisState"))
@@ -292,11 +708,42 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 		}
 		value := &_GenesisState_2_list{list: &x.Utxos}
 		return protoreflect.ValueOfList(value)
-	case "bitway.btcbridge.GenesisState.dkg_request":
-		if x.DkgRequest == nil {
-			x.DkgRequest = new(DKGRequest)
+	case "bitway.btcbridge.GenesisState.dkg_requests":
+		if x.DkgRequests == nil {
+			x.DkgRequests = []*DKGRequest{}
 		}
-		return protoreflect.ValueOfMessage(x.DkgRequest.ProtoReflect())
+		value := &_GenesisState_3_list{list: &x.DkgRequests}
+		return protoreflect.ValueOfList(value)
+	case "bitway.btcbridge.GenesisState.dkg_completions":
+		if x.DkgCompletions == nil {
+			x.DkgCompletions = []*DKGCompletionRequest{}
+		}
+		value := &_GenesisState_4_list{list: &x.DkgCompletions}
+		return protoreflect.ValueOfList(value)
+	case "bitway.btcbridge.GenesisState.signing_requests":
+		if x.SigningRequests == nil {
+			x.SigningRequests = []*SigningRequest{}
+		}
+		value := &_GenesisState_5_list{list: &x.SigningRequests}
+		return protoreflect.ValueOfList(value)
+	case "bitway.btcbridge.GenesisState.withdraw_requests":
+		if x.WithdrawRequests == nil {
+			x.WithdrawRequests = []*WithdrawRequest{}
+		}
+		value := &_GenesisState_6_list{list: &x.WithdrawRequests}
+		return protoreflect.ValueOfList(value)
+	case "bitway.btcbridge.GenesisState.pending_btc_withdraw_requests":
+		if x.PendingBtcWithdrawRequests == nil {
+			x.PendingBtcWithdrawRequests = []*WithdrawRequest{}
+		}
+		value := &_GenesisState_7_list{list: &x.PendingBtcWithdrawRequests}
+		return protoreflect.ValueOfList(value)
+	case "bitway.btcbridge.GenesisState.minted_tx_hashes":
+		if x.MintedTxHashes == nil {
+			x.MintedTxHashes = []string{}
+		}
+		value := &_GenesisState_8_list{list: &x.MintedTxHashes}
+		return protoreflect.ValueOfList(value)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.btcbridge.GenesisState"))
@@ -316,9 +763,24 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 	case "bitway.btcbridge.GenesisState.utxos":
 		list := []*UTXO{}
 		return protoreflect.ValueOfList(&_GenesisState_2_list{list: &list})
-	case "bitway.btcbridge.GenesisState.dkg_request":
-		m := new(DKGRequest)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "bitway.btcbridge.GenesisState.dkg_requests":
+		list := []*DKGRequest{}
+		return protoreflect.ValueOfList(&_GenesisState_3_list{list: &list})
+	case "bitway.btcbridge.GenesisState.dkg_completions":
+		list := []*DKGCompletionRequest{}
+		return protoreflect.ValueOfList(&_GenesisState_4_list{list: &list})
+	case "bitway.btcbridge.GenesisState.signing_requests":
+		list := []*SigningRequest{}
+		return protoreflect.ValueOfList(&_GenesisState_5_list{list: &list})
+	case "bitway.btcbridge.GenesisState.withdraw_requests":
+		list := []*WithdrawRequest{}
+		return protoreflect.ValueOfList(&_GenesisState_6_list{list: &list})
+	case "bitway.btcbridge.GenesisState.pending_btc_withdraw_requests":
+		list := []*WithdrawRequest{}
+		return protoreflect.ValueOfList(&_GenesisState_7_list{list: &list})
+	case "bitway.btcbridge.GenesisState.minted_tx_hashes":
+		list := []string{}
+		return protoreflect.ValueOfList(&_GenesisState_8_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.btcbridge.GenesisState"))
@@ -398,9 +860,41 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
-		if x.DkgRequest != nil {
-			l = options.Size(x.DkgRequest)
-			n += 1 + l + runtime.Sov(uint64(l))
+		if len(x.DkgRequests) > 0 {
+			for _, e := range x.DkgRequests {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if len(x.DkgCompletions) > 0 {
+			for _, e := range x.DkgCompletions {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if len(x.SigningRequests) > 0 {
+			for _, e := range x.SigningRequests {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if len(x.WithdrawRequests) > 0 {
+			for _, e := range x.WithdrawRequests {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if len(x.PendingBtcWithdrawRequests) > 0 {
+			for _, e := range x.PendingBtcWithdrawRequests {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if len(x.MintedTxHashes) > 0 {
+			for _, s := range x.MintedTxHashes {
+				l = len(s)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -431,19 +925,94 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.DkgRequest != nil {
-			encoded, err := options.Marshal(x.DkgRequest)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
+		if len(x.MintedTxHashes) > 0 {
+			for iNdEx := len(x.MintedTxHashes) - 1; iNdEx >= 0; iNdEx-- {
+				i -= len(x.MintedTxHashes[iNdEx])
+				copy(dAtA[i:], x.MintedTxHashes[iNdEx])
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.MintedTxHashes[iNdEx])))
+				i--
+				dAtA[i] = 0x42
 			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-			i--
-			dAtA[i] = 0x1a
+		}
+		if len(x.PendingBtcWithdrawRequests) > 0 {
+			for iNdEx := len(x.PendingBtcWithdrawRequests) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.PendingBtcWithdrawRequests[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x3a
+			}
+		}
+		if len(x.WithdrawRequests) > 0 {
+			for iNdEx := len(x.WithdrawRequests) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.WithdrawRequests[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x32
+			}
+		}
+		if len(x.SigningRequests) > 0 {
+			for iNdEx := len(x.SigningRequests) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.SigningRequests[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x2a
+			}
+		}
+		if len(x.DkgCompletions) > 0 {
+			for iNdEx := len(x.DkgCompletions) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.DkgCompletions[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x22
+			}
+		}
+		if len(x.DkgRequests) > 0 {
+			for iNdEx := len(x.DkgRequests) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.DkgRequests[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x1a
+			}
 		}
 		if len(x.Utxos) > 0 {
 			for iNdEx := len(x.Utxos) - 1; iNdEx >= 0; iNdEx-- {
@@ -596,7 +1165,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 3:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DkgRequest", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DkgRequests", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -623,12 +1192,178 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				if x.DkgRequest == nil {
-					x.DkgRequest = &DKGRequest{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.DkgRequest); err != nil {
+				x.DkgRequests = append(x.DkgRequests, &DKGRequest{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.DkgRequests[len(x.DkgRequests)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DkgCompletions", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.DkgCompletions = append(x.DkgCompletions, &DKGCompletionRequest{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.DkgCompletions[len(x.DkgCompletions)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SigningRequests", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.SigningRequests = append(x.SigningRequests, &SigningRequest{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.SigningRequests[len(x.SigningRequests)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 6:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field WithdrawRequests", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.WithdrawRequests = append(x.WithdrawRequests, &WithdrawRequest{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.WithdrawRequests[len(x.WithdrawRequests)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 7:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PendingBtcWithdrawRequests", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.PendingBtcWithdrawRequests = append(x.PendingBtcWithdrawRequests, &WithdrawRequest{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.PendingBtcWithdrawRequests[len(x.PendingBtcWithdrawRequests)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 8:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MintedTxHashes", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.MintedTxHashes = append(x.MintedTxHashes, string(dAtA[iNdEx:postIndex]))
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -684,9 +1419,14 @@ type GenesisState struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Params     *Params     `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
-	Utxos      []*UTXO     `protobuf:"bytes,2,rep,name=utxos,proto3" json:"utxos,omitempty"`
-	DkgRequest *DKGRequest `protobuf:"bytes,3,opt,name=dkg_request,json=dkgRequest,proto3" json:"dkg_request,omitempty"`
+	Params                     *Params                 `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
+	Utxos                      []*UTXO                 `protobuf:"bytes,2,rep,name=utxos,proto3" json:"utxos,omitempty"`
+	DkgRequests                []*DKGRequest           `protobuf:"bytes,3,rep,name=dkg_requests,json=dkgRequests,proto3" json:"dkg_requests,omitempty"`
+	DkgCompletions             []*DKGCompletionRequest `protobuf:"bytes,4,rep,name=dkg_completions,json=dkgCompletions,proto3" json:"dkg_completions,omitempty"`
+	SigningRequests            []*SigningRequest       `protobuf:"bytes,5,rep,name=signing_requests,json=signingRequests,proto3" json:"signing_requests,omitempty"`
+	WithdrawRequests           []*WithdrawRequest      `protobuf:"bytes,6,rep,name=withdraw_requests,json=withdrawRequests,proto3" json:"withdraw_requests,omitempty"`
+	PendingBtcWithdrawRequests []*WithdrawRequest      `protobuf:"bytes,7,rep,name=pending_btc_withdraw_requests,json=pendingBtcWithdrawRequests,proto3" json:"pending_btc_withdraw_requests,omitempty"`
+	MintedTxHashes             []string                `protobuf:"bytes,8,rep,name=minted_tx_hashes,json=mintedTxHashes,proto3" json:"minted_tx_hashes,omitempty"`
 }
 
 func (x *GenesisState) Reset() {
@@ -723,9 +1463,44 @@ func (x *GenesisState) GetUtxos() []*UTXO {
 	return nil
 }
 
-func (x *GenesisState) GetDkgRequest() *DKGRequest {
+func (x *GenesisState) GetDkgRequests() []*DKGRequest {
 	if x != nil {
-		return x.DkgRequest
+		return x.DkgRequests
+	}
+	return nil
+}
+
+func (x *GenesisState) GetDkgCompletions() []*DKGCompletionRequest {
+	if x != nil {
+		return x.DkgCompletions
+	}
+	return nil
+}
+
+func (x *GenesisState) GetSigningRequests() []*SigningRequest {
+	if x != nil {
+		return x.SigningRequests
+	}
+	return nil
+}
+
+func (x *GenesisState) GetWithdrawRequests() []*WithdrawRequest {
+	if x != nil {
+		return x.WithdrawRequests
+	}
+	return nil
+}
+
+func (x *GenesisState) GetPendingBtcWithdrawRequests() []*WithdrawRequest {
+	if x != nil {
+		return x.PendingBtcWithdrawRequests
+	}
+	return nil
+}
+
+func (x *GenesisState) GetMintedTxHashes() []string {
+	if x != nil {
+		return x.MintedTxHashes
 	}
 	return nil
 }
@@ -741,7 +1516,7 @@ var file_bitway_btcbridge_genesis_proto_rawDesc = []byte{
 	0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d,
 	0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x20, 0x62, 0x69, 0x74, 0x77, 0x61, 0x79, 0x2f,
 	0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2f, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69,
-	0x64, 0x67, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xb3, 0x01, 0x0a, 0x0c, 0x47, 0x65,
+	0x64, 0x67, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xb3, 0x04, 0x0a, 0x0c, 0x47, 0x65,
 	0x6e, 0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x36, 0x0a, 0x06, 0x70, 0x61,
 	0x72, 0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x62, 0x69, 0x74,
 	0x77, 0x61, 0x79, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x50, 0x61,
@@ -749,10 +1524,34 @@ var file_bitway_btcbridge_genesis_proto_rawDesc = []byte{
 	0x6d, 0x73, 0x12, 0x2c, 0x0a, 0x05, 0x75, 0x74, 0x78, 0x6f, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28,
 	0x0b, 0x32, 0x16, 0x2e, 0x62, 0x69, 0x74, 0x77, 0x61, 0x79, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72,
 	0x69, 0x64, 0x67, 0x65, 0x2e, 0x55, 0x54, 0x58, 0x4f, 0x52, 0x05, 0x75, 0x74, 0x78, 0x6f, 0x73,
-	0x12, 0x3d, 0x0a, 0x0b, 0x64, 0x6b, 0x67, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x18,
-	0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x62, 0x69, 0x74, 0x77, 0x61, 0x79, 0x2e, 0x62,
-	0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x52, 0x0a, 0x64, 0x6b, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x42,
+	0x12, 0x3f, 0x0a, 0x0c, 0x64, 0x6b, 0x67, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73,
+	0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x62, 0x69, 0x74, 0x77, 0x61, 0x79, 0x2e,
+	0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x44, 0x4b, 0x47, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x52, 0x0b, 0x64, 0x6b, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x73, 0x12, 0x4f, 0x0a, 0x0f, 0x64, 0x6b, 0x67, 0x5f, 0x63, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74,
+	0x69, 0x6f, 0x6e, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x62, 0x69, 0x74,
+	0x77, 0x61, 0x79, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x44, 0x4b,
+	0x47, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x52, 0x0e, 0x64, 0x6b, 0x67, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f,
+	0x6e, 0x73, 0x12, 0x4b, 0x0a, 0x10, 0x73, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x5f, 0x72, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x18, 0x05, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x20, 0x2e, 0x62,
+	0x69, 0x74, 0x77, 0x61, 0x79, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e,
+	0x53, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0f,
+	0x73, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x12,
+	0x4e, 0x0a, 0x11, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x5f, 0x72, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x73, 0x18, 0x06, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x62, 0x69, 0x74,
+	0x77, 0x61, 0x79, 0x2e, 0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x57, 0x69,
+	0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x10, 0x77,
+	0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x12,
+	0x64, 0x0a, 0x1d, 0x70, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x62, 0x74, 0x63, 0x5f, 0x77,
+	0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73,
+	0x18, 0x07, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x62, 0x69, 0x74, 0x77, 0x61, 0x79, 0x2e,
+	0x62, 0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x2e, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72,
+	0x61, 0x77, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x1a, 0x70, 0x65, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x42, 0x74, 0x63, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x73, 0x12, 0x28, 0x0a, 0x10, 0x6d, 0x69, 0x6e, 0x74, 0x65, 0x64, 0x5f,
+	0x74, 0x78, 0x5f, 0x68, 0x61, 0x73, 0x68, 0x65, 0x73, 0x18, 0x08, 0x20, 0x03, 0x28, 0x09, 0x52,
+	0x0e, 0x6d, 0x69, 0x6e, 0x74, 0x65, 0x64, 0x54, 0x78, 0x48, 0x61, 0x73, 0x68, 0x65, 0x73, 0x42,
 	0xb8, 0x01, 0x0a, 0x14, 0x63, 0x6f, 0x6d, 0x2e, 0x62, 0x69, 0x74, 0x77, 0x61, 0x79, 0x2e, 0x62,
 	0x74, 0x63, 0x62, 0x72, 0x69, 0x64, 0x67, 0x65, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69,
 	0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x31, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
@@ -782,20 +1581,27 @@ func file_bitway_btcbridge_genesis_proto_rawDescGZIP() []byte {
 
 var file_bitway_btcbridge_genesis_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_bitway_btcbridge_genesis_proto_goTypes = []interface{}{
-	(*GenesisState)(nil), // 0: bitway.btcbridge.GenesisState
-	(*Params)(nil),       // 1: bitway.btcbridge.Params
-	(*UTXO)(nil),         // 2: bitway.btcbridge.UTXO
-	(*DKGRequest)(nil),   // 3: bitway.btcbridge.DKGRequest
+	(*GenesisState)(nil),         // 0: bitway.btcbridge.GenesisState
+	(*Params)(nil),               // 1: bitway.btcbridge.Params
+	(*UTXO)(nil),                 // 2: bitway.btcbridge.UTXO
+	(*DKGRequest)(nil),           // 3: bitway.btcbridge.DKGRequest
+	(*DKGCompletionRequest)(nil), // 4: bitway.btcbridge.DKGCompletionRequest
+	(*SigningRequest)(nil),       // 5: bitway.btcbridge.SigningRequest
+	(*WithdrawRequest)(nil),      // 6: bitway.btcbridge.WithdrawRequest
 }
 var file_bitway_btcbridge_genesis_proto_depIdxs = []int32{
 	1, // 0: bitway.btcbridge.GenesisState.params:type_name -> bitway.btcbridge.Params
 	2, // 1: bitway.btcbridge.GenesisState.utxos:type_name -> bitway.btcbridge.UTXO
-	3, // 2: bitway.btcbridge.GenesisState.dkg_request:type_name -> bitway.btcbridge.DKGRequest
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	3, // 2: bitway.btcbridge.GenesisState.dkg_requests:type_name -> bitway.btcbridge.DKGRequest
+	4, // 3: bitway.btcbridge.GenesisState.dkg_completions:type_name -> bitway.btcbridge.DKGCompletionRequest
+	5, // 4: bitway.btcbridge.GenesisState.signing_requests:type_name -> bitway.btcbridge.SigningRequest
+	6, // 5: bitway.btcbridge.GenesisState.withdraw_requests:type_name -> bitway.btcbridge.WithdrawRequest
+	6, // 6: bitway.btcbridge.GenesisState.pending_btc_withdraw_requests:type_name -> bitway.btcbridge.WithdrawRequest
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_bitway_btcbridge_genesis_proto_init() }

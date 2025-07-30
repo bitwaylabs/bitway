@@ -11,5 +11,10 @@ option go_package = "github.com/bitwaylabs/bitway/x/btcbridge/types";
 message GenesisState {
   Params params = 1 [(gogoproto.nullable) = false];
   repeated UTXO utxos = 2;
-  DKGRequest dkg_request = 3;
+  repeated DKGRequest dkg_requests= 3;
+  repeated DKGCompletionRequest dkg_completions = 4;
+  repeated SigningRequest signing_requests = 5;
+  repeated WithdrawRequest withdraw_requests = 6;
+  repeated WithdrawRequest pending_btc_withdraw_requests = 7;
+  repeated string minted_tx_hashes = 8;
 }
