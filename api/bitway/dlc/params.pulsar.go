@@ -15,49 +15,49 @@ import (
 	sync "sync"
 )
 
-var _ protoreflect.List = (*_Params_5_list)(nil)
+var _ protoreflect.List = (*_Params_4_list)(nil)
 
-type _Params_5_list struct {
+type _Params_4_list struct {
 	list *[]string
 }
 
-func (x *_Params_5_list) Len() int {
+func (x *_Params_4_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_Params_5_list) Get(i int) protoreflect.Value {
+func (x *_Params_4_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfString((*x.list)[i])
 }
 
-func (x *_Params_5_list) Set(i int, value protoreflect.Value) {
+func (x *_Params_4_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_Params_5_list) Append(value protoreflect.Value) {
+func (x *_Params_4_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_Params_5_list) AppendMutable() protoreflect.Value {
+func (x *_Params_4_list) AppendMutable() protoreflect.Value {
 	panic(fmt.Errorf("AppendMutable can not be called on message Params at list field AllowedOracleParticipants as it is not of Message kind"))
 }
 
-func (x *_Params_5_list) Truncate(n int) {
+func (x *_Params_4_list) Truncate(n int) {
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_Params_5_list) NewElement() protoreflect.Value {
+func (x *_Params_4_list) NewElement() protoreflect.Value {
 	v := ""
 	return protoreflect.ValueOfString(v)
 }
 
-func (x *_Params_5_list) IsValid() bool {
+func (x *_Params_4_list) IsValid() bool {
 	return x.list != nil
 }
 
@@ -66,10 +66,10 @@ var (
 	fd_Params_nonce_queue_size                  protoreflect.FieldDescriptor
 	fd_Params_nonce_generation_batch_size       protoreflect.FieldDescriptor
 	fd_Params_nonce_generation_interval         protoreflect.FieldDescriptor
-	fd_Params_nonce_generation_timeout_duration protoreflect.FieldDescriptor
 	fd_Params_allowed_oracle_participants       protoreflect.FieldDescriptor
 	fd_Params_oracle_participant_num            protoreflect.FieldDescriptor
 	fd_Params_oracle_participant_threshold      protoreflect.FieldDescriptor
+	fd_Params_nonce_generation_timeout_duration protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -78,10 +78,10 @@ func init() {
 	fd_Params_nonce_queue_size = md_Params.Fields().ByName("nonce_queue_size")
 	fd_Params_nonce_generation_batch_size = md_Params.Fields().ByName("nonce_generation_batch_size")
 	fd_Params_nonce_generation_interval = md_Params.Fields().ByName("nonce_generation_interval")
-	fd_Params_nonce_generation_timeout_duration = md_Params.Fields().ByName("nonce_generation_timeout_duration")
 	fd_Params_allowed_oracle_participants = md_Params.Fields().ByName("allowed_oracle_participants")
 	fd_Params_oracle_participant_num = md_Params.Fields().ByName("oracle_participant_num")
 	fd_Params_oracle_participant_threshold = md_Params.Fields().ByName("oracle_participant_threshold")
+	fd_Params_nonce_generation_timeout_duration = md_Params.Fields().ByName("nonce_generation_timeout_duration")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -167,14 +167,8 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
-	if x.NonceGenerationTimeoutDuration != nil {
-		value := protoreflect.ValueOfMessage(x.NonceGenerationTimeoutDuration.ProtoReflect())
-		if !f(fd_Params_nonce_generation_timeout_duration, value) {
-			return
-		}
-	}
 	if len(x.AllowedOracleParticipants) != 0 {
-		value := protoreflect.ValueOfList(&_Params_5_list{list: &x.AllowedOracleParticipants})
+		value := protoreflect.ValueOfList(&_Params_4_list{list: &x.AllowedOracleParticipants})
 		if !f(fd_Params_allowed_oracle_participants, value) {
 			return
 		}
@@ -188,6 +182,12 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 	if x.OracleParticipantThreshold != uint32(0) {
 		value := protoreflect.ValueOfUint32(x.OracleParticipantThreshold)
 		if !f(fd_Params_oracle_participant_threshold, value) {
+			return
+		}
+	}
+	if x.NonceGenerationTimeoutDuration != nil {
+		value := protoreflect.ValueOfMessage(x.NonceGenerationTimeoutDuration.ProtoReflect())
+		if !f(fd_Params_nonce_generation_timeout_duration, value) {
 			return
 		}
 	}
@@ -212,14 +212,14 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.NonceGenerationBatchSize != uint32(0)
 	case "bitway.dlc.Params.nonce_generation_interval":
 		return x.NonceGenerationInterval != int64(0)
-	case "bitway.dlc.Params.nonce_generation_timeout_duration":
-		return x.NonceGenerationTimeoutDuration != nil
 	case "bitway.dlc.Params.allowed_oracle_participants":
 		return len(x.AllowedOracleParticipants) != 0
 	case "bitway.dlc.Params.oracle_participant_num":
 		return x.OracleParticipantNum != uint32(0)
 	case "bitway.dlc.Params.oracle_participant_threshold":
 		return x.OracleParticipantThreshold != uint32(0)
+	case "bitway.dlc.Params.nonce_generation_timeout_duration":
+		return x.NonceGenerationTimeoutDuration != nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.dlc.Params"))
@@ -242,14 +242,14 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 		x.NonceGenerationBatchSize = uint32(0)
 	case "bitway.dlc.Params.nonce_generation_interval":
 		x.NonceGenerationInterval = int64(0)
-	case "bitway.dlc.Params.nonce_generation_timeout_duration":
-		x.NonceGenerationTimeoutDuration = nil
 	case "bitway.dlc.Params.allowed_oracle_participants":
 		x.AllowedOracleParticipants = nil
 	case "bitway.dlc.Params.oracle_participant_num":
 		x.OracleParticipantNum = uint32(0)
 	case "bitway.dlc.Params.oracle_participant_threshold":
 		x.OracleParticipantThreshold = uint32(0)
+	case "bitway.dlc.Params.nonce_generation_timeout_duration":
+		x.NonceGenerationTimeoutDuration = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.dlc.Params"))
@@ -275,14 +275,11 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 	case "bitway.dlc.Params.nonce_generation_interval":
 		value := x.NonceGenerationInterval
 		return protoreflect.ValueOfInt64(value)
-	case "bitway.dlc.Params.nonce_generation_timeout_duration":
-		value := x.NonceGenerationTimeoutDuration
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "bitway.dlc.Params.allowed_oracle_participants":
 		if len(x.AllowedOracleParticipants) == 0 {
-			return protoreflect.ValueOfList(&_Params_5_list{})
+			return protoreflect.ValueOfList(&_Params_4_list{})
 		}
-		listValue := &_Params_5_list{list: &x.AllowedOracleParticipants}
+		listValue := &_Params_4_list{list: &x.AllowedOracleParticipants}
 		return protoreflect.ValueOfList(listValue)
 	case "bitway.dlc.Params.oracle_participant_num":
 		value := x.OracleParticipantNum
@@ -290,6 +287,9 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 	case "bitway.dlc.Params.oracle_participant_threshold":
 		value := x.OracleParticipantThreshold
 		return protoreflect.ValueOfUint32(value)
+	case "bitway.dlc.Params.nonce_generation_timeout_duration":
+		value := x.NonceGenerationTimeoutDuration
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.dlc.Params"))
@@ -316,16 +316,16 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 		x.NonceGenerationBatchSize = uint32(value.Uint())
 	case "bitway.dlc.Params.nonce_generation_interval":
 		x.NonceGenerationInterval = value.Int()
-	case "bitway.dlc.Params.nonce_generation_timeout_duration":
-		x.NonceGenerationTimeoutDuration = value.Message().Interface().(*durationpb.Duration)
 	case "bitway.dlc.Params.allowed_oracle_participants":
 		lv := value.List()
-		clv := lv.(*_Params_5_list)
+		clv := lv.(*_Params_4_list)
 		x.AllowedOracleParticipants = *clv.list
 	case "bitway.dlc.Params.oracle_participant_num":
 		x.OracleParticipantNum = uint32(value.Uint())
 	case "bitway.dlc.Params.oracle_participant_threshold":
 		x.OracleParticipantThreshold = uint32(value.Uint())
+	case "bitway.dlc.Params.nonce_generation_timeout_duration":
+		x.NonceGenerationTimeoutDuration = value.Message().Interface().(*durationpb.Duration)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.dlc.Params"))
@@ -346,17 +346,17 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "bitway.dlc.Params.allowed_oracle_participants":
+		if x.AllowedOracleParticipants == nil {
+			x.AllowedOracleParticipants = []string{}
+		}
+		value := &_Params_4_list{list: &x.AllowedOracleParticipants}
+		return protoreflect.ValueOfList(value)
 	case "bitway.dlc.Params.nonce_generation_timeout_duration":
 		if x.NonceGenerationTimeoutDuration == nil {
 			x.NonceGenerationTimeoutDuration = new(durationpb.Duration)
 		}
 		return protoreflect.ValueOfMessage(x.NonceGenerationTimeoutDuration.ProtoReflect())
-	case "bitway.dlc.Params.allowed_oracle_participants":
-		if x.AllowedOracleParticipants == nil {
-			x.AllowedOracleParticipants = []string{}
-		}
-		value := &_Params_5_list{list: &x.AllowedOracleParticipants}
-		return protoreflect.ValueOfList(value)
 	case "bitway.dlc.Params.nonce_queue_size":
 		panic(fmt.Errorf("field nonce_queue_size of message bitway.dlc.Params is not mutable"))
 	case "bitway.dlc.Params.nonce_generation_batch_size":
@@ -386,16 +386,16 @@ func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protor
 		return protoreflect.ValueOfUint32(uint32(0))
 	case "bitway.dlc.Params.nonce_generation_interval":
 		return protoreflect.ValueOfInt64(int64(0))
-	case "bitway.dlc.Params.nonce_generation_timeout_duration":
-		m := new(durationpb.Duration)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "bitway.dlc.Params.allowed_oracle_participants":
 		list := []string{}
-		return protoreflect.ValueOfList(&_Params_5_list{list: &list})
+		return protoreflect.ValueOfList(&_Params_4_list{list: &list})
 	case "bitway.dlc.Params.oracle_participant_num":
 		return protoreflect.ValueOfUint32(uint32(0))
 	case "bitway.dlc.Params.oracle_participant_threshold":
 		return protoreflect.ValueOfUint32(uint32(0))
+	case "bitway.dlc.Params.nonce_generation_timeout_duration":
+		m := new(durationpb.Duration)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.dlc.Params"))
@@ -474,10 +474,6 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if x.NonceGenerationInterval != 0 {
 			n += 1 + runtime.Sov(uint64(x.NonceGenerationInterval))
 		}
-		if x.NonceGenerationTimeoutDuration != nil {
-			l = options.Size(x.NonceGenerationTimeoutDuration)
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
 		if len(x.AllowedOracleParticipants) > 0 {
 			for _, s := range x.AllowedOracleParticipants {
 				l = len(s)
@@ -489,6 +485,10 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		}
 		if x.OracleParticipantThreshold != 0 {
 			n += 1 + runtime.Sov(uint64(x.OracleParticipantThreshold))
+		}
+		if x.NonceGenerationTimeoutDuration != nil {
+			l = options.Size(x.NonceGenerationTimeoutDuration)
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -519,25 +519,6 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.OracleParticipantThreshold != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.OracleParticipantThreshold))
-			i--
-			dAtA[i] = 0x38
-		}
-		if x.OracleParticipantNum != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.OracleParticipantNum))
-			i--
-			dAtA[i] = 0x30
-		}
-		if len(x.AllowedOracleParticipants) > 0 {
-			for iNdEx := len(x.AllowedOracleParticipants) - 1; iNdEx >= 0; iNdEx-- {
-				i -= len(x.AllowedOracleParticipants[iNdEx])
-				copy(dAtA[i:], x.AllowedOracleParticipants[iNdEx])
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AllowedOracleParticipants[iNdEx])))
-				i--
-				dAtA[i] = 0x2a
-			}
-		}
 		if x.NonceGenerationTimeoutDuration != nil {
 			encoded, err := options.Marshal(x.NonceGenerationTimeoutDuration)
 			if err != nil {
@@ -550,7 +531,26 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x22
+			dAtA[i] = 0x3a
+		}
+		if x.OracleParticipantThreshold != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.OracleParticipantThreshold))
+			i--
+			dAtA[i] = 0x30
+		}
+		if x.OracleParticipantNum != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.OracleParticipantNum))
+			i--
+			dAtA[i] = 0x28
+		}
+		if len(x.AllowedOracleParticipants) > 0 {
+			for iNdEx := len(x.AllowedOracleParticipants) - 1; iNdEx >= 0; iNdEx-- {
+				i -= len(x.AllowedOracleParticipants[iNdEx])
+				copy(dAtA[i:], x.AllowedOracleParticipants[iNdEx])
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.AllowedOracleParticipants[iNdEx])))
+				i--
+				dAtA[i] = 0x22
+			}
 		}
 		if x.NonceGenerationInterval != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.NonceGenerationInterval))
@@ -675,6 +675,76 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				}
 			case 4:
 				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AllowedOracleParticipants", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.AllowedOracleParticipants = append(x.AllowedOracleParticipants, string(dAtA[iNdEx:postIndex]))
+				iNdEx = postIndex
+			case 5:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OracleParticipantNum", wireType)
+				}
+				x.OracleParticipantNum = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.OracleParticipantNum |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 6:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OracleParticipantThreshold", wireType)
+				}
+				x.OracleParticipantThreshold = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.OracleParticipantThreshold |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 7:
+				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field NonceGenerationTimeoutDuration", wireType)
 				}
 				var msglen int
@@ -709,76 +779,6 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 5:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AllowedOracleParticipants", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.AllowedOracleParticipants = append(x.AllowedOracleParticipants, string(dAtA[iNdEx:postIndex]))
-				iNdEx = postIndex
-			case 6:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OracleParticipantNum", wireType)
-				}
-				x.OracleParticipantNum = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.OracleParticipantNum |= uint32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 7:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OracleParticipantThreshold", wireType)
-				}
-				x.OracleParticipantThreshold = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.OracleParticipantThreshold |= uint32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -836,10 +836,10 @@ type Params struct {
 	NonceQueueSize                 uint32               `protobuf:"varint,1,opt,name=nonce_queue_size,json=nonceQueueSize,proto3" json:"nonce_queue_size,omitempty"`
 	NonceGenerationBatchSize       uint32               `protobuf:"varint,2,opt,name=nonce_generation_batch_size,json=nonceGenerationBatchSize,proto3" json:"nonce_generation_batch_size,omitempty"`
 	NonceGenerationInterval        int64                `protobuf:"varint,3,opt,name=nonce_generation_interval,json=nonceGenerationInterval,proto3" json:"nonce_generation_interval,omitempty"`
-	NonceGenerationTimeoutDuration *durationpb.Duration `protobuf:"bytes,4,opt,name=nonce_generation_timeout_duration,json=nonceGenerationTimeoutDuration,proto3" json:"nonce_generation_timeout_duration,omitempty"`
-	AllowedOracleParticipants      []string             `protobuf:"bytes,5,rep,name=allowed_oracle_participants,json=allowedOracleParticipants,proto3" json:"allowed_oracle_participants,omitempty"`
-	OracleParticipantNum           uint32               `protobuf:"varint,6,opt,name=oracle_participant_num,json=oracleParticipantNum,proto3" json:"oracle_participant_num,omitempty"`
-	OracleParticipantThreshold     uint32               `protobuf:"varint,7,opt,name=oracle_participant_threshold,json=oracleParticipantThreshold,proto3" json:"oracle_participant_threshold,omitempty"`
+	AllowedOracleParticipants      []string             `protobuf:"bytes,4,rep,name=allowed_oracle_participants,json=allowedOracleParticipants,proto3" json:"allowed_oracle_participants,omitempty"`
+	OracleParticipantNum           uint32               `protobuf:"varint,5,opt,name=oracle_participant_num,json=oracleParticipantNum,proto3" json:"oracle_participant_num,omitempty"`
+	OracleParticipantThreshold     uint32               `protobuf:"varint,6,opt,name=oracle_participant_threshold,json=oracleParticipantThreshold,proto3" json:"oracle_participant_threshold,omitempty"`
+	NonceGenerationTimeoutDuration *durationpb.Duration `protobuf:"bytes,7,opt,name=nonce_generation_timeout_duration,json=nonceGenerationTimeoutDuration,proto3" json:"nonce_generation_timeout_duration,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -883,13 +883,6 @@ func (x *Params) GetNonceGenerationInterval() int64 {
 	return 0
 }
 
-func (x *Params) GetNonceGenerationTimeoutDuration() *durationpb.Duration {
-	if x != nil {
-		return x.NonceGenerationTimeoutDuration
-	}
-	return nil
-}
-
 func (x *Params) GetAllowedOracleParticipants() []string {
 	if x != nil {
 		return x.AllowedOracleParticipants
@@ -909,6 +902,13 @@ func (x *Params) GetOracleParticipantThreshold() uint32 {
 		return x.OracleParticipantThreshold
 	}
 	return 0
+}
+
+func (x *Params) GetNonceGenerationTimeoutDuration() *durationpb.Duration {
+	if x != nil {
+		return x.NonceGenerationTimeoutDuration
+	}
+	return nil
 }
 
 var File_bitway_dlc_params_proto protoreflect.FileDescriptor
@@ -932,25 +932,25 @@ var file_bitway_dlc_params_proto_rawDesc = []byte{
 	0x6e, 0x63, 0x65, 0x5f, 0x67, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69,
 	0x6e, 0x74, 0x65, 0x72, 0x76, 0x61, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x17, 0x6e,
 	0x6f, 0x6e, 0x63, 0x65, 0x47, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e,
-	0x74, 0x65, 0x72, 0x76, 0x61, 0x6c, 0x12, 0x6e, 0x0a, 0x21, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x5f,
-	0x67, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x6f,
-	0x75, 0x74, 0x5f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x08, 0xc8, 0xde,
-	0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0x52, 0x1e, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x47, 0x65, 0x6e,
-	0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x44, 0x75,
-	0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x3e, 0x0a, 0x1b, 0x61, 0x6c, 0x6c, 0x6f, 0x77, 0x65,
+	0x74, 0x65, 0x72, 0x76, 0x61, 0x6c, 0x12, 0x3e, 0x0a, 0x1b, 0x61, 0x6c, 0x6c, 0x6f, 0x77, 0x65,
 	0x64, 0x5f, 0x6f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x5f, 0x70, 0x61, 0x72, 0x74, 0x69, 0x63, 0x69,
-	0x70, 0x61, 0x6e, 0x74, 0x73, 0x18, 0x05, 0x20, 0x03, 0x28, 0x09, 0x52, 0x19, 0x61, 0x6c, 0x6c,
+	0x70, 0x61, 0x6e, 0x74, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x09, 0x52, 0x19, 0x61, 0x6c, 0x6c,
 	0x6f, 0x77, 0x65, 0x64, 0x4f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x50, 0x61, 0x72, 0x74, 0x69, 0x63,
 	0x69, 0x70, 0x61, 0x6e, 0x74, 0x73, 0x12, 0x34, 0x0a, 0x16, 0x6f, 0x72, 0x61, 0x63, 0x6c, 0x65,
 	0x5f, 0x70, 0x61, 0x72, 0x74, 0x69, 0x63, 0x69, 0x70, 0x61, 0x6e, 0x74, 0x5f, 0x6e, 0x75, 0x6d,
-	0x18, 0x06, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x14, 0x6f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x50, 0x61,
+	0x18, 0x05, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x14, 0x6f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x50, 0x61,
 	0x72, 0x74, 0x69, 0x63, 0x69, 0x70, 0x61, 0x6e, 0x74, 0x4e, 0x75, 0x6d, 0x12, 0x40, 0x0a, 0x1c,
 	0x6f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x5f, 0x70, 0x61, 0x72, 0x74, 0x69, 0x63, 0x69, 0x70, 0x61,
-	0x6e, 0x74, 0x5f, 0x74, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x18, 0x07, 0x20, 0x01,
+	0x6e, 0x74, 0x5f, 0x74, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x18, 0x06, 0x20, 0x01,
 	0x28, 0x0d, 0x52, 0x1a, 0x6f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x50, 0x61, 0x72, 0x74, 0x69, 0x63,
-	0x69, 0x70, 0x61, 0x6e, 0x74, 0x54, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x42, 0x93,
+	0x69, 0x70, 0x61, 0x6e, 0x74, 0x54, 0x68, 0x72, 0x65, 0x73, 0x68, 0x6f, 0x6c, 0x64, 0x12, 0x6e,
+	0x0a, 0x21, 0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x5f, 0x67, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x5f, 0x64, 0x75, 0x72, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67,
+	0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x98, 0xdf, 0x1f, 0x01, 0x52, 0x1e,
+	0x6e, 0x6f, 0x6e, 0x63, 0x65, 0x47, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54,
+	0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x93,
 	0x01, 0x0a, 0x0e, 0x63, 0x6f, 0x6d, 0x2e, 0x62, 0x69, 0x74, 0x77, 0x61, 0x79, 0x2e, 0x64, 0x6c,
 	0x63, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01,
 	0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x62, 0x69, 0x74,
