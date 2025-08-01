@@ -6,8 +6,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/bitwaylabs/bitway/x/oracle/types"
 	"github.com/cosmos/cosmos-sdk/server"
+
+	"github.com/bitwaylabs/bitway/x/oracle/types"
 )
 
 // ▼ {"arg":{"channel":"index-tickers","instId":"BTC-USDT"},"data":[{"instId":"BTC-USDT","idxPx":"84631.5","open24h":"80469.1","high24h":"86556.5","low24h":"80079.3","sodUtc0":"84343.8","sodUtc8":"84008.9","ts":"1740830316879"}]}

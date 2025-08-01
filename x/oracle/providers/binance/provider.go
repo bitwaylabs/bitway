@@ -4,8 +4,9 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/bitwaylabs/bitway/x/oracle/types"
 	"github.com/cosmos/cosmos-sdk/server"
+
+	"github.com/bitwaylabs/bitway/x/oracle/types"
 )
 
 type Subscription struct {

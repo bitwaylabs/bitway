@@ -7,18 +7,19 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/btcsuite/btcd/rpcclient"
+
+	abci "github.com/cometbft/cometbft/abci/types"
+	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
+
 	"cosmossdk.io/log"
 	"cosmossdk.io/math"
-
-	"github.com/btcsuite/btcd/rpcclient"
+	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/telemetry"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/bitwaylabs/bitway/x/oracle/keeper"
 	"github.com/bitwaylabs/bitway/x/oracle/types"
-	abci "github.com/cometbft/cometbft/abci/types"
-	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
-	"github.com/cosmos/cosmos-sdk/baseapp"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 type PriceOracleVoteExtHandler struct {

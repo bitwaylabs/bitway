@@ -6,8 +6,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/bitwaylabs/bitway/x/oracle/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/bitwaylabs/bitway/x/oracle/types"
 )
 
 var _ types.QueryServer = Keeper{}

@@ -5,8 +5,9 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/bitwaylabs/bitway/x/oracle/types"
 	"github.com/cosmos/cosmos-sdk/server"
+
+	"github.com/bitwaylabs/bitway/x/oracle/types"
 )
 
 // ▼ {"topic":"tickers.BTCUSDT","ts":1740835319867,"type":"snapshot","cs":64027791513,"data":{"symbol":"BTCUSDT","lastPrice":"84547.99","highPrice24h":"86584.84","lowPrice24h":"80609.26","prevPrice24h":"80900","volume24h":"9416.834648","turnover24h":"792190557.2149933","price24hPcnt":"0.0451","usdIndexPrice":"84501.308024"}}

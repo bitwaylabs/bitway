@@ -1,8 +1,9 @@
 package abci
 
 import (
-	"github.com/bitwaylabs/bitway/x/oracle/keeper"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/bitwaylabs/bitway/x/oracle/keeper"
 )
 
 // EndBlocker called at every block

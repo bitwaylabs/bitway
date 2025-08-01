@@ -1,8 +1,9 @@
 package types
 
 import (
-	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/spf13/cast"
+
+	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 )
 
 type OracleConfig struct {

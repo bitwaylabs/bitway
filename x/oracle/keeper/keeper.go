@@ -2,12 +2,11 @@ package keeper
 
 import (
 	"cosmossdk.io/log"
-
-	"github.com/bitwaylabs/bitway/x/oracle/types"
+	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	storetypes "cosmossdk.io/store/types"
+	"github.com/bitwaylabs/bitway/x/oracle/types"
 )
 
 type Keeper struct {

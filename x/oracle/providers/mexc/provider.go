@@ -3,9 +3,11 @@ package mexc
 import (
 	"time"
 
-	"github.com/bitwaylabs/bitway/x/oracle/types"
-	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/gorilla/websocket"
+
+	"github.com/cosmos/cosmos-sdk/server"
+
+	"github.com/bitwaylabs/bitway/x/oracle/types"
 )
 
 var (

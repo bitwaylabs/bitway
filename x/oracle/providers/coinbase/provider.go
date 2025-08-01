@@ -5,8 +5,9 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/bitwaylabs/bitway/x/oracle/types"
 	"github.com/cosmos/cosmos-sdk/server"
+
+	"github.com/bitwaylabs/bitway/x/oracle/types"
 )
 
 // ▼ {"type":"ticker","sequence":1566204232,"product_id":"BTC-USD","price":"1.11","open_24h":"1","volume_24h":"318996.26881102","low_24h":"0.38","high_24h":"1.48","volume_30d":"3743179.26781576","best_bid":"1.09","best_bid_size":"11.99966940","best_ask":"1.11","best_ask_size":"16.34610601","side":"buy","time":"2025-03-01T13:25:17.042052Z","trade_id":130278532,"last_size":"1.98198198"}
