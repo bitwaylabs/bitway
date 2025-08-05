@@ -17,20 +17,20 @@ import (
 var (
 	md_Params                                     protoreflect.MessageDescriptor
 	fd_Params_final_timeout_duration              protoreflect.FieldDescriptor
-	fd_Params_max_liquidation_fee_rate_multiplier protoreflect.FieldDescriptor
 	fd_Params_request_fee_collector               protoreflect.FieldDescriptor
 	fd_Params_origination_fee_collector           protoreflect.FieldDescriptor
 	fd_Params_protocol_fee_collector              protoreflect.FieldDescriptor
+	fd_Params_max_liquidation_fee_rate_multiplier protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_bitway_lending_params_proto_init()
 	md_Params = File_bitway_lending_params_proto.Messages().ByName("Params")
 	fd_Params_final_timeout_duration = md_Params.Fields().ByName("final_timeout_duration")
-	fd_Params_max_liquidation_fee_rate_multiplier = md_Params.Fields().ByName("max_liquidation_fee_rate_multiplier")
 	fd_Params_request_fee_collector = md_Params.Fields().ByName("request_fee_collector")
 	fd_Params_origination_fee_collector = md_Params.Fields().ByName("origination_fee_collector")
 	fd_Params_protocol_fee_collector = md_Params.Fields().ByName("protocol_fee_collector")
+	fd_Params_max_liquidation_fee_rate_multiplier = md_Params.Fields().ByName("max_liquidation_fee_rate_multiplier")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -104,12 +104,6 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
-	if x.MaxLiquidationFeeRateMultiplier != int64(0) {
-		value := protoreflect.ValueOfInt64(x.MaxLiquidationFeeRateMultiplier)
-		if !f(fd_Params_max_liquidation_fee_rate_multiplier, value) {
-			return
-		}
-	}
 	if x.RequestFeeCollector != "" {
 		value := protoreflect.ValueOfString(x.RequestFeeCollector)
 		if !f(fd_Params_request_fee_collector, value) {
@@ -125,6 +119,12 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 	if x.ProtocolFeeCollector != "" {
 		value := protoreflect.ValueOfString(x.ProtocolFeeCollector)
 		if !f(fd_Params_protocol_fee_collector, value) {
+			return
+		}
+	}
+	if x.MaxLiquidationFeeRateMultiplier != int64(0) {
+		value := protoreflect.ValueOfInt64(x.MaxLiquidationFeeRateMultiplier)
+		if !f(fd_Params_max_liquidation_fee_rate_multiplier, value) {
 			return
 		}
 	}
@@ -145,14 +145,14 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	case "bitway.lending.Params.final_timeout_duration":
 		return x.FinalTimeoutDuration != nil
-	case "bitway.lending.Params.max_liquidation_fee_rate_multiplier":
-		return x.MaxLiquidationFeeRateMultiplier != int64(0)
 	case "bitway.lending.Params.request_fee_collector":
 		return x.RequestFeeCollector != ""
 	case "bitway.lending.Params.origination_fee_collector":
 		return x.OriginationFeeCollector != ""
 	case "bitway.lending.Params.protocol_fee_collector":
 		return x.ProtocolFeeCollector != ""
+	case "bitway.lending.Params.max_liquidation_fee_rate_multiplier":
+		return x.MaxLiquidationFeeRateMultiplier != int64(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.lending.Params"))
@@ -171,14 +171,14 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "bitway.lending.Params.final_timeout_duration":
 		x.FinalTimeoutDuration = nil
-	case "bitway.lending.Params.max_liquidation_fee_rate_multiplier":
-		x.MaxLiquidationFeeRateMultiplier = int64(0)
 	case "bitway.lending.Params.request_fee_collector":
 		x.RequestFeeCollector = ""
 	case "bitway.lending.Params.origination_fee_collector":
 		x.OriginationFeeCollector = ""
 	case "bitway.lending.Params.protocol_fee_collector":
 		x.ProtocolFeeCollector = ""
+	case "bitway.lending.Params.max_liquidation_fee_rate_multiplier":
+		x.MaxLiquidationFeeRateMultiplier = int64(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.lending.Params"))
@@ -198,9 +198,6 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 	case "bitway.lending.Params.final_timeout_duration":
 		value := x.FinalTimeoutDuration
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "bitway.lending.Params.max_liquidation_fee_rate_multiplier":
-		value := x.MaxLiquidationFeeRateMultiplier
-		return protoreflect.ValueOfInt64(value)
 	case "bitway.lending.Params.request_fee_collector":
 		value := x.RequestFeeCollector
 		return protoreflect.ValueOfString(value)
@@ -210,6 +207,9 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 	case "bitway.lending.Params.protocol_fee_collector":
 		value := x.ProtocolFeeCollector
 		return protoreflect.ValueOfString(value)
+	case "bitway.lending.Params.max_liquidation_fee_rate_multiplier":
+		value := x.MaxLiquidationFeeRateMultiplier
+		return protoreflect.ValueOfInt64(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.lending.Params"))
@@ -232,14 +232,14 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 	switch fd.FullName() {
 	case "bitway.lending.Params.final_timeout_duration":
 		x.FinalTimeoutDuration = value.Message().Interface().(*durationpb.Duration)
-	case "bitway.lending.Params.max_liquidation_fee_rate_multiplier":
-		x.MaxLiquidationFeeRateMultiplier = value.Int()
 	case "bitway.lending.Params.request_fee_collector":
 		x.RequestFeeCollector = value.Interface().(string)
 	case "bitway.lending.Params.origination_fee_collector":
 		x.OriginationFeeCollector = value.Interface().(string)
 	case "bitway.lending.Params.protocol_fee_collector":
 		x.ProtocolFeeCollector = value.Interface().(string)
+	case "bitway.lending.Params.max_liquidation_fee_rate_multiplier":
+		x.MaxLiquidationFeeRateMultiplier = value.Int()
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.lending.Params"))
@@ -265,14 +265,14 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 			x.FinalTimeoutDuration = new(durationpb.Duration)
 		}
 		return protoreflect.ValueOfMessage(x.FinalTimeoutDuration.ProtoReflect())
-	case "bitway.lending.Params.max_liquidation_fee_rate_multiplier":
-		panic(fmt.Errorf("field max_liquidation_fee_rate_multiplier of message bitway.lending.Params is not mutable"))
 	case "bitway.lending.Params.request_fee_collector":
 		panic(fmt.Errorf("field request_fee_collector of message bitway.lending.Params is not mutable"))
 	case "bitway.lending.Params.origination_fee_collector":
 		panic(fmt.Errorf("field origination_fee_collector of message bitway.lending.Params is not mutable"))
 	case "bitway.lending.Params.protocol_fee_collector":
 		panic(fmt.Errorf("field protocol_fee_collector of message bitway.lending.Params is not mutable"))
+	case "bitway.lending.Params.max_liquidation_fee_rate_multiplier":
+		panic(fmt.Errorf("field max_liquidation_fee_rate_multiplier of message bitway.lending.Params is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.lending.Params"))
@@ -289,14 +289,14 @@ func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protor
 	case "bitway.lending.Params.final_timeout_duration":
 		m := new(durationpb.Duration)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "bitway.lending.Params.max_liquidation_fee_rate_multiplier":
-		return protoreflect.ValueOfInt64(int64(0))
 	case "bitway.lending.Params.request_fee_collector":
 		return protoreflect.ValueOfString("")
 	case "bitway.lending.Params.origination_fee_collector":
 		return protoreflect.ValueOfString("")
 	case "bitway.lending.Params.protocol_fee_collector":
 		return protoreflect.ValueOfString("")
+	case "bitway.lending.Params.max_liquidation_fee_rate_multiplier":
+		return protoreflect.ValueOfInt64(int64(0))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.lending.Params"))
@@ -370,9 +370,6 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.FinalTimeoutDuration)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.MaxLiquidationFeeRateMultiplier != 0 {
-			n += 1 + runtime.Sov(uint64(x.MaxLiquidationFeeRateMultiplier))
-		}
 		l = len(x.RequestFeeCollector)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
@@ -384,6 +381,9 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		l = len(x.ProtocolFeeCollector)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.MaxLiquidationFeeRateMultiplier != 0 {
+			n += 1 + runtime.Sov(uint64(x.MaxLiquidationFeeRateMultiplier))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -414,31 +414,31 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
+		if x.MaxLiquidationFeeRateMultiplier != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.MaxLiquidationFeeRateMultiplier))
+			i--
+			dAtA[i] = 0x28
+		}
 		if len(x.ProtocolFeeCollector) > 0 {
 			i -= len(x.ProtocolFeeCollector)
 			copy(dAtA[i:], x.ProtocolFeeCollector)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ProtocolFeeCollector)))
 			i--
-			dAtA[i] = 0x2a
+			dAtA[i] = 0x22
 		}
 		if len(x.OriginationFeeCollector) > 0 {
 			i -= len(x.OriginationFeeCollector)
 			copy(dAtA[i:], x.OriginationFeeCollector)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.OriginationFeeCollector)))
 			i--
-			dAtA[i] = 0x22
+			dAtA[i] = 0x1a
 		}
 		if len(x.RequestFeeCollector) > 0 {
 			i -= len(x.RequestFeeCollector)
 			copy(dAtA[i:], x.RequestFeeCollector)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RequestFeeCollector)))
 			i--
-			dAtA[i] = 0x1a
-		}
-		if x.MaxLiquidationFeeRateMultiplier != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.MaxLiquidationFeeRateMultiplier))
-			i--
-			dAtA[i] = 0x10
+			dAtA[i] = 0x12
 		}
 		if x.FinalTimeoutDuration != nil {
 			encoded, err := options.Marshal(x.FinalTimeoutDuration)
@@ -540,25 +540,6 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				}
 				iNdEx = postIndex
 			case 2:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MaxLiquidationFeeRateMultiplier", wireType)
-				}
-				x.MaxLiquidationFeeRateMultiplier = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.MaxLiquidationFeeRateMultiplier |= int64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RequestFeeCollector", wireType)
 				}
@@ -590,7 +571,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				}
 				x.RequestFeeCollector = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 4:
+			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OriginationFeeCollector", wireType)
 				}
@@ -622,7 +603,7 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				}
 				x.OriginationFeeCollector = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 5:
+			case 4:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ProtocolFeeCollector", wireType)
 				}
@@ -654,6 +635,25 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				}
 				x.ProtocolFeeCollector = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
+			case 5:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MaxLiquidationFeeRateMultiplier", wireType)
+				}
+				x.MaxLiquidationFeeRateMultiplier = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.MaxLiquidationFeeRateMultiplier |= int64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -710,14 +710,14 @@ type Params struct {
 
 	// final timeout duration for loan
 	FinalTimeoutDuration *durationpb.Duration `protobuf:"bytes,1,opt,name=final_timeout_duration,json=finalTimeoutDuration,proto3" json:"final_timeout_duration,omitempty"`
-	// maximum fee rate multiplier for liquidation; 0 means no limit
-	MaxLiquidationFeeRateMultiplier int64 `protobuf:"varint,2,opt,name=max_liquidation_fee_rate_multiplier,json=maxLiquidationFeeRateMultiplier,proto3" json:"max_liquidation_fee_rate_multiplier,omitempty"`
 	// request fee collector address
-	RequestFeeCollector string `protobuf:"bytes,3,opt,name=request_fee_collector,json=requestFeeCollector,proto3" json:"request_fee_collector,omitempty"`
+	RequestFeeCollector string `protobuf:"bytes,2,opt,name=request_fee_collector,json=requestFeeCollector,proto3" json:"request_fee_collector,omitempty"`
 	// origination fee collector address
-	OriginationFeeCollector string `protobuf:"bytes,4,opt,name=origination_fee_collector,json=originationFeeCollector,proto3" json:"origination_fee_collector,omitempty"`
+	OriginationFeeCollector string `protobuf:"bytes,3,opt,name=origination_fee_collector,json=originationFeeCollector,proto3" json:"origination_fee_collector,omitempty"`
 	// protocol fee collector address
-	ProtocolFeeCollector string `protobuf:"bytes,5,opt,name=protocol_fee_collector,json=protocolFeeCollector,proto3" json:"protocol_fee_collector,omitempty"`
+	ProtocolFeeCollector string `protobuf:"bytes,4,opt,name=protocol_fee_collector,json=protocolFeeCollector,proto3" json:"protocol_fee_collector,omitempty"`
+	// maximum fee rate multiplier for liquidation cet; 0 means no limit
+	MaxLiquidationFeeRateMultiplier int64 `protobuf:"varint,5,opt,name=max_liquidation_fee_rate_multiplier,json=maxLiquidationFeeRateMultiplier,proto3" json:"max_liquidation_fee_rate_multiplier,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -747,13 +747,6 @@ func (x *Params) GetFinalTimeoutDuration() *durationpb.Duration {
 	return nil
 }
 
-func (x *Params) GetMaxLiquidationFeeRateMultiplier() int64 {
-	if x != nil {
-		return x.MaxLiquidationFeeRateMultiplier
-	}
-	return 0
-}
-
 func (x *Params) GetRequestFeeCollector() string {
 	if x != nil {
 		return x.RequestFeeCollector
@@ -775,6 +768,13 @@ func (x *Params) GetProtocolFeeCollector() string {
 	return ""
 }
 
+func (x *Params) GetMaxLiquidationFeeRateMultiplier() int64 {
+	if x != nil {
+		return x.MaxLiquidationFeeRateMultiplier
+	}
+	return 0
+}
+
 var File_bitway_lending_params_proto protoreflect.FileDescriptor
 
 var file_bitway_lending_params_proto_rawDesc = []byte{
@@ -790,22 +790,22 @@ var file_bitway_lending_params_proto_rawDesc = []byte{
 	0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
 	0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x98,
 	0xdf, 0x1f, 0x01, 0x52, 0x14, 0x66, 0x69, 0x6e, 0x61, 0x6c, 0x54, 0x69, 0x6d, 0x65, 0x6f, 0x75,
-	0x74, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x4c, 0x0a, 0x23, 0x6d, 0x61, 0x78,
-	0x5f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x66, 0x65, 0x65,
-	0x5f, 0x72, 0x61, 0x74, 0x65, 0x5f, 0x6d, 0x75, 0x6c, 0x74, 0x69, 0x70, 0x6c, 0x69, 0x65, 0x72,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x1f, 0x6d, 0x61, 0x78, 0x4c, 0x69, 0x71, 0x75, 0x69,
-	0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x65, 0x65, 0x52, 0x61, 0x74, 0x65, 0x4d, 0x75, 0x6c,
-	0x74, 0x69, 0x70, 0x6c, 0x69, 0x65, 0x72, 0x12, 0x32, 0x0a, 0x15, 0x72, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x5f, 0x66, 0x65, 0x65, 0x5f, 0x63, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72,
-	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x13, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x46,
-	0x65, 0x65, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x12, 0x3a, 0x0a, 0x19, 0x6f,
-	0x72, 0x69, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x66, 0x65, 0x65, 0x5f, 0x63,
-	0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x17,
-	0x6f, 0x72, 0x69, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x65, 0x65, 0x43, 0x6f,
-	0x6c, 0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x12, 0x34, 0x0a, 0x16, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x63, 0x6f, 0x6c, 0x5f, 0x66, 0x65, 0x65, 0x5f, 0x63, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x6f,
-	0x72, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x14, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f,
-	0x6c, 0x46, 0x65, 0x65, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x42, 0xab, 0x01,
+	0x74, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x32, 0x0a, 0x15, 0x72, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x5f, 0x66, 0x65, 0x65, 0x5f, 0x63, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74,
+	0x6f, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x13, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x46, 0x65, 0x65, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x12, 0x3a, 0x0a,
+	0x19, 0x6f, 0x72, 0x69, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x66, 0x65, 0x65,
+	0x5f, 0x63, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x17, 0x6f, 0x72, 0x69, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x65, 0x65,
+	0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x12, 0x34, 0x0a, 0x16, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x5f, 0x66, 0x65, 0x65, 0x5f, 0x63, 0x6f, 0x6c, 0x6c, 0x65, 0x63,
+	0x74, 0x6f, 0x72, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x14, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x63, 0x6f, 0x6c, 0x46, 0x65, 0x65, 0x43, 0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x12,
+	0x4c, 0x0a, 0x23, 0x6d, 0x61, 0x78, 0x5f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x5f, 0x66, 0x65, 0x65, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x5f, 0x6d, 0x75, 0x6c, 0x74,
+	0x69, 0x70, 0x6c, 0x69, 0x65, 0x72, 0x18, 0x05, 0x20, 0x01, 0x28, 0x03, 0x52, 0x1f, 0x6d, 0x61,
+	0x78, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x65, 0x65, 0x52,
+	0x61, 0x74, 0x65, 0x4d, 0x75, 0x6c, 0x74, 0x69, 0x70, 0x6c, 0x69, 0x65, 0x72, 0x42, 0xab, 0x01,
 	0x0a, 0x12, 0x63, 0x6f, 0x6d, 0x2e, 0x62, 0x69, 0x74, 0x77, 0x61, 0x79, 0x2e, 0x6c, 0x65, 0x6e,
 	0x64, 0x69, 0x6e, 0x67, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74,
 	0x6f, 0x50, 0x01, 0x5a, 0x2f, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
