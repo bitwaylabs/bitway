@@ -18,6 +18,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
+	oracleabci "github.com/bitwaylabs/bitway/x/oracle/abci"
 	"github.com/bitwaylabs/bitway/x/oracle/client/cli"
 	"github.com/bitwaylabs/bitway/x/oracle/keeper"
 	"github.com/bitwaylabs/bitway/x/oracle/types"
@@ -150,5 +151,8 @@ func (am AppModule) BeginBlock(_ context.Context) error {
 
 // EndBlock contains the logic that is automatically triggered at the end of each block
 func (am AppModule) EndBlock(ctx context.Context) error {
+	c := sdk.UnwrapSDKContext(ctx)
+	oracleabci.EndBlocker(c, am.keeper)
+
 	return nil
 }
