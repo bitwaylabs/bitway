@@ -684,11 +684,11 @@ var (
 	fd_Liquidation_liquidation_bonus_amount            protoreflect.FieldDescriptor
 	fd_Liquidation_protocol_liquidation_fee            protoreflect.FieldDescriptor
 	fd_Liquidation_unliquidated_collateral_amount      protoreflect.FieldDescriptor
-	fd_Liquidation_accrued_interest_during_liquidation protoreflect.FieldDescriptor
 	fd_Liquidation_liquidation_cet                     protoreflect.FieldDescriptor
 	fd_Liquidation_settlement_tx                       protoreflect.FieldDescriptor
 	fd_Liquidation_settlement_tx_id                    protoreflect.FieldDescriptor
 	fd_Liquidation_status                              protoreflect.FieldDescriptor
+	fd_Liquidation_accrued_interest_during_liquidation protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -710,11 +710,11 @@ func init() {
 	fd_Liquidation_liquidation_bonus_amount = md_Liquidation.Fields().ByName("liquidation_bonus_amount")
 	fd_Liquidation_protocol_liquidation_fee = md_Liquidation.Fields().ByName("protocol_liquidation_fee")
 	fd_Liquidation_unliquidated_collateral_amount = md_Liquidation.Fields().ByName("unliquidated_collateral_amount")
-	fd_Liquidation_accrued_interest_during_liquidation = md_Liquidation.Fields().ByName("accrued_interest_during_liquidation")
 	fd_Liquidation_liquidation_cet = md_Liquidation.Fields().ByName("liquidation_cet")
 	fd_Liquidation_settlement_tx = md_Liquidation.Fields().ByName("settlement_tx")
 	fd_Liquidation_settlement_tx_id = md_Liquidation.Fields().ByName("settlement_tx_id")
 	fd_Liquidation_status = md_Liquidation.Fields().ByName("status")
+	fd_Liquidation_accrued_interest_during_liquidation = md_Liquidation.Fields().ByName("accrued_interest_during_liquidation")
 }
 
 var _ protoreflect.Message = (*fastReflection_Liquidation)(nil)
@@ -878,12 +878,6 @@ func (x *fastReflection_Liquidation) Range(f func(protoreflect.FieldDescriptor, 
 			return
 		}
 	}
-	if x.AccruedInterestDuringLiquidation != nil {
-		value := protoreflect.ValueOfMessage(x.AccruedInterestDuringLiquidation.ProtoReflect())
-		if !f(fd_Liquidation_accrued_interest_during_liquidation, value) {
-			return
-		}
-	}
 	if x.LiquidationCet != "" {
 		value := protoreflect.ValueOfString(x.LiquidationCet)
 		if !f(fd_Liquidation_liquidation_cet, value) {
@@ -905,6 +899,12 @@ func (x *fastReflection_Liquidation) Range(f func(protoreflect.FieldDescriptor, 
 	if x.Status != 0 {
 		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.Status))
 		if !f(fd_Liquidation_status, value) {
+			return
+		}
+	}
+	if x.AccruedInterestDuringLiquidation != nil {
+		value := protoreflect.ValueOfMessage(x.AccruedInterestDuringLiquidation.ProtoReflect())
+		if !f(fd_Liquidation_accrued_interest_during_liquidation, value) {
 			return
 		}
 	}
@@ -955,8 +955,6 @@ func (x *fastReflection_Liquidation) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.ProtocolLiquidationFee != nil
 	case "bitway.liquidation.Liquidation.unliquidated_collateral_amount":
 		return x.UnliquidatedCollateralAmount != nil
-	case "bitway.liquidation.Liquidation.accrued_interest_during_liquidation":
-		return x.AccruedInterestDuringLiquidation != nil
 	case "bitway.liquidation.Liquidation.liquidation_cet":
 		return x.LiquidationCet != ""
 	case "bitway.liquidation.Liquidation.settlement_tx":
@@ -965,6 +963,8 @@ func (x *fastReflection_Liquidation) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.SettlementTxId != ""
 	case "bitway.liquidation.Liquidation.status":
 		return x.Status != 0
+	case "bitway.liquidation.Liquidation.accrued_interest_during_liquidation":
+		return x.AccruedInterestDuringLiquidation != nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.liquidation.Liquidation"))
@@ -1013,8 +1013,6 @@ func (x *fastReflection_Liquidation) Clear(fd protoreflect.FieldDescriptor) {
 		x.ProtocolLiquidationFee = nil
 	case "bitway.liquidation.Liquidation.unliquidated_collateral_amount":
 		x.UnliquidatedCollateralAmount = nil
-	case "bitway.liquidation.Liquidation.accrued_interest_during_liquidation":
-		x.AccruedInterestDuringLiquidation = nil
 	case "bitway.liquidation.Liquidation.liquidation_cet":
 		x.LiquidationCet = ""
 	case "bitway.liquidation.Liquidation.settlement_tx":
@@ -1023,6 +1021,8 @@ func (x *fastReflection_Liquidation) Clear(fd protoreflect.FieldDescriptor) {
 		x.SettlementTxId = ""
 	case "bitway.liquidation.Liquidation.status":
 		x.Status = 0
+	case "bitway.liquidation.Liquidation.accrued_interest_during_liquidation":
+		x.AccruedInterestDuringLiquidation = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.liquidation.Liquidation"))
@@ -1087,9 +1087,6 @@ func (x *fastReflection_Liquidation) Get(descriptor protoreflect.FieldDescriptor
 	case "bitway.liquidation.Liquidation.unliquidated_collateral_amount":
 		value := x.UnliquidatedCollateralAmount
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "bitway.liquidation.Liquidation.accrued_interest_during_liquidation":
-		value := x.AccruedInterestDuringLiquidation
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "bitway.liquidation.Liquidation.liquidation_cet":
 		value := x.LiquidationCet
 		return protoreflect.ValueOfString(value)
@@ -1102,6 +1099,9 @@ func (x *fastReflection_Liquidation) Get(descriptor protoreflect.FieldDescriptor
 	case "bitway.liquidation.Liquidation.status":
 		value := x.Status
 		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
+	case "bitway.liquidation.Liquidation.accrued_interest_during_liquidation":
+		value := x.AccruedInterestDuringLiquidation
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.liquidation.Liquidation"))
@@ -1154,8 +1154,6 @@ func (x *fastReflection_Liquidation) Set(fd protoreflect.FieldDescriptor, value 
 		x.ProtocolLiquidationFee = value.Message().Interface().(*v1beta1.Coin)
 	case "bitway.liquidation.Liquidation.unliquidated_collateral_amount":
 		x.UnliquidatedCollateralAmount = value.Message().Interface().(*v1beta1.Coin)
-	case "bitway.liquidation.Liquidation.accrued_interest_during_liquidation":
-		x.AccruedInterestDuringLiquidation = value.Message().Interface().(*v1beta1.Coin)
 	case "bitway.liquidation.Liquidation.liquidation_cet":
 		x.LiquidationCet = value.Interface().(string)
 	case "bitway.liquidation.Liquidation.settlement_tx":
@@ -1164,6 +1162,8 @@ func (x *fastReflection_Liquidation) Set(fd protoreflect.FieldDescriptor, value 
 		x.SettlementTxId = value.Interface().(string)
 	case "bitway.liquidation.Liquidation.status":
 		x.Status = (LiquidationStatus)(value.Enum())
+	case "bitway.liquidation.Liquidation.accrued_interest_during_liquidation":
+		x.AccruedInterestDuringLiquidation = value.Message().Interface().(*v1beta1.Coin)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.liquidation.Liquidation"))
@@ -1318,9 +1318,6 @@ func (x *fastReflection_Liquidation) NewField(fd protoreflect.FieldDescriptor) p
 	case "bitway.liquidation.Liquidation.unliquidated_collateral_amount":
 		m := new(v1beta1.Coin)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "bitway.liquidation.Liquidation.accrued_interest_during_liquidation":
-		m := new(v1beta1.Coin)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "bitway.liquidation.Liquidation.liquidation_cet":
 		return protoreflect.ValueOfString("")
 	case "bitway.liquidation.Liquidation.settlement_tx":
@@ -1329,6 +1326,9 @@ func (x *fastReflection_Liquidation) NewField(fd protoreflect.FieldDescriptor) p
 		return protoreflect.ValueOfString("")
 	case "bitway.liquidation.Liquidation.status":
 		return protoreflect.ValueOfEnum(0)
+	case "bitway.liquidation.Liquidation.accrued_interest_during_liquidation":
+		m := new(v1beta1.Coin)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: bitway.liquidation.Liquidation"))
@@ -1461,10 +1461,6 @@ func (x *fastReflection_Liquidation) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.UnliquidatedCollateralAmount)
 			n += 2 + l + runtime.Sov(uint64(l))
 		}
-		if x.AccruedInterestDuringLiquidation != nil {
-			l = options.Size(x.AccruedInterestDuringLiquidation)
-			n += 2 + l + runtime.Sov(uint64(l))
-		}
 		l = len(x.LiquidationCet)
 		if l > 0 {
 			n += 2 + l + runtime.Sov(uint64(l))
@@ -1479,6 +1475,10 @@ func (x *fastReflection_Liquidation) ProtoMethods() *protoiface.Methods {
 		}
 		if x.Status != 0 {
 			n += 2 + runtime.Sov(uint64(x.Status))
+		}
+		if x.AccruedInterestDuringLiquidation != nil {
+			l = options.Size(x.AccruedInterestDuringLiquidation)
+			n += 2 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -1509,40 +1509,6 @@ func (x *fastReflection_Liquidation) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.Status != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Status))
-			i--
-			dAtA[i] = 0x1
-			i--
-			dAtA[i] = 0xa8
-		}
-		if len(x.SettlementTxId) > 0 {
-			i -= len(x.SettlementTxId)
-			copy(dAtA[i:], x.SettlementTxId)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.SettlementTxId)))
-			i--
-			dAtA[i] = 0x1
-			i--
-			dAtA[i] = 0xa2
-		}
-		if len(x.SettlementTx) > 0 {
-			i -= len(x.SettlementTx)
-			copy(dAtA[i:], x.SettlementTx)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.SettlementTx)))
-			i--
-			dAtA[i] = 0x1
-			i--
-			dAtA[i] = 0x9a
-		}
-		if len(x.LiquidationCet) > 0 {
-			i -= len(x.LiquidationCet)
-			copy(dAtA[i:], x.LiquidationCet)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.LiquidationCet)))
-			i--
-			dAtA[i] = 0x1
-			i--
-			dAtA[i] = 0x92
-		}
 		if x.AccruedInterestDuringLiquidation != nil {
 			encoded, err := options.Marshal(x.AccruedInterestDuringLiquidation)
 			if err != nil {
@@ -1554,6 +1520,40 @@ func (x *fastReflection_Liquidation) ProtoMethods() *protoiface.Methods {
 			i -= len(encoded)
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xaa
+		}
+		if x.Status != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Status))
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xa0
+		}
+		if len(x.SettlementTxId) > 0 {
+			i -= len(x.SettlementTxId)
+			copy(dAtA[i:], x.SettlementTxId)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.SettlementTxId)))
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0x9a
+		}
+		if len(x.SettlementTx) > 0 {
+			i -= len(x.SettlementTx)
+			copy(dAtA[i:], x.SettlementTx)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.SettlementTx)))
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0x92
+		}
+		if len(x.LiquidationCet) > 0 {
+			i -= len(x.LiquidationCet)
+			copy(dAtA[i:], x.LiquidationCet)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.LiquidationCet)))
 			i--
 			dAtA[i] = 0x1
 			i--
@@ -2342,6 +2342,121 @@ func (x *fastReflection_Liquidation) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 17:
 				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LiquidationCet", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.LiquidationCet = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 18:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SettlementTx", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.SettlementTx = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 19:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SettlementTxId", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.SettlementTxId = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 20:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+				}
+				x.Status = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Status |= LiquidationStatus(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 21:
+				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AccruedInterestDuringLiquidation", wireType)
 				}
 				var msglen int
@@ -2376,121 +2491,6 @@ func (x *fastReflection_Liquidation) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 18:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LiquidationCet", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.LiquidationCet = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 19:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SettlementTx", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.SettlementTx = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 20:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SettlementTxId", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.SettlementTxId = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 21:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
-				}
-				x.Status = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.Status |= LiquidationStatus(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -3558,11 +3558,11 @@ type Liquidation struct {
 	LiquidationBonusAmount           *v1beta1.Coin          `protobuf:"bytes,14,opt,name=liquidation_bonus_amount,json=liquidationBonusAmount,proto3" json:"liquidation_bonus_amount,omitempty"`
 	ProtocolLiquidationFee           *v1beta1.Coin          `protobuf:"bytes,15,opt,name=protocol_liquidation_fee,json=protocolLiquidationFee,proto3" json:"protocol_liquidation_fee,omitempty"`
 	UnliquidatedCollateralAmount     *v1beta1.Coin          `protobuf:"bytes,16,opt,name=unliquidated_collateral_amount,json=unliquidatedCollateralAmount,proto3" json:"unliquidated_collateral_amount,omitempty"`
-	AccruedInterestDuringLiquidation *v1beta1.Coin          `protobuf:"bytes,17,opt,name=accrued_interest_during_liquidation,json=accruedInterestDuringLiquidation,proto3" json:"accrued_interest_during_liquidation,omitempty"`
-	LiquidationCet                   string                 `protobuf:"bytes,18,opt,name=liquidation_cet,json=liquidationCet,proto3" json:"liquidation_cet,omitempty"`
-	SettlementTx                     string                 `protobuf:"bytes,19,opt,name=settlement_tx,json=settlementTx,proto3" json:"settlement_tx,omitempty"`
-	SettlementTxId                   string                 `protobuf:"bytes,20,opt,name=settlement_tx_id,json=settlementTxId,proto3" json:"settlement_tx_id,omitempty"`
-	Status                           LiquidationStatus      `protobuf:"varint,21,opt,name=status,proto3,enum=bitway.liquidation.LiquidationStatus" json:"status,omitempty"`
+	LiquidationCet                   string                 `protobuf:"bytes,17,opt,name=liquidation_cet,json=liquidationCet,proto3" json:"liquidation_cet,omitempty"`
+	SettlementTx                     string                 `protobuf:"bytes,18,opt,name=settlement_tx,json=settlementTx,proto3" json:"settlement_tx,omitempty"`
+	SettlementTxId                   string                 `protobuf:"bytes,19,opt,name=settlement_tx_id,json=settlementTxId,proto3" json:"settlement_tx_id,omitempty"`
+	Status                           LiquidationStatus      `protobuf:"varint,20,opt,name=status,proto3,enum=bitway.liquidation.LiquidationStatus" json:"status,omitempty"`
+	AccruedInterestDuringLiquidation *v1beta1.Coin          `protobuf:"bytes,21,opt,name=accrued_interest_during_liquidation,json=accruedInterestDuringLiquidation,proto3" json:"accrued_interest_during_liquidation,omitempty"`
 }
 
 func (x *Liquidation) Reset() {
@@ -3697,13 +3697,6 @@ func (x *Liquidation) GetUnliquidatedCollateralAmount() *v1beta1.Coin {
 	return nil
 }
 
-func (x *Liquidation) GetAccruedInterestDuringLiquidation() *v1beta1.Coin {
-	if x != nil {
-		return x.AccruedInterestDuringLiquidation
-	}
-	return nil
-}
-
 func (x *Liquidation) GetLiquidationCet() string {
 	if x != nil {
 		return x.LiquidationCet
@@ -3730,6 +3723,13 @@ func (x *Liquidation) GetStatus() LiquidationStatus {
 		return x.Status
 	}
 	return LiquidationStatus_LIQUIDATION_STATUS_UNSPECIFIED
+}
+
+func (x *Liquidation) GetAccruedInterestDuringLiquidation() *v1beta1.Coin {
+	if x != nil {
+		return x.AccruedInterestDuringLiquidation
+	}
+	return nil
 }
 
 type LiquidationRecord struct {
@@ -3911,25 +3911,25 @@ var file_bitway_liquidation_liquidation_proto_rawDesc = []byte{
 	0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69,
 	0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x1c, 0x75, 0x6e, 0x6c, 0x69, 0x71, 0x75, 0x69,
 	0x64, 0x61, 0x74, 0x65, 0x64, 0x43, 0x6f, 0x6c, 0x6c, 0x61, 0x74, 0x65, 0x72, 0x61, 0x6c, 0x41,
-	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x6e, 0x0a, 0x23, 0x61, 0x63, 0x63, 0x72, 0x75, 0x65, 0x64,
-	0x5f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x5f, 0x64, 0x75, 0x72, 0x69, 0x6e, 0x67,
-	0x5f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x11, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65,
-	0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8,
-	0xde, 0x1f, 0x00, 0x52, 0x20, 0x61, 0x63, 0x63, 0x72, 0x75, 0x65, 0x64, 0x49, 0x6e, 0x74, 0x65,
-	0x72, 0x65, 0x73, 0x74, 0x44, 0x75, 0x72, 0x69, 0x6e, 0x67, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x27, 0x0a, 0x0f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x63, 0x65, 0x74, 0x18, 0x12, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e,
+	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x27, 0x0a, 0x0f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x63, 0x65, 0x74, 0x18, 0x11, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e,
 	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x65, 0x74, 0x12, 0x23,
 	0x0a, 0x0d, 0x73, 0x65, 0x74, 0x74, 0x6c, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x74, 0x78, 0x18,
-	0x13, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x73, 0x65, 0x74, 0x74, 0x6c, 0x65, 0x6d, 0x65, 0x6e,
+	0x12, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x73, 0x65, 0x74, 0x74, 0x6c, 0x65, 0x6d, 0x65, 0x6e,
 	0x74, 0x54, 0x78, 0x12, 0x28, 0x0a, 0x10, 0x73, 0x65, 0x74, 0x74, 0x6c, 0x65, 0x6d, 0x65, 0x6e,
-	0x74, 0x5f, 0x74, 0x78, 0x5f, 0x69, 0x64, 0x18, 0x14, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x73,
+	0x74, 0x5f, 0x74, 0x78, 0x5f, 0x69, 0x64, 0x18, 0x13, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x73,
 	0x65, 0x74, 0x74, 0x6c, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x54, 0x78, 0x49, 0x64, 0x12, 0x3d, 0x0a,
-	0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x15, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x25, 0x2e,
+	0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x14, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x25, 0x2e,
 	0x62, 0x69, 0x74, 0x77, 0x61, 0x79, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69,
 	0x6f, 0x6e, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x53, 0x74,
-	0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0xf8, 0x02, 0x0a,
+	0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x6e, 0x0a, 0x23,
+	0x61, 0x63, 0x63, 0x72, 0x75, 0x65, 0x64, 0x5f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74,
+	0x5f, 0x64, 0x75, 0x72, 0x69, 0x6e, 0x67, 0x5f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x18, 0x15, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e,
+	0x43, 0x6f, 0x69, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x20, 0x61, 0x63, 0x63, 0x72,
+	0x75, 0x65, 0x64, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x44, 0x75, 0x72, 0x69, 0x6e,
+	0x67, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xf8, 0x02, 0x0a,
 	0x11, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x63, 0x6f,
 	0x72, 0x64, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02,
 	0x69, 0x64, 0x12, 0x25, 0x0a, 0x0e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f,
@@ -4019,8 +4019,8 @@ var file_bitway_liquidation_liquidation_proto_depIdxs = []int32{
 	5,  // 8: bitway.liquidation.Liquidation.liquidation_bonus_amount:type_name -> cosmos.base.v1beta1.Coin
 	5,  // 9: bitway.liquidation.Liquidation.protocol_liquidation_fee:type_name -> cosmos.base.v1beta1.Coin
 	5,  // 10: bitway.liquidation.Liquidation.unliquidated_collateral_amount:type_name -> cosmos.base.v1beta1.Coin
-	5,  // 11: bitway.liquidation.Liquidation.accrued_interest_during_liquidation:type_name -> cosmos.base.v1beta1.Coin
-	0,  // 12: bitway.liquidation.Liquidation.status:type_name -> bitway.liquidation.LiquidationStatus
+	0,  // 11: bitway.liquidation.Liquidation.status:type_name -> bitway.liquidation.LiquidationStatus
+	5,  // 12: bitway.liquidation.Liquidation.accrued_interest_during_liquidation:type_name -> cosmos.base.v1beta1.Coin
 	5,  // 13: bitway.liquidation.LiquidationRecord.debt_amount:type_name -> cosmos.base.v1beta1.Coin
 	5,  // 14: bitway.liquidation.LiquidationRecord.collateral_amount:type_name -> cosmos.base.v1beta1.Coin
 	5,  // 15: bitway.liquidation.LiquidationRecord.bonus_amount:type_name -> cosmos.base.v1beta1.Coin
