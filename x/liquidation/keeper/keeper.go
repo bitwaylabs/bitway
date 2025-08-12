@@ -42,7 +42,7 @@ func NewKeeper(
 		panic(fmt.Sprintf("%s module account has not been set", types.ModuleName))
 	}
 
-	k := &Keeper{
+	return &Keeper{
 		cdc:             cdc,
 		storeKey:        storeKey,
 		memKey:          memKey,
@@ -53,11 +53,6 @@ func NewKeeper(
 		btcbridgeKeeper: btcbridgeKeeper,
 		authority:       authority,
 	}
-
-	// register signing request completed handler
-	tssKeeper.RegisterSigningRequestCompletedHandler(types.ModuleName, k.SigningCompletedHandler)
-
-	return k
 }
 
 func (k Keeper) Logger(ctx sdk.Context) log.Logger {

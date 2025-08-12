@@ -732,6 +732,7 @@ func New(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 	app.LiquidationKeeper.SetLendingKeeper(app.LendingKeeper)
+	app.TSSKeeper.RegisterSigningRequestCompletedHandler(liquidationtypes.ModuleName, app.LiquidationKeeper.SigningCompletedHandler)
 
 	app.FarmingKeeper = farmingkeeper.NewKeeper(
 		appCodec,
