@@ -21,8 +21,7 @@ type Keeper struct {
 	oracleKeeper    types.OracleKeeper
 	tssKeeper       types.TSSKeeper
 	btcbridgeKeeper types.BtcBridgeKeeper
-
-	liquidatedDebtHandler types.LiquidatedDebtHandler
+	lendingKeeper   types.LendingKeeper
 
 	authority string
 }
@@ -102,10 +101,10 @@ func (k Keeper) BtcBridgeKeeper() types.BtcBridgeKeeper {
 	return k.btcbridgeKeeper
 }
 
-func (k Keeper) LiquidatedDebtHandler() types.LiquidatedDebtHandler {
-	return k.liquidatedDebtHandler
+func (k Keeper) LendingKeeper() types.LendingKeeper {
+	return k.lendingKeeper
 }
 
-func (k *Keeper) SetLiquidatedDebtHandler(handler types.LiquidatedDebtHandler) {
-	k.liquidatedDebtHandler = handler
+func (k *Keeper) SetLendingKeeper(lendingKeeper types.LendingKeeper) {
+	k.lendingKeeper = lendingKeeper
 }
