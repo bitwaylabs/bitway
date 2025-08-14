@@ -710,7 +710,7 @@ type Params struct {
 
 	// final timeout duration for loan
 	FinalTimeoutDuration *durationpb.Duration `protobuf:"bytes,1,opt,name=final_timeout_duration,json=finalTimeoutDuration,proto3" json:"final_timeout_duration,omitempty"`
-	// maximum fee rate multiplier for liquidation; 0 means no limit
+	// maximum fee rate multiplier for liquidation cet; 0 means no limit
 	MaxLiquidationFeeRateMultiplier int64 `protobuf:"varint,2,opt,name=max_liquidation_fee_rate_multiplier,json=maxLiquidationFeeRateMultiplier,proto3" json:"max_liquidation_fee_rate_multiplier,omitempty"`
 	// request fee collector address
 	RequestFeeCollector string `protobuf:"bytes,3,opt,name=request_fee_collector,json=requestFeeCollector,proto3" json:"request_fee_collector,omitempty"`
