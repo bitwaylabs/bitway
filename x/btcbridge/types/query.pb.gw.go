@@ -2180,7 +2180,7 @@ var (
 
 	pattern_Query_QuerySigningRequestByTxHash_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"bitway", "btcbridge", "signing", "requests", "tx", "txid"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_QueryPendingSigningRequests_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"bitway", "btcbridge", "signing", "requests", "pending"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_QueryPendingSigningRequests_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 2, 5}, []string{"bitway", "btcbridge", "signing", "requests", "pending", "compact"}, "", runtime.AssumeColonVerbOpt(false)))
 
 	pattern_Query_QueryUTXOs_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"bitway", "btcbridge", "utxos"}, "", runtime.AssumeColonVerbOpt(false)))
 
