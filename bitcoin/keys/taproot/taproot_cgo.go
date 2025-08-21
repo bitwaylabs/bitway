@@ -2,6 +2,8 @@ package taproot
 
 import (
 	"encoding/binary"
+	"encoding/hex"
+	"fmt"
 
 	"github.com/cometbft/cometbft/crypto"
 
@@ -69,6 +71,11 @@ func (pubKey *PubKey) VerifySignature(msg []byte, sigBytes []byte) bool {
 	}
 
 	hash := magicHash(msg)
+
+	fmt.Printf("verification sig: %s", hex.EncodeToString(sigBytes))
+	fmt.Printf("verification msg: %s", hex.EncodeToString(msg))
+	fmt.Printf("verification hash: %s", hex.EncodeToString(hash))
+
 	recoveredPK, compressed, err := ecdsa.RecoverCompact(sigBytes, hash)
 	if err != nil {
 		return false
