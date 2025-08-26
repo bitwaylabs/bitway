@@ -10,7 +10,7 @@ T=2
 
 # User prompt if an existing local node configuration is found.
 if [ -d "$HOME/.shuttler1" ]; then
-	printf "\nAn existing folder at '%s' was found. You can choose to delete this folder and start a new shuttler with new keys. When declined, the existing local node is started. \n" "$HOME/.shuttlerN"
+	printf "\nAn existing folder at '%s' was found. You can choose to delete this folder and start a new shuttler with new keys. When declined, the existing local node is started. \n" "$HOME/.shuttler1"
 	echo "Overwrite the existing configuration and start a new shuttler cluster? [y/n]"
 	read -r overwrite
 else
