@@ -1,10 +1,7 @@
 package segwit
 
 import (
-	"encoding/base64"
 	"encoding/binary"
-	"encoding/hex"
-	fmt "fmt"
 
 	"github.com/cometbft/cometbft/crypto"
 
@@ -72,10 +69,6 @@ func (pubKey *PubKey) VerifySignature(msg []byte, sigBytes []byte) bool {
 	}
 
 	hash := magicHash(msg)
-
-	fmt.Printf("sig: %s\n", base64.StdEncoding.EncodeToString(sigBytes))
-	fmt.Printf("msg: %s\n", string(msg))
-	fmt.Printf("hash: %s\n", hex.EncodeToString(hash))
 
 	recoveredPK, compressed, err := ecdsa.RecoverCompact(sigBytes, hash)
 	if err != nil {
