@@ -50,7 +50,11 @@ func Subscribe(svrCtx *server.Context) error {
 	url := "ws://wbs-api.mexc.com/ws"
 	c, re, err := websocket.DefaultDialer.Dial(url, nil)
 	if err != nil {
-		svrCtx.Logger.Error("price provider connection", "url", url, "status", re.Status, "body", re.Body)
+		if re != nil {
+			svrCtx.Logger.Error("price provider connection", "url", url, "status", re.Status, "body", re.Body)
+		} else {
+			svrCtx.Logger.Error("price provider connection", "url", url, "error", err)
+		}
 		return nil
 	}
 	defer c.Close()
@@ -64,7 +68,7 @@ func Subscribe(svrCtx *server.Context) error {
 			time.Sleep(5 * time.Second)
 			c, _, err = websocket.DefaultDialer.Dial(url, nil)
 			if err != nil {
-				svrCtx.Logger.Error("price provider connection", "url", url, "status", re.Status, "body", re.Body)
+				svrCtx.Logger.Error("price provider connection", "url", url, "error", err)
 			} else {
 				reconnect = false
 			}
