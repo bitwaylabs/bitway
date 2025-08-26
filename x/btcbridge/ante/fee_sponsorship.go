@@ -140,13 +140,13 @@ func (fsd FeeSponsorshipDecorator) isSponsorableTx(ctx sdk.Context, tx sdk.Tx) b
 		switch msg := m.(type) {
 		case *banktypes.MsgSend:
 			denoms := msg.Amount.Denoms()
-			if len(denoms) != 1 || denoms[0] != fsd.btcbridgeKeeper.BtcDenom(ctx) {
+			if len(denoms) != 1 || (denoms[0] != fsd.btcbridgeKeeper.BtcDenom(ctx) && denoms[0] != "uusd1") {
 				return false
 			}
 
 		case *banktypes.MsgMultiSend:
 			denoms := msg.Inputs[0].Coins.Denoms()
-			if len(denoms) != 1 || denoms[0] != fsd.btcbridgeKeeper.BtcDenom(ctx) {
+			if len(denoms) != 1 || (denoms[0] != fsd.btcbridgeKeeper.BtcDenom(ctx) && denoms[0] != "uusd1") {
 				return false
 			}
 
