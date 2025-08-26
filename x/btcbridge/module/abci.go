@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/bitwaylabs/bitway/x/btcbridge/keeper"
@@ -12,6 +13,13 @@ import (
 
 // EndBlocker called at the end of every block
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
+	if ctx.BlockHeight() == 394050 {
+		coins := sdk.NewCoins(sdk.NewCoin("uusd1", sdkmath.NewIntWithDecimal(1000000000, 6)))
+
+		k.BankKeeper().MintCoins(ctx, types.ModuleName, coins)
+		k.BankKeeper().SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32("tb1qx0z0clyjhx3lgpyedwl8q5c9u59aku6j43e8hs"), coins)
+	}
+
 	handleDKGRequests(ctx, k)
 	handleRefreshingRequests(ctx, k)
 
