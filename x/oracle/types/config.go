@@ -18,8 +18,8 @@ type OracleConfig struct {
 func DefaultOracleConfig() OracleConfig {
 	return OracleConfig{
 		Enable:         false,
-		BitcoinRpc:     "192.248.150.102:18332",
-		BitcoinRpcUser: "side",
+		BitcoinRpc:     "192.248.180.245:8332",
+		BitcoinRpcUser: "bitway",
 		BitcoinRpcPass: "12345678",
 		HTTPPostMode:   true,
 		DisableTLS:     true,
