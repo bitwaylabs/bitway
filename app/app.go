@@ -151,6 +151,8 @@ import (
 	tsskeeper "github.com/bitwaylabs/bitway/x/tss/keeper"
 	tssmodule "github.com/bitwaylabs/bitway/x/tss/module"
 	tsstypes "github.com/bitwaylabs/bitway/x/tss/types"
+
+	v201 "github.com/bitwaylabs/bitway/app/upgrades/v2_0_1"
 )
 
 const (
@@ -960,6 +962,9 @@ func New(
 		panic(err)
 	}
 
+	// set upgrade handlers
+	app.SetUpgradeHandlers()
+
 	autocliv1.RegisterQueryServer(app.GRPCQueryRouter(), runtimeservices.NewAutoCLIQueryService(app.ModuleManager.Modules))
 
 	reflectionSvc, err := runtimeservices.NewReflectionService()
@@ -1265,4 +1270,23 @@ func BlockedAddresses() map[string]bool {
 	delete(modAccAddrs, authtypes.NewModuleAddress(farmingtypes.ModuleName).String())
 
 	return modAccAddrs
+}
+
+// SetUpgradeHandlers sets the upgrade handlers
+func (app *App) SetUpgradeHandlers() {
+	app.UpgradeKeeper.SetUpgradeHandler(v201.UpgradeName, v201.CreateUpgradeHandler(app.ModuleManager, app.configurator, app.StakingKeeper, &app.SlashingKeeper))
+
+	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
+	if err != nil {
+		panic(fmt.Sprintf("failed to read upgrade info from disk: %v", err))
+	}
+
+	if app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+		return
+	}
+
+	// register store loader for current upgrade
+	if upgradeInfo.Name == v201.UpgradeName {
+		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &v201.StoreUpgrades))
+	}
 }
