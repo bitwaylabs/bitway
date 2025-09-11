@@ -186,7 +186,7 @@ func appExport(
 }
 
 var tempDir = func() string {
-	dir, err := os.MkdirTemp("", "wasmd")
+	dir, err := os.MkdirTemp("", "bitwayd")
 	if err != nil {
 		panic("failed to create temp dir: " + err.Error())
 	}
