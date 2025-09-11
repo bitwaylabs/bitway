@@ -8,12 +8,7 @@ import (
 	"path/filepath"
 	"sort"
 
-	"github.com/prometheus/client_golang/prometheus"
 	"github.com/spf13/cast"
-
-	"github.com/CosmWasm/wasmd/x/wasm"
-	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
-	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
 	abci "github.com/cometbft/cometbft/abci/types"
 
@@ -128,6 +123,7 @@ import (
 	ibctm "github.com/cosmos/ibc-go/v8/modules/light-clients/07-tendermint"
 
 	"github.com/bitwaylabs/bitway/bitcoin"
+	btccodec "github.com/bitwaylabs/bitway/bitcoin/crypto/codec"
 	"github.com/bitwaylabs/bitway/docs"
 	btcbridgecodec "github.com/bitwaylabs/bitway/x/btcbridge/codec"
 	btcbridgekeeper "github.com/bitwaylabs/bitway/x/btcbridge/keeper"
@@ -155,17 +151,12 @@ import (
 	tsskeeper "github.com/bitwaylabs/bitway/x/tss/keeper"
 	tssmodule "github.com/bitwaylabs/bitway/x/tss/module"
 	tsstypes "github.com/bitwaylabs/bitway/x/tss/types"
-
-	// this line is used by starport scaffolding # stargate/app/moduleImport
-	btccodec "github.com/bitwaylabs/bitway/bitcoin/crypto/codec"
 )
 
 const (
 	AccountAddressPrefix = "bitway"
 	Name                 = "bitway"
 )
-
-// this line is used by starport scaffolding # stargate/wasm/app/enabledProposals
 
 func getGovProposalHandlers() []govclient.ProposalHandler {
 	var govProposalHandlers []govclient.ProposalHandler
@@ -210,7 +201,6 @@ var (
 		ica.AppModuleBasic{},
 		vesting.AppModuleBasic{},
 		consensus.AppModuleBasic{},
-		wasm.AppModuleBasic{},
 		tssmodule.AppModuleBasic{},
 		btcbridgemodule.AppModuleBasic{},
 		liquidationmodule.AppModuleBasic{},
@@ -233,7 +223,6 @@ var (
 		govtypes.ModuleName:                 {authtypes.Burner},
 		ibcfeetypes.ModuleName:              nil,
 		ibctransfertypes.ModuleName:         {authtypes.Minter, authtypes.Burner},
-		wasmtypes.ModuleName:                {authtypes.Burner},
 		tsstypes.ModuleName:                 nil,
 		btcbridgetypes.ModuleName:           {authtypes.Minter, authtypes.Burner},
 		btcbridgetypes.FeeSponsorName:       nil,
@@ -300,14 +289,11 @@ type App struct {
 	GroupKeeper           groupkeeper.Keeper
 	ConsensusParamsKeeper consensusparamkeeper.Keeper
 
-	WasmKeeper wasmkeeper.Keeper
-
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
 	ScopeIBCFeeKeeper    capabilitykeeper.ScopedKeeper
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
 	ScopedICAHostKeeper  capabilitykeeper.ScopedKeeper
-	ScopedWasmKeeper     capabilitykeeper.ScopedKeeper
 
 	TSSKeeper         *tsskeeper.Keeper
 	BtcBridgeKeeper   btcbridgekeeper.Keeper
@@ -388,7 +374,7 @@ func New(
 		govtypes.StoreKey, paramstypes.StoreKey, ibcexported.StoreKey, upgradetypes.StoreKey,
 		feegrant.StoreKey, evidencetypes.StoreKey, ibctransfertypes.StoreKey, icahosttypes.StoreKey,
 		capabilitytypes.StoreKey, group.StoreKey, icacontrollertypes.StoreKey, consensusparamtypes.StoreKey,
-		ibcfeetypes.StoreKey, wasmtypes.StoreKey, tsstypes.StoreKey,
+		ibcfeetypes.StoreKey, tsstypes.StoreKey,
 		btcbridgetypes.StoreKey, liquidationtypes.StoreKey,
 		dlctypes.StoreKey, lendingtypes.StoreKey, oracletypes.StoreKey, oracletypes.MemStoreKey,
 		incentivetypes.StoreKey, farmingtypes.StoreKey,
@@ -442,7 +428,6 @@ func New(
 	scopedICAControllerKeeper := app.CapabilityKeeper.ScopeToModule(icacontrollertypes.SubModuleName)
 	scopedTransferKeeper := app.CapabilityKeeper.ScopeToModule(ibctransfertypes.ModuleName)
 	scopedICAHostKeeper := app.CapabilityKeeper.ScopeToModule(icahosttypes.SubModuleName)
-	scopedWasmKeeper := app.CapabilityKeeper.ScopeToModule(wasmtypes.ModuleName)
 	app.CapabilityKeeper.Seal()
 
 	// add keepers
@@ -747,57 +732,15 @@ func New(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
-	wasmDir := filepath.Join(homePath, "wasm")
-	wasmConfig, err := wasm.ReadWasmConfig(appOpts)
-	if err != nil {
-		panic(fmt.Sprintf("error while reading wasm config: %s", err))
-	}
-
-	wasmOpts := GetWasmOpts(appOpts)
-
-	// The last arguments can contain custom message handlers, and custom query handlers,
-	// if we want to allow any custom callbacks
-	app.WasmKeeper = wasmkeeper.NewKeeper(
-		appCodec,
-		runtime.NewKVStoreService(app.keys[wasmtypes.StoreKey]),
-		app.AccountKeeper,
-		app.BankKeeper,
-		app.StakingKeeper,
-		distrkeeper.NewQuerier(app.DistrKeeper),
-		app.IBCFeeKeeper, // ISC4 Wrapper: fee IBC middleware
-		app.IBCKeeper.ChannelKeeper,
-		app.IBCKeeper.PortKeeper,
-		scopedWasmKeeper,
-		app.TransferKeeper,
-		bApp.MsgServiceRouter(),
-		bApp.GRPCQueryRouter(),
-		wasmDir,
-		wasmConfig,
-		wasmkeeper.BuiltInCapabilities(),
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
-		wasmOpts...,
-	)
-
 	oracleConfig, err := oracletypes.ReadOracleConfig(appOpts)
 	if err != nil {
 		panic(fmt.Sprintf("error while reading oracle config: %s", err))
 	}
 	logger.Info("Oracle Status", "Enable", oracleConfig.Enable)
 
-	wasmModule := wasm.NewAppModule(appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper, app.MsgServiceRouter(), app.GetSubspace(wasmtypes.ModuleName))
-
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
 	/**** IBC Routing ****/
-
-	ics101WasmStack := wasm.NewIBCHandler(app.WasmKeeper, app.IBCKeeper.ChannelKeeper, app.IBCKeeper.ChannelKeeper)
-	// ics101WasmStack = packetforward.NewIBCMiddleware(
-	// 	ics101WasmStack,
-	// 	appKeepers.PacketForwardKeeper,
-	// 	0, // retries on timeout
-	// 	packetforwardkeeper.DefaultForwardTransferPacketTimeoutTimestamp, // forward timeout
-	// 	packetforwardkeeper.DefaultRefundTransferPacketTimeoutTimestamp,  // refund timeout
-	// )
 
 	var transferStack ibcporttypes.IBCModule
 	transferStack = transfer.NewIBCModule(app.TransferKeeper)
@@ -810,7 +753,6 @@ func New(
 	ibcRouter := ibcporttypes.NewRouter()
 	ibcRouter.AddRoute(icahosttypes.SubModuleName, icaHostIBCModule).
 		AddRoute(ibctransfertypes.ModuleName, transferStack)
-	ibcRouter.AddRoute(wasmtypes.ModuleName, ics101WasmStack)
 	// this line is used by starport scaffolding # ibc/app/router
 	app.IBCKeeper.SetRouter(ibcRouter)
 
@@ -862,7 +804,6 @@ func New(
 		ibcFeeModule,
 		icaModule,
 		ibctm.AppModule{},
-		wasmModule,
 
 		tssmodule.NewAppModule(appCodec, *app.TSSKeeper),
 		btcbridgemodule.NewAppModule(appCodec, app.BtcBridgeKeeper),
@@ -925,7 +866,6 @@ func New(
 		vestingtypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		ibcfeetypes.ModuleName,
-		wasmtypes.ModuleName,
 		tsstypes.ModuleName,
 		btcbridgetypes.ModuleName,
 		lendingtypes.ModuleName,
@@ -960,7 +900,6 @@ func New(
 		vestingtypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		ibcfeetypes.ModuleName,
-		wasmtypes.ModuleName,
 		tsstypes.ModuleName,
 		btcbridgetypes.ModuleName,
 		liquidationtypes.ModuleName,
@@ -1000,7 +939,6 @@ func New(
 		upgradetypes.ModuleName,
 		vestingtypes.ModuleName,
 		consensusparamtypes.ModuleName,
-		wasmtypes.ModuleName,
 		tsstypes.ModuleName,
 		btcbridgetypes.ModuleName,
 		liquidationtypes.ModuleName,
@@ -1329,15 +1267,4 @@ func BlockedAddresses() map[string]bool {
 	delete(modAccAddrs, authtypes.NewModuleAddress(farmingtypes.ModuleName).String())
 
 	return modAccAddrs
-}
-
-func GetWasmOpts(appOpts servertypes.AppOptions) []wasmkeeper.Option {
-	var wasmOpts []wasmkeeper.Option
-	if cast.ToBool(appOpts.Get("telemetry.enabled")) {
-		wasmOpts = append(wasmOpts, wasmkeeper.WithVMCacheMetrics(prometheus.DefaultRegisterer))
-	}
-
-	wasmOpts = append(wasmOpts, wasmkeeper.WithGasRegister(NewBitwayWasmGasRegister()))
-
-	return wasmOpts
 }

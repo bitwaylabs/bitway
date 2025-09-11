@@ -26,7 +26,7 @@ func DefaultOracleConfig() OracleConfig {
 	}
 }
 
-// ReadWasmConfig reads the wasm specifig configuration
+// ReadOracleConfig reads the oracle specific configuration
 func ReadOracleConfig(opts servertypes.AppOptions) (OracleConfig, error) {
 	cfg := DefaultOracleConfig()
 	var err error
