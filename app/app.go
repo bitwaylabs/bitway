@@ -160,6 +160,7 @@ import (
 	tsstypes "github.com/bitwaylabs/bitway/x/tss/types"
 
 	v201 "github.com/bitwaylabs/bitway/app/upgrades/v2_0_1"
+	v202 "github.com/bitwaylabs/bitway/app/upgrades/v2_0_2"
 )
 
 const (
@@ -1321,6 +1322,7 @@ func BlockedAddresses() map[string]bool {
 // SetUpgradeHandlers sets the upgrade handlers
 func (app *App) SetUpgradeHandlers() {
 	app.UpgradeKeeper.SetUpgradeHandler(v201.UpgradeName, v201.CreateUpgradeHandler(app.ModuleManager, app.configurator, app.StakingKeeper, &app.SlashingKeeper))
+	app.UpgradeKeeper.SetUpgradeHandler(v202.UpgradeName, v202.CreateUpgradeHandler(app.ModuleManager, app.configurator))
 
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
 	if err != nil {
@@ -1332,7 +1334,7 @@ func (app *App) SetUpgradeHandlers() {
 	}
 
 	// register store loader for current upgrade
-	if upgradeInfo.Name == v201.UpgradeName {
-		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &v201.StoreUpgrades))
+	if upgradeInfo.Name == v202.UpgradeName {
+		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &v202.StoreUpgrades))
 	}
 }
