@@ -10,6 +10,13 @@ import (
 
 	"github.com/spf13/cast"
 
+	hyperlane "github.com/bcp-innovations/hyperlane-cosmos/x/core"
+	hyperlanekeeper "github.com/bcp-innovations/hyperlane-cosmos/x/core/keeper"
+	hyperlanetypes "github.com/bcp-innovations/hyperlane-cosmos/x/core/types"
+	hyperlanewarp "github.com/bcp-innovations/hyperlane-cosmos/x/warp"
+	hyperlanewarpkeeper "github.com/bcp-innovations/hyperlane-cosmos/x/warp/keeper"
+	hyperlanewarptypes "github.com/bcp-innovations/hyperlane-cosmos/x/warp/types"
+
 	abci "github.com/cometbft/cometbft/abci/types"
 
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
@@ -211,6 +218,8 @@ var (
 		oraclemodule.AppModuleBasic{},
 		incentivemodule.AppModuleBasic{},
 		farmingmodule.AppModuleBasic{},
+		hyperlane.AppModule{},
+		hyperlanewarp.AppModule{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
@@ -235,6 +244,8 @@ var (
 		lendingtypes.RepaymentEscrowAccount: nil,
 		oracletypes.ModuleName:              nil,
 		farmingtypes.ModuleName:             nil,
+		hyperlanetypes.ModuleName:           nil,
+		hyperlanewarptypes.ModuleName:       {authtypes.Minter, authtypes.Burner},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
@@ -305,6 +316,11 @@ type App struct {
 	OracleKeeper      oraclekeeper.Keeper
 	IncentiveKeeper   incentivekeeper.Keeper
 	FarmingKeeper     farmingkeeper.Keeper
+
+	// Hyperlane
+	HyperlaneKeeper     hyperlanekeeper.Keeper
+	HyperlaneWarpKeeper hyperlanewarpkeeper.Keeper
+
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// the module manager
@@ -380,6 +396,7 @@ func New(
 		btcbridgetypes.StoreKey, liquidationtypes.StoreKey,
 		dlctypes.StoreKey, lendingtypes.StoreKey, oracletypes.StoreKey, oracletypes.MemStoreKey,
 		incentivetypes.StoreKey, farmingtypes.StoreKey,
+		hyperlanetypes.ModuleName, hyperlanewarptypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 
@@ -732,6 +749,24 @@ func New(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
+	app.HyperlaneKeeper = hyperlanekeeper.NewKeeper(
+		appCodec,
+		app.AccountKeeper.AddressCodec(),
+		runtime.NewKVStoreService(keys[hyperlanetypes.ModuleName]),
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		app.BankKeeper,
+	)
+
+	app.HyperlaneWarpKeeper = hyperlanewarpkeeper.NewKeeper(
+		appCodec,
+		app.AccountKeeper.AddressCodec(),
+		runtime.NewKVStoreService(keys[hyperlanewarptypes.ModuleName]),
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		app.BankKeeper,
+		&app.HyperlaneKeeper,
+		[]int32{int32(hyperlanewarptypes.HYP_TOKEN_TYPE_SYNTHETIC), int32(hyperlanewarptypes.HYP_TOKEN_TYPE_COLLATERAL)},
+	)
+
 	oracleConfig, err := oracletypes.ReadOracleConfig(appOpts)
 	if err != nil {
 		panic(fmt.Sprintf("error while reading oracle config: %s", err))
@@ -813,6 +848,9 @@ func New(
 		lendingmodule.NewAppModule(appCodec, app.LendingKeeper),
 		oraclemodule.NewAppModule(appCodec, app.OracleKeeper),
 		farmingmodule.NewAppModule(appCodec, app.FarmingKeeper),
+
+		hyperlane.NewAppModule(appCodec, &app.HyperlaneKeeper),
+		hyperlanewarp.NewAppModule(appCodec, app.HyperlaneWarpKeeper),
 		// this line is used by starport scaffolding # stargate/app/appModule
 
 		crisis.NewAppModule(app.CrisisKeeper, skipGenesisInvariants, app.GetSubspace(crisistypes.ModuleName)), // always be last to make sure that it checks for all invariants and not only part of them
@@ -874,6 +912,8 @@ func New(
 		oracletypes.ModuleName,
 		incentivetypes.ModuleName,
 		farmingtypes.ModuleName,
+		hyperlanetypes.ModuleName,
+		hyperlanewarptypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
@@ -908,6 +948,8 @@ func New(
 		oracletypes.ModuleName,
 		incentivetypes.ModuleName,
 		farmingtypes.ModuleName,
+		hyperlanetypes.ModuleName,
+		hyperlanewarptypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
@@ -947,6 +989,8 @@ func New(
 		oracletypes.ModuleName,
 		incentivetypes.ModuleName,
 		farmingtypes.ModuleName,
+		hyperlanetypes.ModuleName,
+		hyperlanewarptypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 	app.ModuleManager.SetOrderInitGenesis(genesisModuleOrder...)
@@ -1246,6 +1290,8 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(oracletypes.ModuleName)
 	paramsKeeper.Subspace(incentivetypes.ModuleName)
 	paramsKeeper.Subspace(farmingtypes.ModuleName)
+	paramsKeeper.Subspace(hyperlanetypes.ModuleName)
+	paramsKeeper.Subspace(hyperlanewarptypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper
