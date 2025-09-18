@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
@@ -18,6 +19,15 @@ const (
 
 	// DKG type for nonce generation along with oracle
 	DKG_TYPE_NONCE = "nonce"
+
+	// DKG type for oracle participants liveness check
+	DKG_TYPE_LIVENESS_CHECK = "liveness_check"
+
+	// default DKG timeout duration
+	DefaultDKGTimeoutDuration = 300 * time.Second // 300s
+
+	// default oracle participant liveness check interval
+	DefaultOracleParticipantLivenessCheckInterval = int64(2000) // 2000 blocks
 
 	// default outcome index
 	DefaultOutcomeIndex = -1

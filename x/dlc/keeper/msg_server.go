@@ -53,6 +53,9 @@ func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParam
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	// get the current params
+	params := m.GetParams(ctx)
+
 	// validate oracle participant allowlist
 	if err := m.ValidateOracleParticipantAllowlist(ctx, msg.Params.AllowedOracleParticipants); err != nil {
 		return nil, err
@@ -62,7 +65,7 @@ func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParam
 	m.SetParams(ctx, msg.Params)
 
 	// update oracle participants liveness on params changed
-	m.UpdateOracleParticipantsLiveness(ctx, msg.Params.AllowedOracleParticipants)
+	m.UpdateOracleParticipantsLiveness(ctx, params.AllowedOracleParticipants, msg.Params.AllowedOracleParticipants)
 
 	return &types.MsgUpdateParamsResponse{}, nil
 }

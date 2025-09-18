@@ -10,14 +10,16 @@ import (
 // DKGCompletionReceivedHandler is callback handler when the DKG completion received by TSS
 func (k Keeper) DKGCompletionReceivedHandler(ctx sdk.Context, id uint64, ty string, intent int32, participant string) error {
 	switch ty {
-	case types.DKG_TYPE_NONCE:
-		// set to alive with the current dkg
-		k.SetOracleParticipantLiveness(ctx, &types.OracleParticipantLiveness{
-			ConsensusPubkey: participant,
-			IsAlive:         true,
-			LastDkgId:       id,
-			LastBlockHeight: ctx.BlockHeight(),
-		})
+	case types.DKG_TYPE_NONCE, types.DKG_TYPE_LIVENESS_CHECK:
+		if k.HasOracleParticipantLiveness(ctx, participant) {
+			liveness := k.GetOracleParticipantLiveness(ctx, participant)
+
+			// set to alive with the current dkg and block height
+			liveness.IsAlive = true
+			liveness.LastDkgId = id
+			liveness.LastBlockHeight = ctx.BlockHeight()
+			k.SetOracleParticipantLiveness(ctx, liveness)
+		}
 	}
 
 	return nil
@@ -45,22 +47,24 @@ func (k Keeper) DKGCompletedHandler(ctx sdk.Context, id uint64, ty string, inten
 // DKGTimeoutHandler is callback handler when the DKG timed out in TSS
 func (k Keeper) DKGTimeoutHandler(ctx sdk.Context, id uint64, ty string, intent int32, absentParticipants []string) error {
 	switch ty {
-	case types.DKG_TYPE_NONCE:
+	case types.DKG_TYPE_NONCE, types.DKG_TYPE_LIVENESS_CHECK:
 		if len(absentParticipants) == len(k.tssKeeper.GetDKGRequest(ctx, id).Participants) {
 			// remain current liveness if all participants are absent
 			return nil
 		}
 
 		for _, participant := range absentParticipants {
-			liveness := k.GetOracleParticipantLiveness(ctx, participant)
-			if liveness.LastDkgId > id {
-				// skip if the last dkg is later than the current one
-				continue
-			}
+			if k.HasOracleParticipantLiveness(ctx, participant) {
+				liveness := k.GetOracleParticipantLiveness(ctx, participant)
+				if liveness.LastDkgId > id {
+					// skip if the last dkg is later than the current one
+					continue
+				}
 
-			// set to non-alive
-			liveness.IsAlive = false
-			k.SetOracleParticipantLiveness(ctx, liveness)
+				// set to non-alive
+				liveness.IsAlive = false
+				k.SetOracleParticipantLiveness(ctx, liveness)
+			}
 		}
 	}
 
