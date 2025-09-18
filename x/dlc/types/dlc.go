@@ -21,6 +21,9 @@ const (
 
 	// default outcome index
 	DefaultOutcomeIndex = -1
+
+	// oracle participants liveness reset interval in blocks
+	OracleParticipantsLivenessResetInterval = 600
 )
 
 // GetEventOutcomeHash gets the event outcome hash by the given index

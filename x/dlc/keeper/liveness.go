@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"slices"
+
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -14,6 +16,13 @@ func (k Keeper) SetOracleParticipantLiveness(ctx sdk.Context, liveness *types.Or
 	bz := k.cdc.MustMarshal(liveness)
 
 	store.Set(types.OracleParticipantLivenessKey(liveness.ConsensusPubkey), bz)
+}
+
+// RemoveOracleParticipantLiveness removes the given oracle participant liveness
+func (k Keeper) RemoveOracleParticipantLiveness(ctx sdk.Context, consensusPubKey string) {
+	store := ctx.KVStore(k.storeKey)
+
+	store.Delete(types.OracleParticipantLivenessKey(consensusPubKey))
 }
 
 // HasOracleParticipantLiveness returns true if the given oracle participant liveness exists, false otherwise
@@ -88,14 +97,32 @@ func (k Keeper) IsOracleParticipantAlive(ctx sdk.Context, consensusPubKey string
 }
 
 // UpdateOracleParticipantsLiveness updates oracle participants liveness
-func (k Keeper) UpdateOracleParticipantsLiveness(ctx sdk.Context, participants []string) {
+func (k Keeper) UpdateOracleParticipantsLiveness(ctx sdk.Context, participants []string, newParticipants []string) {
 	for _, participant := range participants {
-		// set to initial status if no liveness status exists yet
-		if !k.HasOracleParticipantLiveness(ctx, participant) {
+		// delete the liveness status for the removed participant
+		if !slices.Contains(newParticipants, participant) {
+			k.RemoveOracleParticipantLiveness(ctx, participant)
+		}
+	}
+
+	for _, participant := range newParticipants {
+		// set to initial status for the newly added participant
+		if !slices.Contains(participants, participant) {
 			k.SetOracleParticipantLiveness(ctx, &types.OracleParticipantLiveness{
 				ConsensusPubkey: participant,
 				IsAlive:         true,
 			})
+		}
+	}
+}
+
+// ResetOracleParticipantsLiveness resets oracle participants liveness
+func (k Keeper) ResetOracleParticipantsLiveness(ctx sdk.Context) {
+	for _, participant := range k.GetOracleParticipantBaseSet(ctx) {
+		liveness := k.GetOracleParticipantLiveness(ctx, participant)
+		if !liveness.IsAlive {
+			liveness.IsAlive = true
+			k.SetOracleParticipantLiveness(ctx, liveness)
 		}
 	}
 }

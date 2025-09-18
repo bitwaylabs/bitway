@@ -11,13 +11,15 @@ import (
 func (k Keeper) DKGCompletionReceivedHandler(ctx sdk.Context, id uint64, ty string, intent int32, participant string) error {
 	switch ty {
 	case types.DKG_TYPE_NONCE:
-		// set to alive with the current dkg
-		k.SetOracleParticipantLiveness(ctx, &types.OracleParticipantLiveness{
-			ConsensusPubkey: participant,
-			IsAlive:         true,
-			LastDkgId:       id,
-			LastBlockHeight: ctx.BlockHeight(),
-		})
+		if k.HasOracleParticipantLiveness(ctx, participant) {
+			liveness := k.GetOracleParticipantLiveness(ctx, participant)
+
+			// set to alive with the current dkg and block height
+			liveness.IsAlive = true
+			liveness.LastDkgId = id
+			liveness.LastBlockHeight = ctx.BlockHeight()
+			k.SetOracleParticipantLiveness(ctx, liveness)
+		}
 	}
 
 	return nil
@@ -52,15 +54,17 @@ func (k Keeper) DKGTimeoutHandler(ctx sdk.Context, id uint64, ty string, intent 
 		}
 
 		for _, participant := range absentParticipants {
-			liveness := k.GetOracleParticipantLiveness(ctx, participant)
-			if liveness.LastDkgId > id {
-				// skip if the last dkg is later than the current one
-				continue
-			}
+			if k.HasOracleParticipantLiveness(ctx, participant) {
+				liveness := k.GetOracleParticipantLiveness(ctx, participant)
+				if liveness.LastDkgId > id {
+					// skip if the last dkg is later than the current one
+					continue
+				}
 
-			// set to non-alive
-			liveness.IsAlive = false
-			k.SetOracleParticipantLiveness(ctx, liveness)
+				// set to non-alive
+				liveness.IsAlive = false
+				k.SetOracleParticipantLiveness(ctx, liveness)
+			}
 		}
 	}
 
