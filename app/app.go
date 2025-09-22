@@ -161,6 +161,7 @@ import (
 
 	v201 "github.com/bitwaylabs/bitway/app/upgrades/v2_0_1"
 	v202 "github.com/bitwaylabs/bitway/app/upgrades/v2_0_2"
+	v203 "github.com/bitwaylabs/bitway/app/upgrades/v2_0_3"
 )
 
 const (
@@ -1323,6 +1324,7 @@ func BlockedAddresses() map[string]bool {
 func (app *App) SetUpgradeHandlers() {
 	app.UpgradeKeeper.SetUpgradeHandler(v201.UpgradeName, v201.CreateUpgradeHandler(app.ModuleManager, app.configurator, app.StakingKeeper, &app.SlashingKeeper))
 	app.UpgradeKeeper.SetUpgradeHandler(v202.UpgradeName, v202.CreateUpgradeHandler(app.ModuleManager, app.configurator))
+	app.UpgradeKeeper.SetUpgradeHandler(v203.UpgradeName, v203.CreateUpgradeHandler(app.ModuleManager, app.configurator))
 
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
 	if err != nil {
