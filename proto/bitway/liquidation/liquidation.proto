@@ -24,7 +24,7 @@ enum LiquidationStatus {
     LIQUIDATION_STATUS_SETTLED = 4;
 }
 
-message Liquidation {
+message LiquidationV1 {
     uint64 id = 1;
     string loan_id = 2;
     string debtor = 3;
@@ -50,6 +50,34 @@ message Liquidation {
     string settlement_tx_id = 19;
     LiquidationStatus status = 20;
     cosmos.base.v1beta1.Coin accrued_interest_during_liquidation = 21 [(gogoproto.nullable) = false];
+}
+
+message Liquidation {
+    uint64 id = 1;
+    string loan_id = 2;
+    string debtor = 3;
+    string dcm = 4 [(gogoproto.customname) = "DCM"];
+    cosmos.base.v1beta1.Coin collateral_amount = 5 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin actual_collateral_amount = 6 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin debt_amount = 7 [(gogoproto.nullable) = false];
+    AssetMetadata collateral_asset = 8 [(gogoproto.nullable) = false];
+    AssetMetadata debt_asset = 9 [(gogoproto.nullable) = false];
+    string liquidation_price = 10 [
+      (cosmos_proto.scalar)  = "cosmos.Dec",
+      (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+      (gogoproto.nullable)   = false
+    ];
+    google.protobuf.Timestamp liquidation_time = 11 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    cosmos.base.v1beta1.Coin liquidated_collateral_amount = 12 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin liquidated_debt_amount = 13 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin liquidation_bonus_amount = 14 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin protocol_liquidation_fee = 15 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin unliquidated_collateral_amount = 16 [(gogoproto.nullable) = false];
+    cosmos.base.v1beta1.Coin accrued_interest_during_liquidation = 17 [(gogoproto.nullable) = false];
+    string liquidation_cet = 18;
+    string settlement_tx = 19;
+    string settlement_tx_id = 20;
+    LiquidationStatus status = 21;
 }
 
 message LiquidationRecord {
