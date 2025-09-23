@@ -24,7 +24,7 @@ import (
 )
 
 // ConsensusVersion defines the current x/dlc module consensus version.
-const ConsensusVersion = 1
+const ConsensusVersion = 2
 
 var (
 	_ module.AppModule      = AppModule{}
@@ -121,6 +121,11 @@ func (am AppModule) IsAppModule() {}
 func (am AppModule) RegisterServices(cfg module.Configurator) {
 	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
 	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
+
+	m := keeper.NewMigrator(am.keeper)
+	if err := cfg.RegisterMigration(types.ModuleName, 1, m.Migrate1to2); err != nil {
+		panic(fmt.Sprintf("failed to migrate x/%s from version 1 to 2: %v", types.ModuleName, err))
+	}
 }
 
 // RegisterInvariants registers the invariants of the module. If an invariant deviates from its predicted value, the InvariantRegistry triggers appropriate logic (most often the chain will be halted)
