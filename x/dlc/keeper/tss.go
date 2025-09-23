@@ -10,7 +10,7 @@ import (
 // DKGCompletionReceivedHandler is callback handler when the DKG completion received by TSS
 func (k Keeper) DKGCompletionReceivedHandler(ctx sdk.Context, id uint64, ty string, intent int32, participant string) error {
 	switch ty {
-	case types.DKG_TYPE_NONCE:
+	case types.DKG_TYPE_NONCE, types.DKG_TYPE_LIVENESS_CHECK:
 		if k.HasOracleParticipantLiveness(ctx, participant) {
 			liveness := k.GetOracleParticipantLiveness(ctx, participant)
 
@@ -47,7 +47,7 @@ func (k Keeper) DKGCompletedHandler(ctx sdk.Context, id uint64, ty string, inten
 // DKGTimeoutHandler is callback handler when the DKG timed out in TSS
 func (k Keeper) DKGTimeoutHandler(ctx sdk.Context, id uint64, ty string, intent int32, absentParticipants []string) error {
 	switch ty {
-	case types.DKG_TYPE_NONCE:
+	case types.DKG_TYPE_NONCE, types.DKG_TYPE_LIVENESS_CHECK:
 		if len(absentParticipants) == len(k.tssKeeper.GetDKGRequest(ctx, id).Participants) {
 			// remain current liveness if all participants are absent
 			return nil

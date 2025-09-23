@@ -115,14 +115,3 @@ func (k Keeper) UpdateOracleParticipantsLiveness(ctx sdk.Context, participants [
 		}
 	}
 }
-
-// ResetOracleParticipantsLiveness resets oracle participants liveness
-func (k Keeper) ResetOracleParticipantsLiveness(ctx sdk.Context) {
-	for _, participant := range k.GetOracleParticipantBaseSet(ctx) {
-		liveness := k.GetOracleParticipantLiveness(ctx, participant)
-		if !liveness.IsAlive {
-			liveness.IsAlive = true
-			k.SetOracleParticipantLiveness(ctx, liveness)
-		}
-	}
-}
