@@ -7,6 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"golang.org/x/exp/slices"
 
 	"cosmossdk.io/log"
 	confixcmd "cosmossdk.io/tools/confix/cmd"
@@ -181,6 +182,9 @@ func appExport(
 	} else {
 		bApp = app.New(logger, db, traceStore, true, appOpts)
 	}
+
+	modulesToExclude := []string{"gov"}
+	modulesToExport = slices.DeleteFunc(modulesToExport, func(module string) bool { return slices.Contains(modulesToExclude, module) })
 
 	return bApp.ExportAppStateAndValidators(forZeroHeight, jailAllowedAddrs, modulesToExport)
 }
