@@ -17,7 +17,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/gogoproto/proto"
 
 	"github.com/bitwaylabs/bitway/x/oracle/keeper"
 	"github.com/bitwaylabs/bitway/x/oracle/types"
@@ -107,9 +106,6 @@ func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 		if err != nil {
 			return nil, fmt.Errorf("failed to unmarshal vote extension: %w", err)
 		}
-
-		// discard unknown fields in OracleVoteExtension
-		proto.DiscardUnknown(&voteExt)
 
 		if voteExt.Height != req.Height {
 			return nil, fmt.Errorf("vote extension height does not match request height; expected: %d, got: %d", req.Height, voteExt.Height)
