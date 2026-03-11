@@ -94,6 +94,11 @@ func (h *PriceOracleVoteExtHandler) VerifyVoteExtensionHandler() sdk.VerifyVoteE
 			return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_ACCEPT}, nil
 		}
 
+		const maxVoteExtensionSize = 20 * 1024 // upper bound for OracleVoteExtension
+		if len(req.VoteExtension) > maxVoteExtensionSize {
+			return &abci.ResponseVerifyVoteExtension{Status: abci.ResponseVerifyVoteExtension_REJECT}, nil
+		}
+
 		validator := hex.EncodeToString(req.ValidatorAddress)
 		var voteExt types.OracleVoteExtension
 		err := voteExt.Unmarshal(req.VoteExtension)
