@@ -27,7 +27,10 @@ func (k Keeper) TransferVault(ctx sdk.Context, sourceVersion uint64, destVersion
 	// handle pre-built psbts if any
 	if len(psbts) > 0 {
 		for i := range psbts {
-			p, _ := psbt.NewFromRawBytes(bytes.NewReader([]byte(psbts[i])), true)
+			p, err := psbt.NewFromRawBytes(bytes.NewReader([]byte(psbts[i])), true)
+			if err != nil {
+				return types.ErrInvalidPsbt
+			}
 
 			if err := k.handleTransferVaultTx(ctx, p, sourceVault, destVault, assetType); err != nil {
 				return err
@@ -126,7 +129,9 @@ func (k Keeper) handleTransferVaultTx(ctx sdk.Context, p *psbt.Packet, sourceVau
 			runeBalances = runeBalances.Merge(utxo.Runes)
 		}
 
-		_ = k.SpendUTXO(ctx, hash, uint64(vout))
+		if err := k.SpendUTXO(ctx, hash, uint64(vout)); err != nil {
+			return err
+		}
 	}
 
 	for i, out := range p.UnsignedTx.TxOut {
@@ -219,7 +224,9 @@ func (k Keeper) BuildTransferVaultBtcSigningRequest(ctx sdk.Context, sourceVault
 	txHash := p.UnsignedTx.TxHash().String()
 
 	// spend the involved utxos
-	_ = k.SpendUTXOs(ctx, utxos)
+	if err := k.SpendUTXOs(ctx, utxos); err != nil {
+		return nil, err
+	}
 
 	// lock the recipient(change) utxo
 	k.lockChangeUTXOs(ctx, txHash, recipientUTXO)
@@ -283,8 +290,12 @@ func (k Keeper) BuildTransferVaultRunesSigningRequest(ctx sdk.Context, sourceVau
 	txHash := p.UnsignedTx.TxHash().String()
 
 	// spend the involved utxos
-	_ = k.SpendUTXOs(ctx, runesUtxos)
-	_ = k.SpendUTXOs(ctx, selectedUtxos)
+	if err := k.SpendUTXOs(ctx, runesUtxos); err != nil {
+		return nil, err
+	}
+	if err := k.SpendUTXOs(ctx, selectedUtxos); err != nil {
+		return nil, err
+	}
 
 	// lock the change utxos
 	k.lockChangeUTXOs(ctx, txHash, changeUtxo, runesRecipientUtxo)
@@ -383,8 +394,15 @@ func (k Keeper) VaultTransferCompleted(ctx sdk.Context, vault string) bool {
 
 // VaultsTransferCompleted returns true if all asset transfer completed for the given vault version, false otherwise
 func (k Keeper) VaultsTransferCompleted(ctx sdk.Context, version uint64) bool {
-	btcVault := k.GetVaultByAssetTypeAndVersion(ctx, types.AssetType_ASSET_TYPE_BTC, version).Address
-	runesVault := k.GetVaultByAssetTypeAndVersion(ctx, types.AssetType_ASSET_TYPE_RUNES, version).Address
+	btcVault := k.GetVaultByAssetTypeAndVersion(ctx, types.AssetType_ASSET_TYPE_BTC, version)
+	if btcVault == nil {
+		return false
+	}
 
-	return k.VaultTransferCompleted(ctx, btcVault) && k.VaultTransferCompleted(ctx, runesVault)
+	runesVault := k.GetVaultByAssetTypeAndVersion(ctx, types.AssetType_ASSET_TYPE_RUNES, version)
+	if runesVault == nil {
+		return false
+	}
+
+	return k.VaultTransferCompleted(ctx, btcVault.Address) && k.VaultTransferCompleted(ctx, runesVault.Address)
 }

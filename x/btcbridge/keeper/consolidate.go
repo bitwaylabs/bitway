@@ -60,7 +60,9 @@ func (k Keeper) handleBtcConsolidation(ctx sdk.Context, vaultVersion uint64, tar
 	txHash := p.UnsignedTx.TxHash().String()
 
 	// spend the involved utxos
-	_ = k.SpendUTXOs(ctx, targetUTXOs)
+	if err := k.SpendUTXOs(ctx, targetUTXOs); err != nil {
+		return err
+	}
 
 	// lock the recipient(change) utxo
 	k.lockChangeUTXOs(ctx, txHash, recipientUTXO)
@@ -127,8 +129,12 @@ func (k Keeper) handleRunesConsolidation(ctx sdk.Context, vaultVersion uint64, r
 	txHash := p.UnsignedTx.TxHash().String()
 
 	// spend the involved utxos
-	_ = k.SpendUTXOs(ctx, targetRunesUTXOs)
-	_ = k.SpendUTXOs(ctx, selectedUtxos)
+	if err := k.SpendUTXOs(ctx, targetRunesUTXOs); err != nil {
+		return err
+	}
+	if err := k.SpendUTXOs(ctx, selectedUtxos); err != nil {
+		return err
+	}
 
 	// lock the change utxos
 	k.lockChangeUTXOs(ctx, txHash, changeUtxo, runesRecipientUtxo)
