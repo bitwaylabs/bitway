@@ -129,7 +129,16 @@ func handleVaultTransfer(ctx sdk.Context, k keeper.Keeper) {
 	for _, req := range completedDKGRequests {
 		if req.EnableTransfer {
 			completions := k.GetDKGCompletionRequests(ctx, req.Id)
-			dkgVaultVersion, _ := k.GetVaultVersionByAddress(ctx, completions[0].Vaults[0])
+			if len(completions) == 0 || len(completions[0].Vaults) == 0 {
+				k.Logger(ctx).Error("invalid dkg completion for vault transfer", "id", req.Id)
+				continue
+			}
+
+			dkgVaultVersion, ok := k.GetVaultVersionByAddress(ctx, completions[0].Vaults[0])
+			if !ok || dkgVaultVersion == 0 {
+				k.Logger(ctx).Error("failed to resolve vault version for transfer", "address", completions[0].Vaults[0])
+				continue
+			}
 
 			sourceVersion := dkgVaultVersion - 1
 			destVersion := k.GetLatestVaultVersion(ctx)
@@ -138,11 +147,20 @@ func handleVaultTransfer(ctx sdk.Context, k keeper.Keeper) {
 				continue
 			}
 
-			sourceBtcVault := k.GetVaultByAssetTypeAndVersion(ctx, types.AssetType_ASSET_TYPE_BTC, sourceVersion).Address
-			sourceRunesVault := k.GetVaultByAssetTypeAndVersion(ctx, types.AssetType_ASSET_TYPE_RUNES, sourceVersion).Address
+			sourceBtcVault := k.GetVaultByAssetTypeAndVersion(ctx, types.AssetType_ASSET_TYPE_BTC, sourceVersion)
+			if sourceBtcVault == nil {
+				k.Logger(ctx).Error("source btc vault does not exist", "version", sourceVersion)
+				continue
+			}
+
+			sourceRunesVault := k.GetVaultByAssetTypeAndVersion(ctx, types.AssetType_ASSET_TYPE_RUNES, sourceVersion)
+			if sourceRunesVault == nil {
+				k.Logger(ctx).Error("source runes vault does not exist", "version", sourceVersion)
+				continue
+			}
 
 			// transfer runes
-			if !k.VaultTransferCompleted(ctx, sourceRunesVault) {
+			if !k.VaultTransferCompleted(ctx, sourceRunesVault.Address) {
 				if err := k.TransferVault(ctx, sourceVersion, destVersion, types.AssetType_ASSET_TYPE_RUNES, nil, req.TargetUtxoNum); err != nil {
 					k.Logger(ctx).Info("failed to transfer vault", "source version", sourceVersion, "destination version", destVersion, "asset type", types.AssetType_ASSET_TYPE_RUNES, "target utxo num", req.TargetUtxoNum, "err", err)
 					continue
@@ -150,7 +168,7 @@ func handleVaultTransfer(ctx sdk.Context, k keeper.Keeper) {
 			}
 
 			// transfer btc only when runes transfer completed
-			if k.VaultTransferCompleted(ctx, sourceRunesVault) && !k.VaultTransferCompleted(ctx, sourceBtcVault) {
+			if k.VaultTransferCompleted(ctx, sourceRunesVault.Address) && !k.VaultTransferCompleted(ctx, sourceBtcVault.Address) {
 				if err := k.TransferVault(ctx, sourceVersion, destVersion, types.AssetType_ASSET_TYPE_BTC, nil, req.TargetUtxoNum); err != nil {
 					k.Logger(ctx).Info("failed to transfer vault", "source version", sourceVersion, "destination version", destVersion, "asset type", types.AssetType_ASSET_TYPE_BTC, "target utxo num", req.TargetUtxoNum, "err", err)
 					continue
@@ -207,8 +225,6 @@ func handleIBCWithdrawRequests(ctx sdk.Context, k keeper.Keeper) {
 		networkFee, err := k.EstimateWithdrawalNetworkFee(ctx, req.Address, withdrawAmount, feeRate.Value)
 		if err != nil {
 			k.Logger(ctx).Info("failed to estimate network fee for withdrawal from IBC", "address", req.Address, "amount", req.Amount, "fee rate", feeRate.Value, "err", err)
-
-			k.RemoveFromIBCWithdrawRequestQueue(ctx, req.ChannelId, req.Sequence)
 			continue
 		}
 
@@ -221,29 +237,25 @@ func handleIBCWithdrawRequests(ctx sdk.Context, k keeper.Keeper) {
 			continue
 		}
 
-		// handle rate limit
-		if err := k.HandleRateLimit(ctx, req.Address, amount); err != nil {
+		// check rate limit without consuming quota until the withdrawal succeeds
+		if err := k.CheckRateLimit(ctx, req.Address, amount.Amount.Int64()); err != nil {
 			k.Logger(ctx).Info("failed to perform withdrawal from IBC", "address", req.Address, "amount", req.Amount, "err", err)
+			continue
+		}
 
-			k.RemoveFromIBCWithdrawRequestQueue(ctx, req.ChannelId, req.Sequence)
+		// collect protocol fee before burning so a failed fee transfer does not destroy user funds
+		if err := k.BankKeeper().SendCoins(ctx, address, protocoFeeCollector, sdk.NewCoins(protocolFee)); err != nil {
+			k.Logger(ctx).Warn("failed to transfer protocol fee for withdrawal from IBC", "address", req.Address, "amount", req.Amount, "protocol fee", protocolFee, "err", err)
 			continue
 		}
 
 		// burn asset
 		if err := k.BurnAsset(ctx, req.Address, withdrawAmount.Add(networkFee)); err != nil {
 			k.Logger(ctx).Warn("failed to burn asset for withdrawal from IBC", "address", req.Address, "amount", req.Amount, "burned amount", withdrawAmount.Add(networkFee), "err", err)
-
-			k.RemoveFromIBCWithdrawRequestQueue(ctx, req.ChannelId, req.Sequence)
 			continue
 		}
 
-		// transfer protocol fee to fee collector
-		if err := k.BankKeeper().SendCoins(ctx, address, protocoFeeCollector, sdk.NewCoins(protocolFee)); err != nil {
-			k.Logger(ctx).Warn("failed to transfer protocol fee for withdrawal from IBC", "address", req.Address, "amount", req.Amount, "protocol fee", protocolFee, "err", err)
-
-			k.RemoveFromIBCWithdrawRequestQueue(ctx, req.ChannelId, req.Sequence)
-			continue
-		}
+		k.UpdateRateLimitUsedQuotas(ctx, req.Address, amount.Amount.Int64())
 
 		// set the withdrawal request
 		withdrawRequest := k.NewWithdrawRequest(ctx, req.Address, withdrawAmount.String())

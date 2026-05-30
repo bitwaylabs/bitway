@@ -200,8 +200,12 @@ func (k Keeper) NewRunesSigningRequest(ctx sdk.Context, sender string, amount sd
 	txHash := psbt.UnsignedTx.TxHash().String()
 
 	// spend the involved utxos
-	_ = k.SpendUTXOs(ctx, runesUTXOs)
-	_ = k.SpendUTXOs(ctx, selectedUTXOs)
+	if err := k.SpendUTXOs(ctx, runesUTXOs); err != nil {
+		return nil, err
+	}
+	if err := k.SpendUTXOs(ctx, selectedUTXOs); err != nil {
+		return nil, err
+	}
 
 	// lock the change utxos
 	k.lockChangeUTXOs(ctx, txHash, changeUTXO, runesChangeUTXO)
@@ -238,7 +242,9 @@ func (k Keeper) BuildBtcBatchWithdrawSigningRequest(ctx sdk.Context, withdrawReq
 	txHash := psbt.UnsignedTx.TxHash().String()
 
 	// spend the selected utxos
-	_ = k.SpendUTXOs(ctx, selectedUTXOs)
+	if err := k.SpendUTXOs(ctx, selectedUTXOs); err != nil {
+		return nil, err
+	}
 
 	// lock the change utxo
 	k.lockChangeUTXOs(ctx, txHash, changeUTXO)
